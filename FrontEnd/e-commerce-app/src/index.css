@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+.about{
+    background: linear-gradient(to right, white 0%, white 65%, theme(colors.gray.500) 60%, theme(colors.gray.500) 100% );
+   }
+}
