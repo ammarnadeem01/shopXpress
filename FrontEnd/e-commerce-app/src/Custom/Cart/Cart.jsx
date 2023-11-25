@@ -24,7 +24,7 @@ function Cart() {
           return item;
         });
     });
-
+  console.log(8)
     // Wait for all promises to resolve
     Promise.all(fetchPromises)
       .then((fetchedItems) => {
