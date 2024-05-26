@@ -137,7 +137,7 @@ function Products() {
         {/* Right */}
         <div
           id="container"
-          className="flex flex-row flex-wrap justify-evenly items-baseline w-4/5 h-auto gap-3 py-10 space-y-5"
+          className="flex flex-row flex-wrap justify-evenly items-baseline w-4/5 h-auto gap-3 py-10 space-y-5 "
         >
           {data.map((product) => {
             return <ProductCard key={product.id} data={product} />;

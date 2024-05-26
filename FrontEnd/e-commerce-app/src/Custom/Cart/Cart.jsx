@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import M1 from "../../Images/ProductImages/M1.jpg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 function Cart() {
+  const dispatch=useDispatch();
   const nav = useNavigate();
   const [grossTotal, setGrossTotal] = useState(0);
   const { cartItems } = useSelector((state) => {
@@ -12,19 +13,25 @@ function Cart() {
   });
 
   const [items, setItems] = useState([]);
-
+   function checkOutHandle()
+   {
+    dispatch(
+      {
+        type:"SET_TOTAL",
+        payload:grossTotal
+      }
+    )
+    nav("/checkout/shipping");
+   }
   useEffect(() => {
     // Create an array of promises for fetching data
-    const fetchPromises = cartItems.map((cartItem) => {
-      return axios
-        .get(`http://localhost:3000/api/v3/products/${cartItem.productId}`)
-        .then((results) => {
-          const item = results.data.data.product;
-          item.quantity = cartItem.quantity;
-          return item;
-        });
-    });
-  console.log(8)
+    const fetchPromises = cartItems.map(async (cartItem) => {
+      const results = await axios
+        .get(`http://localhost:3000/api/v3/products/${cartItem.productId}`);
+      const item = results.data.data.product;
+      item.quantity = cartItem.quantity;
+      return item;
+  })
     // Wait for all promises to resolve
     Promise.all(fetchPromises)
       .then((fetchedItems) => {
@@ -42,7 +49,21 @@ function Cart() {
       });
   }, [cartItems]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const total = items.reduce((acc, i) => {
+      return acc + i.price * i.quantity;
+    }, 0);
+    setGrossTotal(total);
+  }, [items]);
+
+  function updateQuantity(_id,quantity)
+  {
+    const cartInfo ={ productId:_id,quantity:quantity };
+    dispatch({
+      type: "UPDATE_ITEM_IN_CART",
+      payload: cartInfo,
+    });
+  }
 
   return (
     <div className="flex justify-center items-center bg-gray-50 w-max--screen h-auto flex-wrap py-10">
@@ -77,21 +98,16 @@ function Cart() {
             <p
               className="bg-gray-500 text-white w-5 h-7 text-center cursor-pointer"
               onClick={() => {
-                debugger;
-                const promises = items.map((prevItem) => ({
+                const updatedItems = items.map((prevItem) => ({
                   ...prevItem,
                   quantity:
                     prevItem._id === item._id
-                      ? item.quantity + 1
-                      : prevItem.quantity,
+                    ? item.quantity + 1
+                    : prevItem.quantity,
                 }));
-                Promise.all(promises).then((allItems) => {
-                  setItems(allItems);
-                  const total = items.reduce((acc, i) => {
-                    return acc + i.price * i.quantity;
-                  }, 0);
-                  setGrossTotal(total);
-                });
+                setItems(updatedItems);
+                console.log(items)
+                
               }}
             >
               +
@@ -99,33 +115,21 @@ function Cart() {
             <p className="w-auto px-2 ">{item && item.quantity}</p>
             <p
               className="bg-gray-500 text-white w-5 h-7 text-center cursor-pointer"
-              onClick={async () => {
-                const promises = await items.map(
-                  (prevItem) =>
-                    new Promise((resolve) => {
-                      resolve({
-                        ...prevItem,
-                        quantity:
-                          prevItem._id === item._id
-                            ? item.quantity - 1
-                            : prevItem.quantity,
-                      });
-                    })
-                );
-
-                setItems(promises);
-                const total = items.reduce((acc, i) => {
-                  return acc + i.price * i.quantity;
-                }, 0);
-                setGrossTotal(total);
-
-                // Promise.all(promises).then((allItems) => {
-                //   setItems(allItems);
-                //   const total = items.reduce((acc, i) => {
-                //     return acc + i.price * i.quantity;
-                //   }, 0);
-                //   setGrossTotal(total);
-                // });
+              onClick={() => {
+                const updatedItems = items.map((prevItem) => ({
+                  ...prevItem,
+                  quantity:
+                    prevItem._id === item._id
+                      ? item.quantity - 1
+                      : prevItem.quantity,
+                }));
+                
+                setItems(updatedItems);
+                const i = items.filter((prevItem)=>{
+                  return prevItem._id === item._id            
+                })
+                updateQuantity(i[0]._id,i[0].quantity);
+                
               }}
             >
               -
@@ -147,11 +151,11 @@ function Cart() {
           <div className="flex flex-col justify-between  w-2/6 border-t-4 border-orange-400 mr-1">
             <div className="w-full flex justify-between py-3">
               <p className="font-semibold text-lg">Gross Total</p>
-              <p className="font-semibold text-lg">{grossTotal}</p>
+              <p className="font-semibold text-lg">{(grossTotal).toFixed(3)}</p>
             </div>
             <p
               className="py-1.5 px-8 rounded-2xl text-xs flex w-2/6 justify-center items-center cursor-pointer text-white bg-orange-500"
-              onClick={() => nav("/checkout/shipping")}
+              onClick={checkOutHandle}
             >
               Check Out
             </p>

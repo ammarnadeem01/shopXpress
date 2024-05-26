@@ -7,7 +7,11 @@ function MyProfile() {
   useEffect(() => {
     dispatch({
       type: "SET_USER_ID",
-      payload: location.state.data._id,
+      payload: location.state.data.id,
+    });
+    dispatch({
+      type: "SET_USER_NAME",
+      payload: location.state.data.name,
     });
   }, []);
 
@@ -35,7 +39,7 @@ function MyProfile() {
           <div>
             <p className="text-xl font-semibold">Joined On</p>
             <p className="text-gray-700">
-              {location.state.data.createdAt.getFullYear}
+              {location.state.data.createdAt.getFullYear()}
             </p>
           </div>
           <div className="w-full">

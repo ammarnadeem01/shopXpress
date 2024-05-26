@@ -45,14 +45,20 @@ const ProductDetails = () => {
     quantity: count,
   };
   const nav = useNavigate();
-  function AddedToCartFUnction() {
+  function AddedToCartFunction() {
     console.log("Order added to cart");
     dispatch({
       type: "ADD_ITEM_TO_CART",
       payload: infoForCart,
     });
+    dispatch({
+      type: "UPDATE_ITEM_IN_CART",
+      payload: infoForCart,
+    });
+    
     nav("/products");
   }
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -130,7 +136,7 @@ const ProductDetails = () => {
               </p>
               <p
                 className="bg-orange-600 cursor-pointer hover:bg-orange-500 ml-3  text-center text-xs flex items-center text-white px-4 rounded-3xl"
-                onClick={AddedToCartFUnction}
+                onClick={AddedToCartFunction}
               >
                 Add to Cart
               </p>

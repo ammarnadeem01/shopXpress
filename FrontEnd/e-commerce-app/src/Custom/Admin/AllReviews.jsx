@@ -1,8 +1,36 @@
-import DeleteIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import StarIcon from "@mui/icons-material/Star";
 import LeftBar from "./LeftBar";
+import { useState } from "react";
+import axios from "axios";
 
 function AllReviews() {
+  const [productId,setProductId]=useState("");
+  const [reviews,setReviews]=useState([]);
+  function searchReviews() {
+    axios.get(`http://localhost:3000/api/v3/reviews/${productId}`)
+    .then((results) => {
+      const reviewsData = results.data.data.specificProductReviews;
+      Promise.all(reviewsData.map((review) =>
+        axios.get(`http://localhost:3000/api/v3/users/${review.reviewedBy}`)
+          .then((response) => {
+            const userName = response.data.data.user.name;
+            return { ...review, user: userName };
+          })
+      ))
+        .then((updatedReviews) => {
+          setReviews(updatedReviews);
+        })
+        .catch((error) => {
+          console.error("Error fetching user names:", error);
+        });
+    })
+    .catch((error) => {
+      console.error("Error fetching reviews:", error);
+    });
+  }
+  
+
   return (
     <div className="flex w-max-screen ">
       {/*  Left Bar */}
@@ -16,10 +44,14 @@ function AllReviews() {
               <StarIcon className="absolute translate-y-2.5 translate-x-1" />
               <input
                 className="border-2 border-gray-300 pl-8 rounded-md pr-2 py-2 text-lg"
-                value={"IdN23na09b1234ns7002n"}
+                placeholder="Enter Product's Id"
+                value={productId}
+                onChange={(e)=>{setProductId(e.target.value)}}
               />
             </div>
-            <p className="bg-orange-600 py-1.5 px-16 rounded-md hover:bg-orange-500 text-white">
+            <p className="bg-orange-600 py-1.5 px-16 rounded-md hover:bg-orange-500 text-white"
+             onClick={searchReviews}
+            >
               Search
             </p>
           </div>
@@ -30,17 +62,18 @@ function AllReviews() {
             <p className="w-1/12 text-start  ">Rating</p>
             <p className="w-1/12 text-start  ">Actions</p>
           </div>
-          <div className="flex w-full h-auto bg-gray-300 justify-evenly items-center flex-wrap py-2 text-sm">
-            <p className="w-2/12  text-start">12345678ijhvcxa</p>
-            <p className="w-2/12 text-start ">Ammar Nadeem</p>
-            <p className="w-2/5  text-start">
-              shut up i dont like this kind of stuff
-            </p>
-            <p className="w-1/12 pl-4">5</p>
+          {console.log(reviews)}
+          {reviews.map((rev)=>(
+          <div className="flex w-full h-auto bg-gray-300 justify-evenly items-center flex-wrap py-2 text-sm" key={rev._id}>
+            <p className="w-2/12 text-gray-500 text-start">{rev._id}</p>
+            <p className="w-2/12 pl-2 text-start ">{rev.user}</p>
+            <p className="w-2/5  text-start">{rev.review}</p>
+            <p className="w-1/12 pl-4">{rev.ratings}</p>
             <p className="w-1/12 pl-4 text-xs">
               <DeleteIcon />
             </p>
           </div>
+          ))}
         </div>
       </div>
     </div>

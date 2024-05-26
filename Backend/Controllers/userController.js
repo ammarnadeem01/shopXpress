@@ -48,3 +48,20 @@ exports.getSpecificUser = async (req, res) => {
     });
   }
 };
+
+exports.getSpecificUserWithId = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.status(200).json({
+      status: "Success",
+      data: {
+        user,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "Fail",
+      message: error.message,
+    });
+  }
+};
