@@ -12,21 +12,53 @@ function Navbar() {
     z-10"
     >
       <div className="logo w-1/3 ml-5 text-3xl ">
-        <span className="text-5xl ">S</span>HOP
-        <span className="text-5xl italic">X</span>PRES
-        <span className="text-5xl ">S</span>
+        <span className="text-4xl ">S</span>HOP
+        <span className="text-4xl italic">X</span>PRES
+        <span className="text-4xl ">S</span>
       </div>
       <div className=" flex justify-around w-1/2">
-        <NavLink className="navLink no-underline" to="/">
+        <NavLink
+          className="navLink no-underline text-white font-semibold text-xl "
+          style={({ isActive}) => {  
+            return {
+              borderBottom: isActive ? "1px solid white" : "",
+            };
+          }}
+          to="/"
+        >
           Home
         </NavLink>
-        <NavLink className="navLink no-underline" to="/products">
+        <NavLink
+        style={({ isActive}) => {
+          return {
+            borderBottom: isActive ? "1px solid white" : "",
+          };
+        }}
+          className="navLink no-underline text-white font-semibold text-xl "
+          to="/products"
+        >
           Products
         </NavLink>
-        <NavLink className="navLink no-underline" to="/contact">
+        <NavLink
+        style={({ isActive}) => {
+          return {
+            borderBottom: isActive ? "1px solid white" : "",
+          };
+        }}
+          className="navLink no-underline text-white font-semibold text-xl "
+          to="/contact"
+        >
           Contact
         </NavLink>
-        <NavLink className="navLink no-underline" to="/about">
+        <NavLink
+        style={({ isActive}) => {
+          return {
+            borderBottom: isActive ? "1px solid white" : "",
+          };
+        }}
+          className="navLink no-underline text-white font-semibold text-xl "
+          to="/about"
+        >
           About
         </NavLink>
       </div>
