@@ -1,4 +1,5 @@
 const User = require("../Models/userModel");
+const uploadOnCloudinary = require("../Utils/cloudinary")
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
@@ -18,7 +19,13 @@ exports.getAllUsers = async (req, res) => {
 };
 exports.createNewUser = async (req, res) => {
   try {
-    const newUser = await User.create(req.body);
+    const {name,email,password}=req.body;
+    const avatarLocalPath = req.file.path;
+    const avatarui = await uploadOnCloudinary(avatarLocalPath);
+    const newUser = await User.create({
+      name,password,email,
+      avatar:avatarui.url
+    });
     res.status(201).json({
       status: "Success",
       data: {
@@ -28,7 +35,8 @@ exports.createNewUser = async (req, res) => {
   } catch (error) {
     res.status(404).json({
       status: "Fail",
-      message: error.message,
+      error,
+      message: error,
     });
   }
 };
