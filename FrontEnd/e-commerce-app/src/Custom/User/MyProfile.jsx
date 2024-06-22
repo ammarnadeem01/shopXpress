@@ -1,18 +1,29 @@
-import { useEffect } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 function MyProfile() {
   const location = useLocation();
   const dispatch = useDispatch();
+  const [data,setData]=useState({name:"",email:"",avatar:null});
   useEffect(() => {
     dispatch({
       type: "SET_USER_ID",
-      payload: location.state.data.id,
+      payload: location.state.data._id,
     });
     dispatch({
       type: "SET_USER_NAME",
       payload: location.state.data.name,
     });
+    axios.get(`http://localhost:3000/api/v3/users/${location.state.data.email}`)
+    .then((data)=>{
+      setData({
+        name:data.data.data.user.name,
+        email:data.data.data.user.email,
+        createdAt:data.data.data.user.createdAt,
+        avatar:data.data.data.user.avatar,
+      })
+    }).catch(err=>console.log(err))
   }, []);
 
   return (
@@ -21,7 +32,7 @@ function MyProfile() {
       <div className="flex w-11/12 h-full bg-white ">
         {/* LHS */}
         <div className="flex flex-col flex-wrap w-1/2 justify-evenly items-center gap-3">
-          <div className="h-72 w-72 rounded-full bg-orange-500"></div>
+          <img src={data.avatar} className="rounded-full w-2/4 h-3/4"/>
           <div className="py-3 px-5  bg-orange-600 hover:bg-orange-500 text-white">
             Edit Profile
           </div>
@@ -30,16 +41,16 @@ function MyProfile() {
         <div className="flex flex-col flex-wrap w-1/2 justify-evenly items-start">
           <div>
             <p className="text-xl font-semibold">Full Name</p>
-            <p className="text-gray-700">{location.state.data.name}</p>
+            <p className="text-gray-700">{data.name}</p>
           </div>
           <div>
             <p className="text-xl font-semibold">Email</p>
-            <p className="text-gray-700">{location.state.data.email}</p>
+            <p className="text-gray-700">{data.email}</p>
           </div>
           <div>
             <p className="text-xl font-semibold">Joined On</p>
             <p className="text-gray-700">
-              {location.state.data.createdAt.getFullYear()}
+             {new Date(data.createdAt).toLocaleDateString()}
             </p>
           </div>
           <div className="w-full">

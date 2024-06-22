@@ -3,7 +3,17 @@ const router = express.Router();
 const reviewControllers = require("../Controllers/reviewController");
 router.route("/").post(reviewControllers.addReview);
 router
-  .route("/:id")
-  .get(reviewControllers.specificProductReviews)
+  .route("/product/:id")
+  .get(reviewControllers.specificProductReviews);
+
+router
+  .route("/user/:id")
   .get(reviewControllers.specificUserReviews);
+
+router
+  .route("/:id")
+  .delete(reviewControllers.deleteSpecificReviews);
+
 module.exports = router;
+
+

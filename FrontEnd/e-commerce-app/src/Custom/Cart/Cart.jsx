@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 function Cart() {
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const nav = useNavigate();
   const [grossTotal, setGrossTotal] = useState(0);
   const { cartItems } = useSelector((state) => {
@@ -13,25 +13,23 @@ function Cart() {
   });
 
   const [items, setItems] = useState([]);
-   function checkOutHandle()
-   {
-    dispatch(
-      {
-        type:"SET_TOTAL",
-        payload:grossTotal
-      }
-    )
+  function checkOutHandle() {
+    dispatch({
+      type: "SET_TOTAL",
+      payload: grossTotal,
+    });
     nav("/checkout/shipping");
-   }
+  }
   useEffect(() => {
     // Create an array of promises for fetching data
     const fetchPromises = cartItems.map(async (cartItem) => {
-      const results = await axios
-        .get(`http://localhost:3000/api/v3/products/${cartItem.productId}`);
+      const results = await axios.get(
+        `http://localhost:3000/api/v3/products/${cartItem.productId}`
+      );
       const item = results.data.data.product;
       item.quantity = cartItem.quantity;
       return item;
-  })
+    });
     // Wait for all promises to resolve
     Promise.all(fetchPromises)
       .then((fetchedItems) => {
@@ -56,9 +54,8 @@ function Cart() {
     setGrossTotal(total);
   }, [items]);
 
-  function updateQuantity(_id,quantity)
-  {
-    const cartInfo ={ productId:_id,quantity:quantity };
+  function updateQuantity(_id, quantity) {
+    const cartInfo = { productId: _id, quantity: quantity };
     dispatch({
       type: "UPDATE_ITEM_IN_CART",
       payload: cartInfo,
@@ -79,7 +76,7 @@ function Cart() {
       {items.map((item) => (
         <div
           className="flex h-auto items-center rounded-md shadow-md w-11/12 justify-start"
-          key={item && item.id}
+          key={item && item._id}
         >
           {console.log("item: ", item)}
           <div className="w-4/6 flex items-center justify-start">
@@ -91,7 +88,7 @@ function Cart() {
                 {" "}
                 Price : {item && item.price}
               </p>
-              <p className="text-xs text-red-500">Remove</p>
+              <p className="text-xs text-red-500 ">Remove</p>
             </div>
           </div>
           <div className="flex w-1/6 items-center">
@@ -102,12 +99,11 @@ function Cart() {
                   ...prevItem,
                   quantity:
                     prevItem._id === item._id
-                    ? item.quantity + 1
-                    : prevItem.quantity,
+                      ? item.quantity + 1
+                      : prevItem.quantity,
                 }));
                 setItems(updatedItems);
-                console.log(items)
-                
+                console.log(items);
               }}
             >
               +
@@ -123,13 +119,12 @@ function Cart() {
                       ? item.quantity - 1
                       : prevItem.quantity,
                 }));
-                
+
                 setItems(updatedItems);
-                const i = items.filter((prevItem)=>{
-                  return prevItem._id === item._id            
-                })
-                updateQuantity(i[0]._id,i[0].quantity);
-                
+                const i = items.filter((prevItem) => {
+                  return prevItem._id === item._id;
+                });
+                updateQuantity(i[0]._id, i[0].quantity);
               }}
             >
               -
@@ -151,14 +146,17 @@ function Cart() {
           <div className="flex flex-col justify-between  w-2/6 border-t-4 border-orange-400 mr-1">
             <div className="w-full flex justify-between py-3">
               <p className="font-semibold text-lg">Gross Total</p>
-              <p className="font-semibold text-lg">{(grossTotal).toFixed(3)}</p>
+              <p className="font-semibold text-lg">{grossTotal.toFixed(3)}</p>
             </div>
-            <p
-              className="py-1.5 px-8 rounded-2xl text-xs flex w-2/6 justify-center items-center cursor-pointer text-white bg-orange-500"
+            <button
+              className={`py-1.5 px-8 rounded-2xl text-xs flex w-2/6 justify-center items-center cursor-pointer text-white bg-orange-500  
+              ${
+                grossTotal === 0 ? "bg-orange-300" : "bg-orange-500"}`}
+              disabled={grossTotal === 0}
               onClick={checkOutHandle}
             >
               Check Out
-            </p>
+            </button>
           </div>
         </div>
       </div>

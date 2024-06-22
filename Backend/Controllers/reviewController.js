@@ -27,38 +27,58 @@ exports.addReview = async (req, res) => {
   }
 };
 
-// reviews related to product
+// Controller method for product reviews
 exports.specificProductReviews = async (req, res) => {
   try {
-    const id = req.params.id;
-    const specificProductReviews = await Review.find({ reviewedProduct: id });
+    const productReviews = await Review.find({ reviewedProduct: req.params.id });
     res.status(200).json({
       status: "Success",
-      length: specificProductReviews.length,
       data: {
-        specificProductReviews,
+        reviews: productReviews,
       },
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       status: "Fail",
       message: error.message,
     });
   }
 };
+
+// Controller method for user reviews
 exports.specificUserReviews = async (req, res) => {
   try {
-    const id = req.params.id;
-    const specificUserReviews = await Review.find({ reviewedBy: id });
+    const userReviews = await Review.find({ reviewedBy: req.params.id });
     res.status(200).json({
       status: "Success",
-      length: specificUserReviews.length,
       data: {
-        specificUserReviews,
+        reviews: userReviews,
       },
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
+      status: "Fail",
+      message: error.message,
+    });
+  }
+};
+
+// Controller method for deleting a review
+exports.deleteSpecificReviews = async (req, res) => {
+  try {
+    const review = await Review.findByIdAndRemove(req.params.id);
+    if (!review) {
+      return res.status(404).json({
+        status: "Fail",
+        message: "Review not found",
+      });
+    }
+    res.status(204).json({
+      status: "Success",
+      data: null,
+    });
+  } catch (error) {
+    res.status(500).json({
       status: "Fail",
       message: error.message,
     });

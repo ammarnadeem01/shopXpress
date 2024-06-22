@@ -40,9 +40,10 @@ exports.createNewUser = async (req, res) => {
     });
   }
 };
+
 exports.getSpecificUser = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.params.email });
+    const user = await User.findOne({ email: req.params[0] });
     res.status(200).json({
       status: "Success",
       data: {

@@ -62,13 +62,13 @@ function Dashboard() {
               <p>$ 542.76</p>
             </div>
             <div className="flex w-full h-auto justify-center gap-8 items-center text-white mt-5">
-              <p className="rounded-full bg-orange-400 w-1/6 h-auto py-16 text-center">
+              <p className="rounded-full bg-orange-400 w-1/5 h-auto py-16 text-center">
                 Products <br /> 0
               </p>
-              <p className="rounded-full bg-pink-600 w-1/6 h-auto py-16 text-center ">
+              <p className="rounded-full bg-pink-600 w-1/5 h-auto py-16 text-center ">
                 Orders <br /> 2
               </p>
-              <p className="rounded-full bg-gray-600 w-1/6 h-auto py-16 text-center">
+              <p className="rounded-full bg-gray-600 w-1/5 h-auto py-16 text-center">
                 Users <br /> 2
               </p>
             </div>

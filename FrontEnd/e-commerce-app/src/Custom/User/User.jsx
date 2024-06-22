@@ -15,24 +15,36 @@ const User = () => {
     name: "",
     email: "",
     password: "",
+    avatar: null,
   });
   function handleRegSubmit(e) {
     e.preventDefault();
     axios
-      .post("http://localhost:3000/api/v3/users", regFormData)
-      .then(() => {
+      .post("http://localhost:3000/api/v3/users", regFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
         console.log("User Created.");
         nav("/profile", {
-          state: { data: regFormData },
+          state: { data: res.data.data.newUser },
         });
       })
       .catch((err) => {
         console.log("Error Ocurred.", err);
       });
   }
+  // function handleFileChange(){
+
+  // }
   function handleRegChange(e) {
-    const { name, value } = e.target;
-    setRegFormData({ ...regFormData, [name]: value });
+    const { name, value, type, files } = e.target;
+    if (type === "file") {
+      setRegFormData({ ...regFormData, [name]: files[0] });
+    } else {
+      setRegFormData({ ...regFormData, [name]: value });
+    }
   }
 
   // =================================== LOGIN =============================================
@@ -48,7 +60,6 @@ const User = () => {
         nav("/profile", {
           state: { data: results.data.data.user },
         });
-        console.log(results.data.data.user);
       })
       .catch((err) => {
         console.log("Error Occurred : ", err);
@@ -105,7 +116,7 @@ const User = () => {
                 className="border-2 border-gray-600 rounded-md w-full pl-14 py-2"
                 name="email"
                 onChange={handleLoginChange}
-                value={logFormData.name}
+                value={logFormData.email}
               />
             </div>
             <div className="w-2/3">
@@ -176,6 +187,16 @@ const User = () => {
               />
               <RemoveRedEyeIcon className="absolute -translate-x-8 translate-y-3" />
             </div>
+            <div className="w-2/3">
+              <input
+                type="file"
+                placeholder="avatar"
+                className="border-2 border-gray-600 rounded-md w-full px-14 py-2"
+                name="avatar"
+                onChange={handleRegChange}
+              />
+            </div>
+
             <button
               type="submit"
               onClick={handleRegSubmit}

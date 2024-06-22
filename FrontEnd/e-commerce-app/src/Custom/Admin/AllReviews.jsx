@@ -8,9 +8,9 @@ function AllReviews() {
   const [productId,setProductId]=useState("");
   const [reviews,setReviews]=useState([]);
   function searchReviews() {
-    axios.get(`http://localhost:3000/api/v3/reviews/${productId}`)
+    axios.get(`http://localhost:3000/api/v3/reviews/product/${productId}`)
     .then((results) => {
-      const reviewsData = results.data.data.specificProductReviews;
+      const reviewsData = results.data.data.reviews;
       Promise.all(reviewsData.map((review) =>
         axios.get(`http://localhost:3000/api/v3/users/${review.reviewedBy}`)
           .then((response) => {
@@ -30,6 +30,10 @@ function AllReviews() {
     });
   }
   
+  const deleteReview=(revid)=>{
+    axios.delete(`http://localhost:3000/api/v3/reviews/${revid}`).then((res)=>searchReviews())
+    .catch((err)=>console.log(err))
+  }
 
   return (
     <div className="flex w-max-screen ">
@@ -70,7 +74,7 @@ function AllReviews() {
             <p className="w-2/5  text-start">{rev.review}</p>
             <p className="w-1/12 pl-4">{rev.ratings}</p>
             <p className="w-1/12 pl-4 text-xs">
-              <DeleteIcon />
+              <DeleteIcon onClick={()=>{deleteReview(rev._id)}}/>
             </p>
           </div>
           ))}

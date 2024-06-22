@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 
-const userSchema = new mongoose.Schema({
+const messageSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Please Enter Your Name"],
@@ -14,22 +14,19 @@ const userSchema = new mongoose.Schema({
     unique: true,
     validate: [validator.isEmail, "Please Enter a valid Email"],
   },
-  password: {
-    type: String,
-    required: [true, "Please Enter Your Password"],
-    minLength: [8, "Password should be greater than 8 characters"],
-    select: false,
+  message:{
+    type:String,
+    required:true,
+    maxLength: [300, "Message cannot exceed 300 characters"],
+    minLength: [1, "Name should have more than 1 character"],
   },
-  avatar:{
-     type:String,
-  },
-  role: {
-    type: String,
-    default: "user",
+  phoneNumber:{
+    type:String,
+    required:true,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Message",messageSchema);

@@ -1,4 +1,5 @@
 const Product = require("../Models/productsModel");
+const uploadOnCloudinary = require("../Utils/cloudinary");
 
 // GetAllProducts
 exports.getAllProducts = async (req, res) => {
@@ -39,7 +40,17 @@ exports.getSpecificProduct = async (req, res) => {
 //Add-One
 exports.addNewProduct = async (req, res) => {
   try {
-    const newProduct = Product.create(req.body);
+    const {name,description,price,category,stock}=req.body;
+    const image1LocalePath = req.files[0].path;
+    const image2LocalePath = req.files[1].path;
+    const image3LocalePath = req.files[2].path;
+    const img1=await uploadOnCloudinary(image1LocalePath)
+    const img2=await uploadOnCloudinary(image2LocalePath)
+    const img3=await uploadOnCloudinary(image3LocalePath)
+    const newProduct=await Product.create({
+      name,description,price,category,stock,
+      productImages:[img1.url,img2.url,img3.url]
+    })
     res.status(201).json({
       status: "Success",
       data: {

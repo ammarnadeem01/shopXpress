@@ -8,7 +8,7 @@ function Search() {
   const [search, setSearch] = useState("");
   const [originalData, setoriginalData] = useState([]);
   const [ratingsValue, setRatingsValue] = useState([10, 70]);
-  const [priceValue, setPriceValue] = useState([10, 70]);
+  const [priceValue, setPriceValue] = useState([0, 70000]);
 
   function handleCategories(category) {
     setdatais(
@@ -89,6 +89,8 @@ function Search() {
                 value={priceValue}
                 onChange={handlePriceChange}
                 valueLabelDisplay="auto"
+                min={0}
+                max={42000}
               />
             </div>
             <div className="flex flex-col h-auto w-full justify-center items-start px-3">
@@ -151,6 +153,8 @@ function Search() {
                 value={ratingsValue}
                 onChange={handleRatingsChange}
                 valueLabelDisplay="auto"
+                min={0.5}
+                max={5}
               />
             </div>
           </div>

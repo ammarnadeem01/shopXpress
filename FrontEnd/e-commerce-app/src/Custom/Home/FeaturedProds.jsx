@@ -21,16 +21,9 @@ function FeaturedProds() {
       </p>
       <div className="flex flex-row justify-center">
         <div className="flex flex-row flex-wrap justify-evenly items-baseline w-5/6 h-auto gap-3 py-10 space-y-5">
-          {/* <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard /> */}
+         
           {datais.map((product) => {
-            return <ProductCard key={product.id} data={product} />;
+            return <ProductCard key={product._id} data={product} />;
           })}
         </div>
       </div>

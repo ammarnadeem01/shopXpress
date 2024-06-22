@@ -3,9 +3,6 @@ import { Fragment, useEffect, useState } from "react";
 import ReviewCard from "./ReviewCard";
 import Carousel from "react-bootstrap/Carousel";
 import "bootstrap/dist/css/bootstrap.min.css";
-import M1 from "../../Images/ProductImages/M1.jpg";
-import M2 from "../../Images/ProductImages/M2.jpg";
-import M3 from "../../Images/ProductImages/M3.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -19,7 +16,14 @@ import axios from "axios";
 
 const ProductDetails = () => {
   const [allReviews, setAllReviews] = useState([]);
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => {
+    console.log("state.userReducer.userId : ",state.userReducer.userId)
+    return state.userReducer.userId;
+
+  });
   function handleReviewSubmission() {
+    console.log("userId : ",userId)
     axios
       .post("http://localhost:3000/api/v3/reviews", {
         productId: location.state.data._id,
@@ -28,15 +32,11 @@ const ProductDetails = () => {
         ratings,
       })
       .then((results) => {
-        console.log("new review", results.data.data);
         handleClose();
-      });
+      }).catch((err)=>console.log(err))
   }
-  const dispatch = useDispatch();
-  const { userId } = useSelector((state) => {
-    return state.userReducer;
-  });
-  console.log(userId);
+ 
+ 
   const [count, setCount] = useState(1);
   const location = useLocation();
   const [open, setOpen] = useState(false);
@@ -55,10 +55,9 @@ const ProductDetails = () => {
       type: "UPDATE_ITEM_IN_CART",
       payload: infoForCart,
     });
-    
+
     nav("/products");
   }
-
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -72,7 +71,6 @@ const ProductDetails = () => {
     axios
       .get(`http://localhost:3000/api/v3/reviews/${location.state.data._id}`)
       .then((results) => {
-        console.log(results.data.data.specificProductReviews);
         setAllReviews(results.data.data.specificProductReviews);
       });
   }, [allReviews]);
@@ -87,13 +85,13 @@ const ProductDetails = () => {
           <div className="w-1/2">
             <Carousel>
               <Carousel.Item>
-                <img src={M1} alt="IMAGE 1" />
+                <img src={location.state.data.productImages[0]} className="w-screen" alt="IMAGE 1 " />
               </Carousel.Item>
               <Carousel.Item>
-                <img src={M2} className="w-full h-full" alt="IMAGE 1" />
+                <img src={location.state.data.productImages[1]} className="w-screen" alt="IMAGE 1" />
               </Carousel.Item>
               <Carousel.Item>
-                <img src={M3} alt="IMAGE 1" />
+                <img src={location.state.data.productImages[2]} className="w-screen" alt="IMAGE 1" />
               </Carousel.Item>
             </Carousel>
           </div>
@@ -120,7 +118,9 @@ const ProductDetails = () => {
               <p
                 className="bg-gray-500 text-white w-5 text-center cursor-pointer"
                 onClick={() => {
-                  setCount(count + 1);
+                  setCount(
+                    count < location.state.data.stock ? count + 1 : count
+                  );
                 }}
               >
                 +
@@ -129,7 +129,7 @@ const ProductDetails = () => {
               <p
                 className="bg-gray-500 text-white w-5 text-center cursor-pointer"
                 onClick={() => {
-                  setCount(count - 1);
+                  setCount(count > 1 ? count - 1 : count);
                 }}
               >
                 -
@@ -143,7 +143,10 @@ const ProductDetails = () => {
             </div>
             <p className="border-y-2 border-gray-200 w-3/4 py-2">
               Status :
-              <span className="text-green-600 font-semibold ml-2">InStock</span>
+              <span className={` font-semibold ml-2
+               ${location.state.data.stock == 0 ? "text-red-600" : "text-green-600"}`}>
+                {location.state.data.stock == 0 ? "Out Of Stock" : "InStock"}
+              </span>
             </p>
             <p>
               <span className="text-lg font-semibold">
@@ -201,7 +204,7 @@ const ProductDetails = () => {
           </div>
           {/* REVIEWS */}
           {allReviews.map((review) => (
-            <ReviewCard data={review} key={review.id} />
+            <ReviewCard key={review._id} data={review} />
           ))}
         </div>
       </div>

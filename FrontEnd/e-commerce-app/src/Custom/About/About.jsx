@@ -3,7 +3,7 @@ import aboutImg from '../../Images/GraphicImages/aboutImage.jpg'
 function About() {
   return (
     <div className="about flex bg-gray-50 justify-center items-center p-20">
-    <div className="flex bg-white z-9 justify-center content-center items-center flex-wrap w-3/4 h-5/6 shadow-2xl shadow-black ">
+    <div className="flex sm:flex-col md:flex-row bg-white z-9 justify-center content-center items-center flex-wrap w-3/4 h-5/6 shadow-2xl shadow-black ">
      
       <p className="text-3xl p-2 text-red-700 w-full text-center">About Us</p>
 {/* Left side */}

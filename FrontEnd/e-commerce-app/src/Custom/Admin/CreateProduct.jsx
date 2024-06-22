@@ -14,16 +14,38 @@ function CreateProduct() {
     description: "",
     category: "Laptop",
     stock: 1,
+    productImages:[],
   });
   function handleChange(e) {
-    const { name, value } = e.target;
-    setProductData({ ...productData, [name]: value });
+    const { name, value,type,files } = e.target;
+    console.log(files)
+    if(type=="file")
+      {
+       setProductData({...productData,[name]:Array.from(files)})
+      }
+      else{
+        setProductData({ ...productData, [name]: value });
+      }
   }
   function handleCreateProduct(e) {
     e.preventDefault();
-    console.log(productData);
-    axios
-      .post("http://localhost:3000/api/v3/products", productData)
+   const formData= new FormData();
+   formData.append("name",productData.name)
+   formData.append("description",productData.description)
+   formData.append("stock",productData.stock)
+   formData.append("category",productData.category)
+   formData.append("price",productData.price)
+   
+   productData.productImages.map((img)=>{
+    formData.append("productImages",img)
+   })
+   
+   axios
+      .post("http://localhost:3000/api/v3/products", formData,{
+        headers:{
+          "Content-Type":"multipart/form-data"
+        }        
+      })
       .then(() => {
         console.log("Product Created.");
       })
@@ -99,13 +121,22 @@ function CreateProduct() {
                 name="stock"
               />
             </div>
-            <div className="w-full h-auto">
+             <div className="w-full h-auto">
               <input
-                type="string"
-                className="border-2 border-gray-400 py-2 px-11 text-center rounded-md"
-                placeholder="Choose File"
+                type="file"
+                multiple
+                className="hidden"
+                id="productImages"
+                name="productImages"
+                onChange={handleChange}
               />
-            </div>
+              <label
+                htmlFor="productImages"
+                className="bg-gray-800 text-white w-full mt-2 text-center py-2 px-4 rounded-md cursor-pointer hover:bg-gray-600"
+              >
+                Choose Images
+              </label>
+              </div>
             <button
               className="bg-gray-800 mt-2 cursor-pointer  hover:bg-gray-600 rounded-md text-center text-white w-full py-1.5"
               onClick={handleCreateProduct}
