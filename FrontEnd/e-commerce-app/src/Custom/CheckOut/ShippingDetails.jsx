@@ -1,53 +1,61 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Country, State,City } from "country-state-city";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import Checkout from "./Checkout";
 import HomeIcon from "@mui/icons-material/Home";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
 import PublicIcon from "@mui/icons-material/Public";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
-import Checkout from "./checkout";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+
 function ShippingDetails() {
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const { userId } = useSelector((state) => {
     return state.userReducer;
   });
   const nav = useNavigate();
-  const [shippingFormData,setShippingFormData]=useState({
-     address:"",
-     city:"",
-     pin:"",
-     phone:"",
-     country:"",
-     state:"",
-     customer:""
-  })
-  function handleShippingFormChange(e) {
-    const {name,value}=e.target;
-    setShippingFormData({...shippingFormData,[name]:value})
-  }
-  function handleShippingFormSubmit(e){
-    e.preventDefault();
-    axios.post("http://localhost:3000/api/v3/shippinginfo",
-    {
-      ...shippingFormData,
-      customer: userId,
 
-    }).then((response)=>{
-      console.log("response : ",response)
-      console.log("response.data : ",response.data)
-      console.log("response.data.data : ",response.data.data)
-      console.log("response.data.data.newShippingInfo : ",response.data.data.newShippingInfo)
-      dispatch({
-         type:"SET_SHIPPING_DATA",
-        payload : response.data.data.newShippingInfo,
-      })
-      nav("/checkout/confirm")
-    })
-    
+  const [shippingFormData, setShippingFormData] = useState({
+    address: "",
+    city: "",
+    pin: "",
+    phone: "",
+    country: "",
+    state: "",
+    customer: userId,
+  });
+
+  function handleShippingFormChange(e) {
+    const { name, value } = e.target;
+    setShippingFormData({ ...shippingFormData, [name]: value });
   }
+
+  function handleShippingFormSubmit(e) {
+    e.preventDefault();
+    axios
+      .post("http://localhost:3000/api/v3/shippinginfo", {
+        ...shippingFormData,
+        customer: userId,
+      })
+      .then((response) => {
+        console.log("response: ", response);
+        console.log("response.data: ", response.data);
+        console.log("response.data.data: ", response.data.data);
+        console.log(
+          "response.data.data.newShippingInfo: ",
+          response.data.data.newShippingInfo
+        );
+        dispatch({
+          type: "SET_SHIPPING_DATA",
+          payload: response.data.data.newShippingInfo,
+        });
+        nav("/checkout/confirm");
+      });
+  }
+
   return (
     <div className="flex items-center justify-center bg-gray-50 w-max-screen my-3 h-auto">
       <div className="bg-white shadow-lg shadow-gray-400 w-11/12 h-full py-3">
@@ -63,7 +71,7 @@ function ShippingDetails() {
             <div>
               <HomeIcon className="absolute translate-y-1 ml-3" />
               <input
-                className="border-2 pl-12 border-gray-300 py-1"
+                className="border-2 w-full pl-12 border-gray-300 py-1"
                 placeholder="Address"
                 type="text"
                 name="address"
@@ -72,18 +80,6 @@ function ShippingDetails() {
               />
             </div>
 
-            <div>
-              <ApartmentIcon className="absolute translate-y-1 ml-3" />
-              <input
-                className="border-2 pl-12 border-gray-300 py-1"
-                placeholder="City"
-                type="text"
-                name="city"
-                value={shippingFormData.city}
-                onChange={handleShippingFormChange}
-
-              />
-            </div>
 
             <div>
               <LocationOnIcon className="absolute translate-y-1 ml-3" />
@@ -94,7 +90,6 @@ function ShippingDetails() {
                 name="pin"
                 value={shippingFormData.pin}
                 onChange={handleShippingFormChange}
-
               />
             </div>
 
@@ -107,37 +102,72 @@ function ShippingDetails() {
                 name="phone"
                 value={shippingFormData.phone}
                 onChange={handleShippingFormChange}
-
               />
             </div>
-            <div>
+
+            <div className="w-5/6 flex bg-fuchsia-700">
               <PublicIcon className="absolute translate-y-1 ml-3" />
-              <input
-                className="border-2 pl-12 border-gray-300 py-1"
-                placeholder="Country"
-                type="text"
+              <select
+                className="w-full border-2 pl-12 border-gray-300 py-1"
                 name="country"
                 value={shippingFormData.country}
                 onChange={handleShippingFormChange}
-
-              />
+              >
+                <option value="" disabled>
+                  Choose Country
+                </option>
+                {Country.getAllCountries().map((country) => (
+                  <option key={country.isoCode} value={country.isoCode}>
+                    {country.name}
+                  </option>
+                ))}
+              </select>
             </div>
-            <div>
+
+            <div className="w-5/6 flex bg-fuchsia-700">
               <LocationCityIcon className="absolute translate-y-1 ml-3" />
-              <input
-                className="border-2 pl-12 border-gray-300 py-1"
-                placeholder="State"
-                type="text"
+              <select
+                className="border-2 pl-12 w-full border-gray-300 py-1"
                 name="state"
                 value={shippingFormData.state}
                 onChange={handleShippingFormChange}
-
-              />
+              >
+                <option value="" disabled>
+                  Choose State
+                </option>
+                {State.getStatesOfCountry(shippingFormData.country).map(
+                  (state) => (
+                    <option key={state.isoCode} value={state.isoCode}>
+                      {state.name}
+                    </option>
+                  )
+                )}
+              </select>
             </div>
-
+            <div className="w-5/6 flex bg-fuchsia-700">
+              <ApartmentIcon className="absolute translate-y-1 ml-3" />
+              <select
+                className="border-2 pl-12 w-full border-gray-300 py-1"
+                name="city"
+                value={shippingFormData.city}
+                onChange={handleShippingFormChange}
+              >
+                <option value="" disabled>
+                  Choose City
+                </option>
+                {City.getCitiesOfState(shippingFormData.country,shippingFormData.state).map(
+                  (city) => (
+                    <option key={city.isoCode} value={city.isoCode}>
+                      {city.name}
+                    </option>
+                  )
+                )}
+              </select>
+            </div>
+             
             <button
               type="submit"
-              className="text-center w-full text-sm my-3 text-white bg-orange-600 hover:bg-orange-500 py-2 px-5"
+              className="text-center w-5/6 text-sm my-3 text-white bg-orange-600 hover:bg-orange-500 py-2 px-5"
               onClick={handleShippingFormSubmit}
             >
               Continue
@@ -148,4 +178,5 @@ function ShippingDetails() {
     </div>
   );
 }
+
 export default ShippingDetails;

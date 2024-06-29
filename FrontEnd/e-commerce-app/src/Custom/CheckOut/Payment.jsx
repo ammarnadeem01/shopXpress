@@ -1,7 +1,7 @@
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import KeyIcon from "@mui/icons-material/Key";
-import Checkout from "./checkout";
+import Checkout from "./Checkout";
 function Payment() {
   return (
     <div className="flex items-center justify-center bg-gray-50 w-max-screen my-3 h-auto">

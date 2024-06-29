@@ -191,12 +191,16 @@ const User = () => {
               <input
                 type="file"
                 placeholder="avatar"
-                className="border-2 border-gray-600 rounded-md w-full px-14 py-2"
+                className="hidden border-2 border-gray-600 rounded-md w-full px-14 py-2"
                 name="avatar"
+                id="avatar"
                 onChange={handleRegChange}
               />
+              <label htmlFor="avatar"
+              className="bg-gray-800 text-white w-full mt-2 text-center py-2 px-4 rounded-md cursor-pointer hover:bg-gray-600">
+                Choose Avatar
+              </label>
             </div>
-
             <button
               type="submit"
               onClick={handleRegSubmit}

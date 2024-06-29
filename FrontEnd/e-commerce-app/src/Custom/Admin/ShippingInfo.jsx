@@ -3,15 +3,11 @@ import LeftBar from "./LeftBar";
 function ShippingInfo() {
   return (
     <div className="flex w-max-screen ">
-      {/*  Left Bar */}
+
       <LeftBar />
-      {/* Right Bar */}
+
       <div className="flex flex-wrap justify-center bg-white items-center h-full w-full">
-        {/* LHS */}
-        {/* <div className="flex items-center justify-center bg-gray-50 w-max-screen my-3 h-auto"> */}
-        {/* <div className="bg-white shadow-lg shadow-gray-400 w-11/12 h-full py-3"> */}
-        {/* <div className="flex flex-row justify-between items-center flex-wrap w-max-screen h-auto"> */}
-        {/* Left */}
+
         <div className="w-4/6 pl-4 border-r-2 border-gray-300 h-auto flex flex-col justify-center items-start my-5">
           <p className="text-2xl font-semibold ">Shipping Info</p>
           <div className="pl-8">

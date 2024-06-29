@@ -17,8 +17,8 @@ function ProductCard({ data }) {
         <p className="w-full line-clamp-2 text-gray-600 text-sm px-0.5">
           {data.description}
         </p>
-        <p className="w-full">{data.ratings} (Reviews)</p>
-        <p className="w-full text-red-700">{data.price}</p>
+        <p className="w-full">{data.ratings} ⭐⭐⭐⭐⭐ (1234)</p>
+        <p className="w-full text-red-700">$ {data.price}</p>
       </div>
     </div>
   );

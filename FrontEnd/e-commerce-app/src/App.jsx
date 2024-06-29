@@ -28,6 +28,7 @@ import CreateProduct from "./Custom/Admin/CreateProduct";
 import AllOrders from "./Custom/Admin/AllOrders";
 import AllReviews from "./Custom/Admin/AllReviews";
 import ShippingInfo from "./Custom/Admin/ShippingInfo";
+import EmptyCart from "./Custom/Cart/EmptyCart";
 //
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
           <Route path="/checkout/payment" element={<Payment />} />
           <Route path="/checkout/shipping" element={<ShippingDetails />} />
           <Route path="/placed" element={<OrderPlaced />} />
+          <Route path="/empty" element={<EmptyCart />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />

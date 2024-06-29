@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import M1 from "../../Images/ProductImages/M1.jpg";
-import Checkout from "./checkout";
+import Checkout from "./Checkout";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -111,7 +111,7 @@ function ConfirmOrder() {
             </p>
             <div className="flex w-full justify-between">
               <p>Subtotal : </p>
-              <p className="text-gray-500">$ {grossTotal}</p>
+              <p className="text-gray-500">$ {grossTotal.toFixed(2)}</p>
             </div>
             <div className="flex w-full justify-between ">
               <p>Shipping Charges : </p>
@@ -119,7 +119,7 @@ function ConfirmOrder() {
             </div>
             <div className="flex w-full justify-between">
               <p>GST : </p>
-              <p className="text-gray-500">$ {GST}</p>
+              <p className="text-gray-500">$ {GST.toFixed(2)}</p>
             </div>
             <div className="flex w-full justify-between border-t-2 border-gray-300 pt-2  ">
               <p className="font-semibold text-lg">Total</p>

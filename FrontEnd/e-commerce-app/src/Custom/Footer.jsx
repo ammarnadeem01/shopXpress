@@ -18,7 +18,7 @@ function Footer() {
                  <p className='text-xl text-white font-semibold w-full'>Donations</p>
           </div>
           <div>
-                 <p className='text-white w-full'>Donations are very much appreciated. Please consider donating to keep the website development going.</p>
+                <p className='text-white w-full'><br />Donations are very much appreciated. Please consider donating to keep the website development going.</p>
                 <p className='text-gray-500 w-full'>Download App for Android and IOS mobile phone</p>
           </div>
           </div>

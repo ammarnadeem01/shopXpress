@@ -1,24 +1,18 @@
+const asyncErrorHandler = require('./../Utils/asyncErrorHandler');
+const CustomError = require('./../Utils/CustomError');
 const User = require("../Models/userModel");
 const uploadOnCloudinary = require("../Utils/cloudinary")
-exports.getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find();
-    res.status(200).json({
+exports.getAllUsers = asyncErrorHandler(async (req, res) => {
+     const users = await User.find();
+     res.status(200).json({
       status: "Success",
       length: users.length,
       data: {
         users,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
-exports.createNewUser = async (req, res) => {
-  try {
+});
+exports.createNewUser = asyncErrorHandler(async (req, res) => {
     const {name,email,password}=req.body;
     const avatarLocalPath = req.file.path;
     const avatarui = await uploadOnCloudinary(avatarLocalPath);
@@ -32,17 +26,9 @@ exports.createNewUser = async (req, res) => {
         newUser,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "Fail",
-      error,
-      message: error,
-    });
-  }
-};
+})
 
-exports.getSpecificUser = async (req, res) => {
-  try {
+exports.getSpecificUser = asyncErrorHandler(async (req, res) => {
     const user = await User.findOne({ email: req.params[0] });
     res.status(200).json({
       status: "Success",
@@ -50,16 +36,9 @@ exports.getSpecificUser = async (req, res) => {
         user,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
+})
 
-exports.getSpecificUserWithId = async (req, res) => {
-  try {
+exports.getSpecificUserWithId = asyncErrorHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     res.status(200).json({
       status: "Success",
@@ -67,10 +46,4 @@ exports.getSpecificUserWithId = async (req, res) => {
         user,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
+});

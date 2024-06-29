@@ -1,8 +1,22 @@
 import { NavLink } from "react-router-dom";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
-
+import Badge from '@mui/material/Badge';
+import { styled } from '@mui/material/styles';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 function Navbar() {
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+      right: -3,
+      top: 13,
+      border: `2px solid ${theme.palette.background.paper}`,
+      padding: '0 4px',
+    },
+  }));
+    const {cartItems} = useSelector((state)=>{
+      return state.cartReducer;
+    }) 
   return (
     <nav
       className="
@@ -66,9 +80,16 @@ function Navbar() {
         <NavLink to="/search" className="navLink no-underline ">
           🔍
         </NavLink>
-        <NavLink to="/cart" className="navLink no-underline ">
+
+
+       
+       <NavLink aria-label="cart"  to="/cart" className="navLink no-underline">
+        <StyledBadge badgeContent={cartItems.length==0?0:cartItems.length} color="secondary">
           <ShoppingCartIcon />
+        </StyledBadge>
         </NavLink>
+
+        
         <NavLink to="/user" className="no-underline navLink">
           <AccountBoxIcon />
         </NavLink>

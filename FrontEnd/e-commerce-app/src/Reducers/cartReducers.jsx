@@ -17,6 +17,13 @@ export const reducers = createReducer(initialState, {
     state.cartItems = [...new Map(state.cartItems.map(obj => [obj.productId, obj])).values()];
 
   },
+  
+  DELETE_ITEM_FROM_CART: (state, action) => {
+    state.cartItems = state.cartItems.filter(
+      (cartItem) => cartItem.productId !== action.payload.id
+    );
+  },
+  
   SET_TOTAL:(state,action)=>{
     state.grossTotal=action.payload;
   }

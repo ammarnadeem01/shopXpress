@@ -10,7 +10,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-// import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
@@ -18,12 +17,12 @@ const ProductDetails = () => {
   const [allReviews, setAllReviews] = useState([]);
   const dispatch = useDispatch();
   const userId = useSelector((state) => {
-    console.log("state.userReducer.userId : ",state.userReducer.userId)
+    console.log("state.userReducer.userId : ", state.userReducer.userId);
     return state.userReducer.userId;
-
   });
+
   function handleReviewSubmission() {
-    console.log("userId : ",userId)
+    console.log("userId : ", userId);
     axios
       .post("http://localhost:3000/api/v3/reviews", {
         productId: location.state.data._id,
@@ -33,10 +32,10 @@ const ProductDetails = () => {
       })
       .then((results) => {
         handleClose();
-      }).catch((err)=>console.log(err))
+      })
+      .catch((err) => console.log(err));
   }
- 
- 
+
   const [count, setCount] = useState(1);
   const location = useLocation();
   const [open, setOpen] = useState(false);
@@ -45,6 +44,7 @@ const ProductDetails = () => {
     quantity: count,
   };
   const nav = useNavigate();
+
   function AddedToCartFunction() {
     console.log("Order added to cart");
     dispatch({
@@ -66,7 +66,7 @@ const ProductDetails = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  //
+
   useEffect(() => {
     axios
       .get(`http://localhost:3000/api/v3/reviews/${location.state.data._id}`)
@@ -77,27 +77,40 @@ const ProductDetails = () => {
 
   const [review, setReview] = useState("");
   const [ratings, setRatings] = useState(0);
+
   return (
     <Fragment>
-      <div className="flex w-max-screen h-auto  justify-center items-center flex-wrap  bg-gray-100 pt-10">
+      <div className="flex w-max-screen justify-center items-center flex-wrap bg-gray-100 pt-10">
         <div className="flex w-4/5 h-4/5 rounded-md shadow-lg flex-wrap">
-          {/* image  */}
+          {/* image */}
           <div className="w-1/2">
             <Carousel>
               <Carousel.Item>
-                <img src={location.state.data.productImages[0]} className="w-screen" alt="IMAGE 1 " />
+                <img
+                  src={location.state.data.productImages[0]}
+                  className="carousel-image"
+                  alt="IMAGE 1"
+                />
               </Carousel.Item>
               <Carousel.Item>
-                <img src={location.state.data.productImages[1]} className="w-screen" alt="IMAGE 1" />
+                <img
+                  src={location.state.data.productImages[1]}
+                  className="carousel-image"
+                  alt="IMAGE 2"
+                />
               </Carousel.Item>
               <Carousel.Item>
-                <img src={location.state.data.productImages[2]} className="w-screen" alt="IMAGE 1" />
+                <img
+                  src={location.state.data.productImages[2]}
+                  className="carousel-image"
+                  alt="IMAGE 3"
+                />
               </Carousel.Item>
             </Carousel>
           </div>
 
           {/* detail */}
-          <div className="w-1/2 p-6 flex flex-col bg-white justify-evenly items-start">
+          <div className="w-1/2 p-6 flex flex-col bg-white justify-evenly items-start detail-container">
             <p className="text-2xl font-semibold">{location.state.data.name}</p>
             <p className="text-xs text-gray-400">
               Product # {location.state.data._id}
@@ -114,7 +127,7 @@ const ProductDetails = () => {
             <p className="text-2xl font-semibold mb-2">
               {location.state.data.price}
             </p>
-            <div className="flex mb-2 ">
+            <div className="flex mb-2">
               <p
                 className="bg-gray-500 text-white w-5 text-center cursor-pointer"
                 onClick={() => {
@@ -125,7 +138,7 @@ const ProductDetails = () => {
               >
                 +
               </p>
-              <p className="w-auto px-2 ">{count}</p>
+              <p className="w-auto px-2">{count}</p>
               <p
                 className="bg-gray-500 text-white w-5 text-center cursor-pointer"
                 onClick={() => {
@@ -135,7 +148,7 @@ const ProductDetails = () => {
                 -
               </p>
               <p
-                className="bg-orange-600 cursor-pointer hover:bg-orange-500 ml-3  text-center text-xs flex items-center text-white px-4 rounded-3xl"
+                className="bg-orange-600 cursor-pointer hover:bg-orange-500 ml-3 text-center text-xs flex items-center text-white px-4 rounded-3xl"
                 onClick={AddedToCartFunction}
               >
                 Add to Cart
@@ -143,9 +156,12 @@ const ProductDetails = () => {
             </div>
             <p className="border-y-2 border-gray-200 w-3/4 py-2">
               Status :
-              <span className={` font-semibold ml-2
-               ${location.state.data.stock == 0 ? "text-red-600" : "text-green-600"}`}>
-                {location.state.data.stock == 0 ? "Out Of Stock" : "InStock"}
+              <span
+                className={`font-semibold ml-2 ${
+                  location.state.data.stock == 0 ? "text-red-600" : "text-green-600"
+                }`}
+              >
+                {location.state.data.stock == 0 ? "Out Of Stock" : "In Stock"}
               </span>
             </p>
             <p>
@@ -154,11 +170,9 @@ const ProductDetails = () => {
               </span>
               {location.state.data.description}
             </p>
-            {/* start */}
-
             <button
               onClick={handleClickOpen}
-              className="bg-orange-600 w-1/4 py-1.5 px-0.5 mt-2 hover:bg-orange-500  text-center text-xs text-white rounded-lg"
+              className="bg-orange-600 w-1/4 py-1.5 px-0.5 mt-2 hover:bg-orange-500 text-center text-xs text-white rounded-lg"
             >
               Submit Review
             </button>
@@ -193,21 +207,27 @@ const ProductDetails = () => {
                 <Button onClick={handleReviewSubmission}>Submit</Button>
               </DialogActions>
             </Dialog>
-            {/* end */}
           </div>
         </div>
         <div className="flex justify-evenly gap-4 space-y-10 mb-10 w-screen items-center flex-wrap mt-10">
-          <div className="w-full flex justify-center text-2xl font-semibold ">
-            <p className="w-auto  border-b-2 border-gray-500 pb-3 px-5">
-              REVIEWS
-            </p>
+          <div className="w-full flex justify-center text-2xl font-semibold">
+            <p className="w-auto border-b-2 border-gray-500 pb-3 px-5">REVIEWS</p>
           </div>
-          {/* REVIEWS */}
           {allReviews.map((review) => (
             <ReviewCard key={review._id} data={review} />
           ))}
         </div>
       </div>
+      <style jsx>{`
+        .carousel-image {
+          width: 100%;
+          height: 600px; 
+          object-fit: cover;
+        }
+        .detail-container {
+          height: 600px; 
+        }
+      `}</style>
     </Fragment>
   );
 };

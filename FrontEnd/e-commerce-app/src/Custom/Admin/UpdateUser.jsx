@@ -18,22 +18,22 @@ function UpdateUser() {
               <PersonIcon className="absolute translate-x-2 translate-y-2.5" />
               <input
                 className="border-2 border-gray-400 py-2 px-11 rounded-md"
-                placeholder="Ammar Nadeem"
+                placeholder="Name"
               />
             </div>
             <div>
               <EmailIcon className="absolute translate-x-2 translate-y-2.5" />
               <input
                 className="border-2 border-gray-400 py-2 px-11 rounded-md"
-                placeholder="ammarpk786@gmail.com"
+                placeholder="Email"
               />
             </div>
-            <div>
+            <div className="w-full">
               <VerifiedUserIcon className="absolute translate-x-2 translate-y-2.5" />
-              <input
-                className="border-2 border-gray-400 py-2 px-11 rounded-md"
-                placeholder="Admin"
-              />
+               <select id="options" name="options" className="w-full border-2 border-gray-400 py-2 px-11 rounded-md">
+                <option value="option1">Admin</option>
+                <option value="option1">User</option>
+              </select>
             </div>
             <p className="bg-gray-800 hover:bg-gray-600 rounded-md text-center text-white w-full py-1.5">
               UPDATE

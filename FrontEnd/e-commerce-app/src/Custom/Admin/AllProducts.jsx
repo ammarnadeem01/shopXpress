@@ -9,11 +9,12 @@ function AllProducts() {
      useEffect(()=>{
         axios.get("http://localhost:3000/api/v3/products")
         .then((results)=>{
+          console.log(results)
           setItems(results.data.data.product);
         }).catch((err)=>{
           console.log("Error Occurred.")
         })
-     },[items])
+     },[])
   return (
     <div className="flex w-max-screen ">
       {/*  Left Bar */}
