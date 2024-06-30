@@ -3,15 +3,24 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import LeftBar from "./LeftBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 function UserList() {
   const [users, setUsers] = useState([])
+  const nav = useNavigate()
+
+  
+  const deleteUser=(userid)=>{
+    axios.delete(`http://localhost:3000/api/v3/users/${userid}`).then((res)=>console.log(res))
+    .catch((err)=>console.log(err))
+  }
+
   useEffect(() => {
      axios.get("http://localhost:3000/api/v3/users").then((result)=>{
       setUsers(result.data.data.users)
      }).catch((err)=>{
       console.log("Error Fetching Data")
      })
-  }, [])
+  }, [users])
   
   return (
     <div className="flex w-max-screen ">
@@ -38,8 +47,12 @@ function UserList() {
             <p className="w-1/4  ">{user.name}</p>
             <p className="w-1/12 ">{user.role}</p>
             <p className="w-1/12 flex gap-2">
-              <EditIcon />
-              <DeleteIcon />
+              <EditIcon className="cursor-pointer" onClick={()=>{nav("/admin/updateuser",{state:{
+                name:user.name,
+                email:user.email,
+                role:user.role
+              }})}} />
+              <DeleteIcon  className="cursor-pointer" onClick={()=>{deleteUser(user._id)}}/>
             </p>
           </div>
             ))

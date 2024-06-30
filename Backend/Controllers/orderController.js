@@ -26,3 +26,21 @@ exports.placeOrder = async (req, res) => {
     });
   }
 };
+
+exports.getAllOrders=async(req,res)=>{
+  try {
+    const order = await Order.find();
+    res.status(200).json({
+      status: "Success",
+      length: order.length,
+      data: {
+        order,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "Fail",
+      message: error.message,
+    });
+  }
+}

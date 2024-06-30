@@ -3,8 +3,17 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import LeftBar from "./LeftBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function AllProducts() {
+  const nav=useNavigate()
+  function deleteProduct(prodId)
+  {
+    axios.delete(`http://localhost:3000/api/v3/products/${prodId}`)
+    .then((res)=>{console.log(res)})
+    .catch((err)=>{console.log(err)})
+
+  }
      const [items,setItems]=useState([])
      useEffect(()=>{
         axios.get("http://localhost:3000/api/v3/products")
@@ -14,7 +23,7 @@ function AllProducts() {
         }).catch((err)=>{
           console.log("Error Occurred.")
         })
-     },[])
+     },[items])
   return (
     <div className="flex w-max-screen ">
       {/*  Left Bar */}
@@ -39,8 +48,8 @@ function AllProducts() {
             <p className="w-1/12  ">{item.stock}</p>
             <p className="w-2/12 ">${item.price}</p>
             <p className="w-1/12 flex gap-2">
-              <EditIcon />
-              <DeleteIcon />
+              <EditIcon className="cursor-pointer" onClick={()=>{nav("/admin/editproduct",{state:item})}} />
+              <DeleteIcon className="cursor-pointer" onClick={()=>{deleteProduct(item._id)}}/>
             </p>
           </div>
           ))}

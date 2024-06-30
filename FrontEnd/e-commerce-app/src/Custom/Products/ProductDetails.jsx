@@ -15,25 +15,45 @@ import axios from "axios";
 
 const ProductDetails = () => {
   const [allReviews, setAllReviews] = useState([]);
+  const [purchased, setPurchased] = useState(true)
   const dispatch = useDispatch();
-  const userId = useSelector((state) => {
+  const {userId} = useSelector((state) => {
     console.log("state.userReducer.userId : ", state.userReducer.userId);
-    return state.userReducer.userId;
+     return state.userReducer;
   });
+  console.log(userId)
 
   function handleReviewSubmission() {
-    console.log("userId : ", userId);
-    axios
-      .post("http://localhost:3000/api/v3/reviews", {
-        productId: location.state.data._id,
-        userId,
-        review,
-        ratings,
-      })
-      .then((results) => {
-        handleClose();
-      })
-      .catch((err) => console.log(err));
+    if(existingReview)
+      {
+         axios
+        .put("http://localhost:3000/api/v3/reviews", {
+          productId: location.state.data._id,
+          userId,
+          review,
+          ratings,
+        })
+        .then((results) => {
+          console.log("results",results)
+          handleClose();
+        })
+        .catch((err) => console.log(err));
+
+      }
+      else{
+        axios
+          .post("http://localhost:3000/api/v3/reviews", {
+            productId: location.state.data._id,
+            userId,
+            review,
+            ratings,
+          })
+          .then((results) => {
+            console.log("results",results)
+            handleClose();
+          })
+          .catch((err) => console.log(err));
+      }
   }
 
   const [count, setCount] = useState(1);
@@ -69,12 +89,12 @@ const ProductDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/v3/reviews/${location.state.data._id}`)
+      .get(`http://localhost:3000/api/v3/reviews/product/${location.state.data._id}`)
       .then((results) => {
-        setAllReviews(results.data.data.specificProductReviews);
-      });
-  }, [allReviews]);
-
+        console.log("results",allReviews)
+        setAllReviews(results.data.data.reviews);
+      }).catch((err)=>{console.log(err)})
+  }, []);
   const [review, setReview] = useState("");
   const [ratings, setRatings] = useState(0);
 
@@ -171,11 +191,14 @@ const ProductDetails = () => {
               {location.state.data.description}
             </p>
             <button
+              disabled={purchased === false}
               onClick={handleClickOpen}
-              className="bg-orange-600 w-1/4 py-1.5 px-0.5 mt-2 hover:bg-orange-500 text-center text-xs text-white rounded-lg"
+              className={`w-1/4 py-1.5 px-0.5 mt-2 text-center text-xs text-white rounded-lg
+                ${purchased==true?"bg-orange-500 hover:bg-orange-600 cursor-pointer":"bg-orange-200"}
+                `}
             >
               Submit Review
-            </button>
+           </button>
             <Dialog open={open} onClose={handleClose}>
               <DialogTitle>Submit Review</DialogTitle>
               <DialogContent>
@@ -213,12 +236,13 @@ const ProductDetails = () => {
           <div className="w-full flex justify-center text-2xl font-semibold">
             <p className="w-auto border-b-2 border-gray-500 pb-3 px-5">REVIEWS</p>
           </div>
-          {allReviews.map((review) => (
-            <ReviewCard key={review._id} data={review} />
+        {console.log("allReviews",allReviews)}
+          {allReviews && allReviews.map((review) => (
+              <ReviewCard key={review._id} data={review} />
           ))}
         </div>
       </div>
-      <style jsx>{`
+      <style>{`
         .carousel-image {
           width: 100%;
           height: 600px; 

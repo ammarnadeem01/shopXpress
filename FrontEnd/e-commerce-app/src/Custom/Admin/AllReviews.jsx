@@ -53,7 +53,7 @@ function AllReviews() {
                 onChange={(e)=>{setProductId(e.target.value)}}
               />
             </div>
-            <p className="bg-orange-600 py-1.5 px-16 rounded-md hover:bg-orange-500 text-white"
+            <p className="cursor-pointer bg-orange-600 py-1.5 px-16 rounded-md hover:bg-orange-500 text-white"
              onClick={searchReviews}
             >
               Search
@@ -74,7 +74,7 @@ function AllReviews() {
             <p className="w-2/5  text-start">{rev.review}</p>
             <p className="w-1/12 pl-4">{rev.ratings}</p>
             <p className="w-1/12 pl-4 text-xs">
-              <DeleteIcon onClick={()=>{deleteReview(rev._id)}}/>
+              <DeleteIcon className="cursor-pointer" onClick={()=>{deleteReview(rev._id)}}/>
             </p>
           </div>
           ))}

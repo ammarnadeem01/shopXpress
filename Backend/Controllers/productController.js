@@ -67,27 +67,58 @@ exports.addNewProduct = async (req, res) => {
   }
 };
 
+
 //Update
+
 exports.updateProduct = async (req, res) => {
+  // try {
+  //   console.log("req.params.id",req.params.id)
+  //   console.log("req.body",req.body)
+  //   const updatedProduct = await Product.findByIdAndUpdate(
+  //     req.params.id,
+  //     req.body,
+  //     { new: true, runValidators: true }
+  //   );
+  //   res.status(200).json({
+  //     status: "Success",
+  //     data: {
+  //       updatedProduct,
+  //     },
+  //   });
+  // } catch (error) {
+  //   res.status(404).json({
+  //     status: "Fail",
+  //     message: error.message,
+  //   });
+  // }
   try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
-    res.status(204).json({
+    console.log("req.params.id",req.params.id)
+    console.log("req.body",req.body)
+    const {name,description,price,category,stock}=req.body;
+    const image1LocalePath = req.files[0].path;
+    const image2LocalePath = req.files[1].path;
+    const image3LocalePath = req.files[2].path;
+    const img1=await uploadOnCloudinary(image1LocalePath)
+    const img2=await uploadOnCloudinary(image2LocalePath)
+    const img3=await uploadOnCloudinary(image3LocalePath)
+    const updatedProduct=await Product.findByIdAndUpdate(req.params.id,{
+      name,description,price,category,stock,
+      productImages:[img1.url,img2.url,img3.url]
+    }, { new: true, runValidators: true })
+    res.status(201).json({
       status: "Success",
       data: {
         updatedProduct,
       },
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(400).json({
       status: "Fail",
       message: error.message,
     });
   }
 };
+
 //Delete-One
 exports.deleteSpecificProduct = async (req, res) => {
   try {

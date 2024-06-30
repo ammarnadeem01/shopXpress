@@ -25,6 +25,7 @@ import UpdateUser from "./Custom/Admin/UpdateUser";
 import Dashboard from "./Custom/Admin/Dashboard";
 import AllProducts from "./Custom/Admin/AllProducts";
 import CreateProduct from "./Custom/Admin/CreateProduct";
+import EditProduct from "./Custom/Admin/EditProduct";
 import AllOrders from "./Custom/Admin/AllOrders";
 import AllReviews from "./Custom/Admin/AllReviews";
 import ShippingInfo from "./Custom/Admin/ShippingInfo";
@@ -51,6 +52,7 @@ function App() {
           <Route path="/admin/reviews" element={<AllReviews />} />
           <Route path="/admin/shipping" element={<ShippingInfo />} />
           <Route path="/admin/create" element={<CreateProduct />} />
+          <Route path="/admin/editproduct" element={<EditProduct />} />
           <Route path="/admin/orders" element={<AllOrders />} />
           <Route path="/profile" element={<MyProfile />} />
           <Route path="/checkout/confirm" element={<ConfirmOrder />} />

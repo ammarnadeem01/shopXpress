@@ -47,3 +47,45 @@ exports.getSpecificUserWithId = asyncErrorHandler(async (req, res) => {
       },
     });
 });
+
+
+exports.deleteSpecificUser = async(req,res)=>{
+  try {
+    await User.findByIdAndDelete(req.params.id)
+    res.status(202).json(
+    {
+      status:"Success",
+      data:null
+     }
+    )
+  } catch (error) {
+     res.status(404).json({
+      status:"Fail",
+      message:error.message
+     })
+  }
+}
+
+
+exports.edituser=async(req,res)=>{
+  try {
+    console.log("req.body.role",req.body.role)
+    console.log(req.params[0])
+    const updatedUser = await User.findOneAndUpdate({ email: req.params[0] },{
+      $set: { role: req.body.role}
+    },
+    { new: true, runValidators: true } 
+  )
+    res.status(200).json(
+    {
+      status:"Success",
+      data:updatedUser
+     }
+    )
+  } catch (error) {
+     res.status(404).json({
+      status:"Fail",
+      message:error.message
+     })
+  } 
+}

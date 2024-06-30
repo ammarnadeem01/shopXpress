@@ -3,12 +3,15 @@ import { NavLink, useNavigate } from "react-router-dom";
 import BadgeIcon from "@mui/icons-material/Badge";
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import axios from "axios";
 const User = () => {
   const [loginForm, setLoginForm] = useState(true);
   const [registerForm, setRegisterForm] = useState(false);
   const nav = useNavigate();
+  // =================================== Password Show n Hide ============================================= 
+  const [show, setShow] = useState(false);
 
   // =================================== REGISTER =============================================
   const [regFormData, setRegFormData] = useState({
@@ -122,14 +125,15 @@ const User = () => {
             <div className="w-2/3">
               <LockIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
               <input
-                type="password"
+                type={show ? "text" : "password"}
                 placeholder="Password"
                 className="border-2 border-gray-600 rounded-md w-full px-14 py-2"
                 name="password"
                 onChange={handleLoginChange}
                 value={logFormData.password}
               />
-              <RemoveRedEyeIcon className="absolute -translate-x-8 translate-y-3" />
+              {show &&<VisibilityIcon onClick={()=>setShow(false)} className=" cursor-pointer absolute -translate-x-8 translate-y-3" />}
+              {!show &&<VisibilityOffIcon onClick={()=>setShow(true)} className=" cursor-pointer absolute -translate-x-8 translate-y-3" />}
             </div>
             <p
               onClick={() => {
@@ -178,14 +182,16 @@ const User = () => {
             <div className="w-2/3">
               <LockIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
               <input
-                type="password"
+                type={show ? "text" : "password"}
                 placeholder="Password"
                 className="border-2 border-gray-600 rounded-md w-full px-14 py-2"
                 value={regFormData.password}
                 onChange={handleRegChange}
                 name="password"
               />
-              <RemoveRedEyeIcon className="absolute -translate-x-8 translate-y-3" />
+              
+              {show &&<VisibilityIcon onClick={()=>setShow(false)} className=" cursor-pointer absolute -translate-x-8 translate-y-3" />}
+              {!show &&<VisibilityOffIcon onClick={()=>setShow(true)} className=" cursor-pointer absolute -translate-x-8 translate-y-3" />}
             </div>
             <div className="w-2/3">
               <input
