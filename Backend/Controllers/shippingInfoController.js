@@ -18,32 +18,28 @@ exports.addShippingInfo=async (req,res)=>{
      }
 }
 
-exports.getShippingInfo = (req, res) => {
-    const id = req.params.id;
+exports.getShippingInfo = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const document = await ShippingInfo.find({ customer: id }).select('address city state country phone');
 
-    ShippingInfo.findById(id)
-        .select('address city state country')
-        .then((document) => {
-            if (!document) {
-                // If no document is found, send a 404 response
-                return res.status(404).json({
-                    status: "Failure",
-                    message: "Shipping information not found",
-                });
-            }
-
-            // If a document is found, send a success response
-            return res.status(200).json({
-                status: "Success",
-                data: {
-                    shippingInfo: document,
-                },
-            });
-        })
-        .catch((error) => {
-            return res.status(500).json({
+        if (!document) {
+            return res.status(404).json({
                 status: "Failure",
-                message: error.message
+                message: "Shipping information not found",
             });
+        }
+
+        res.status(200).json({
+            status: "Success",
+            data: {
+                shippingInfo: document,
+            },
         });
+    } catch (error) {
+        res.status(500).json({
+            status: "Failure",
+            message: error.message,
+        });
+    }
 };

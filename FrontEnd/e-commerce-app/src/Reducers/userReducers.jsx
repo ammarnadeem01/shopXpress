@@ -2,7 +2,9 @@ import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
   userId: "",
-  userName: ""
+  userName: "",
+  userAddress:"",
+  userPhone:""
 };
 
 export const reducers = createReducer(initialState, {
@@ -10,6 +12,12 @@ export const reducers = createReducer(initialState, {
     state.userId = action.payload;
   },
   SET_USER_NAME: (state, action) => {
+    state.userName = action.payload;
+  },
+  SET_USER_ADDRESS: (state, action) => {
+    state.userName = action.payload;
+  },
+  SET_USER_PHONE: (state, action) => {
     state.userName = action.payload;
   },
 });

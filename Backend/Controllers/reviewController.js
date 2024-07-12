@@ -29,9 +29,34 @@ exports.addReview = async (req, res) => {
   }
 };
 
-// Controller method for product reviews
+exports.editReview=async(req,res)=>{
+    try {
+      const editedReview = await Review.findByIdAndUpdate(req.params.id,{
+            ratings:req.body.ratings,
+            review:req.body.review
+      },{runValidators:true,new:true})
+      res.status(201).json({
+        status:"Success",
+        data:{
+          editedReview
+        }
+      })
+      
+    } catch (error) {
+      res.status(404).json({
+        status:"Failure",
+        message:error.message
+      }) 
+    }
+}
+
+
+
+
+// // Controller method for product reviews
 exports.specificProductReviews = async (req, res) => {
   try {
+    console.log(req.params.id)
     const productReviews = await Review.find({ reviewedProduct: req.params.id });
     res.status(200).json({
       status: "Success",
@@ -40,16 +65,20 @@ exports.specificProductReviews = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(404).json({
       status: "Fail",
       message: error.message,
     });
   }
 };
 
+
+
+
 // Controller method for user reviews
 exports.specificUserReviews = async (req, res) => {
   try {
+    
     const userReviews = await Review.find({ reviewedBy: req.params.id });
     res.status(200).json({
       status: "Success",

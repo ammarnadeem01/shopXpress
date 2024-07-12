@@ -18,4 +18,6 @@ router
     .route("/:id")
     .get(userControllers.getSpecificUserWithId)
     .delete(userControllers.deleteSpecificUser)
+    .patch(userControllers.editProfile)
+
 module.exports = router;

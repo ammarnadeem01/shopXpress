@@ -10,5 +10,6 @@ router
   .route("/:id")
   .get(productControllers.getSpecificProduct)
   .put(upload.array('productImages',3),productControllers.updateProduct)
-  .delete(productControllers.deleteSpecificProduct);
+  .delete(productControllers.deleteSpecificProduct)
+  .patch(productControllers.stockUpdate)
 module.exports = router;

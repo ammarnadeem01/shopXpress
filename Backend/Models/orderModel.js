@@ -4,7 +4,7 @@ const orderSchema = new mongoose.Schema({
     {
       item: {
         type: mongoose.Schema.ObjectId,
-        ref: "Products",
+        ref: "Product",
       },
       quantity: {
         type: Number,
@@ -14,11 +14,19 @@ const orderSchema = new mongoose.Schema({
   ],
   placedBy: {
     type: mongoose.Schema.ObjectId,
-    ref: "Users",
+    ref: "User",
+  },
+  status:{
+    type:String,
+    default:"Processing"
+  },
+  totalPrice:{
+    type:Number,
+    default:0
   },
   placedDate: {
     type: Date,
     default: Date.now,
   },
 });
-module.exports = mongoose.model("Orders", orderSchema);
+module.exports = mongoose.model("Order", orderSchema);

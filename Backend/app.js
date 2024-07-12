@@ -19,10 +19,10 @@ app.use("/api/v3/users", userRouter);
 app.use("/api/v3/reviews", reviewRouter);
 app.use("/api/v3/shippinginfo", shippingInfoRouter);
 app.use("/api/v3/message", messageRouter);
-app.all('*', (req, res, next) => {
-    const err = new CustomError(`Can't find ${req.originalUrl} on the server!`, 404);
-    next(err);
-});
+// app.all('*', (req, res, next) => {
+//     const err = new CustomError(`Can't find ${req.originalUrl} on the server!`, 404);
+//     next(err);
+// });
 
 app.use(globalErrorHandler);
 

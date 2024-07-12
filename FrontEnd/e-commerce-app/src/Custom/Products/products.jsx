@@ -9,7 +9,63 @@ function Products() {
   const [filteredData, setFilteredData] = useState([]);
   const [ratingsValue, setRatingsValue] = useState([0.5, 5]);
   const [priceValue, setPriceValue] = useState([0, 43000]);
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(['Laptop', 'Footwear', 'Bottom', 'Tops', 'Attire', 'Camera', 'SmartPhone']);
+
+  
+  useEffect(() => {
+    filterData(ratingsValue, priceValue, category);
+  }, [ratingsValue, priceValue, category]);
+
+  function handleRatingsChange(e, newValue) {
+    setRatingsValue(newValue);
+  }
+
+  function handlePriceChange(e, newValue) {
+    setPriceValue(newValue);
+  }
+
+  function handleCategories(selectedCategory) {
+    setCategory(selectedCategory);
+  }
+
+  async function filterData(newRatingsValue, newPriceValue, newCategory) {
+    console.log(newRatingsValue, newPriceValue, newCategory);
+    let currentData = originalData;
+    
+    // Filter by category
+    if (newCategory.length > 0) {
+      currentData = currentData.filter(product => newCategory.includes(product.category));
+    }
+
+    // Filter by price
+    currentData = currentData.filter((product) => {
+      return product.price >= newPriceValue[0] && product.price <= newPriceValue[1];
+    });
+
+    // Fetch reviews
+    const fetchPromises = currentData.map(async (data) => {
+      const results = await axios.get(`http://localhost:3000/api/v3/reviews/product/${data._id}`);
+      console.log("results", results);
+      const item = results.data.data.productReviews;
+      return { ...data, reviews: item };
+    });
+
+    const fetchedItems = await Promise.all(fetchPromises);
+    console.log("fetchedItems", fetchedItems);
+    setReviewsData(fetchedItems);
+
+    // Filter by rating
+    currentData = fetchedItems.filter((product) => {
+      return product.rating >= newRatingsValue[0] && product.rating <= newRatingsValue[1];
+    });
+
+    setFilteredData(currentData);
+  }
+
+
+
+
+
 
   useEffect(() => {
     axios.get("http://localhost:3000/api/v3/products").then((result) => {
@@ -20,24 +76,23 @@ function Products() {
 
   function handleRatingsChange(e, newValue) {
     setRatingsValue(newValue);
-    filterData({ newRatingsValue: newValue });
+    filterData(ratingsValue,priceValue,category);
   }
 
   function handlePriceChange(e, newValue) {
     setPriceValue(newValue);
-    filterData({ newPriceValue: newValue });
+    filterData(ratingsValue,priceValue,category);
   }
 
   function handleCategories(selectedCategory) {
     setCategory(selectedCategory);
-    filterData({ newCategory: selectedCategory });
+    filterData(ratingsValue,priceValue,category);
   }
 
-  function filterData({ newRatingsValue = ratingsValue, newPriceValue = priceValue, newCategory = category }={}) {
+  function filterData( newRatingsValue , newPriceValue , newCategory ) {
+    console.log(newRatingsValue,newPriceValue,newCategory)
     let currentData = originalData;
-    if (newCategory) {
-      currentData = currentData.filter((product) => product.category === newCategory);
-    }
+    currentData = currentData.filter(product => newCategory.includes(product.category));
 
     currentData = currentData.filter((product) => {
       return product.price >= newPriceValue[0] && product.price <= newPriceValue[1];
@@ -45,8 +100,9 @@ function Products() {
 
 
     const fetchPromises = currentData.map(async (data) => {
-      const results=await axios.get(`http://localhost:3000/api/v3/reviews/${data._id}`);
-      const item = results.data.data.specificProductReviews;
+      const results=await axios.get(`http://localhost:3000/api/v3/reviews/product/${data._id}`);
+      console.log("results",results)
+      const item = results.data.data.productReviews;
       return item;
     });
 
@@ -57,10 +113,94 @@ function Products() {
     })
 
 
-    currentData = currentData.filter((product) => {
-      return product.price >= rev[0] && product.price <= newPriceValue[1];
-    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // old start
+
+
+    // function handleRatingsChange(e, newValue) {
+    //   setRatingsValue(newValue);
+    //   filterData({ newRatingsValue: newValue });
+    // }
+  
+    // function handlePriceChange(e, newValue) {
+    //   setPriceValue(newValue);
+    //   filterData({ newPriceValue: newValue });
+    // }
+  
+    // function handleCategories(selectedCategory) {
+    //   setCategory(selectedCategory);
+    //   filterData({ newCategory: selectedCategory });
+    // }
+
+
+  // function filterData({ newRatingsValue = ratingsValue, newPriceValue = priceValue, newCategory = category }={}) {
+  //   console.log(newRatingsValue,priceValue,category)
+  //   let currentData = originalData;
+  //   if (newCategory) {
+  //     currentData = currentData.filter(product => product.category === newCategory);
+  //   }
+
+  //   currentData = currentData.filter((product) => {
+  //     return product.price >= newPriceValue[0] && product.price <= newPriceValue[1];
+  //   });
+
+
+  //   const fetchPromises = currentData.map(async (data) => {
+  //     const results=await axios.get(`http://localhost:3000/api/v3/reviews/product/${data._id}`);
+  //     console.log("results",results)
+  //     const item = results.data.data.productReviews;
+  //     return item;
+  //   });
+
+  //   Promise.all(fetchPromises)
+  //   .then((fetchedItems)=>{
+  //     console.log("fetchedItems",fetchedItems[0])
+  //     setReviewsData(fetchedItems[0])
+  //   })
+
+
+  //   currentData = currentData.filter((product) => {
+  //     return product.price >= rev[0] && product.price <= newPriceValue[1];
+  //   });
  
+
+
+  // old end
 
 
 

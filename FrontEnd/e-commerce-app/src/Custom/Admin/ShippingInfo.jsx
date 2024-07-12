@@ -1,6 +1,92 @@
-import M1 from "../../Images/ProductImages/M1.jpg";
 import LeftBar from "./LeftBar";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 function ShippingInfo() {
+  const [orderData, setOrderData] = useState([])
+  const [cartItems, setCartItems] = useState([])
+  const [userData, setUserData] = useState({})
+  const [shippingData, setShippingData] = useState({})
+  const loc=useLocation()
+  const orderId=loc.state;
+ 
+  function handleStatus() {
+    axios.patch(`http://localhost:3000/api/v3/orders/${orderId}`,{
+      status:orderData.status=="Processing"?"Shipped":"Delivered"
+    })
+    .then((response)=>{
+      console.log("response",response)
+      if(orderData.status=="Processing")
+        {
+          cartItems.map((item)=>{
+            console.log("item.stock",item.stock)
+            console.log("item.quantity",item.quantity)
+            const newStock = item.stock-item.quantity
+            console.log(`Updating stock for product ${item.id} to ${newStock}`);
+            axios.patch(`http://localhost:3000/api/v3/products/${item.id}`,{
+              stock:newStock
+              })
+              .then((response)=>{console.log(response)})
+              .catch((err)=>{console.log(err)})
+              })
+              
+              }
+        // window.location.reload();
+              })
+    .catch((err)=>{console.log(err)})
+  }
+
+  const fetchOrderDetails = async () => {
+    try {
+      // Fetch order data
+      const orderResponse = await axios.get(`http://localhost:3000/api/v3/orders/${orderId}`);
+      const order = orderResponse.data.data.order;
+      setOrderData(order);
+
+      // Fetch product details for each ordered item
+      const itemDetailsPromises = order.orderedItems.map(async (orderedItem) => {
+        try {
+          const productResponse = await axios.get(`http://localhost:3000/api/v3/products/${orderedItem.item}`);
+          const productDetails = productResponse.data.data.product;
+          console.log("productResponse",productResponse)
+          console.log("productDetails",productDetails)
+          return {
+            id:productDetails._id,
+            name: productDetails.name,
+            quantity: orderedItem.quantity,
+            price: productDetails.price,
+            image:productDetails.productImages[0],
+            stock:productDetails.stock
+          };
+        } catch (error) {
+          console.error(`Error fetching details for item ${orderedItem.item}:`, error);
+          return null;
+        }
+      });
+
+      const itemDetails = await Promise.all(itemDetailsPromises);
+      console.log("validItemDetails",itemDetails)
+      setCartItems(itemDetails);
+
+      // Fetch user data
+      const userResponse = await axios.get(`http://localhost:3000/api/v3/users/${order.placedBy}`);
+      const user = userResponse.data.data.user;
+      setUserData(user);
+
+      // Fetch shipping data
+      const shippingResponse = await axios.get(`http://localhost:3000/api/v3/shippinginfo/${user._id}`);
+      const shippingInfo = shippingResponse.data.data.shippingInfo[0];
+      setShippingData(shippingInfo);
+
+    } catch (error) {
+      console.error('Error fetching order details:', error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchOrderDetails();
+  }, [orderId]); 
   return (
     <div className="flex w-max-screen ">
 
@@ -12,62 +98,64 @@ function ShippingInfo() {
           <p className="text-2xl font-semibold ">Shipping Info</p>
           <div className="pl-8">
             <p className="text-gray-500 text-sm">
-              <span className="font-semibold text-black">Name : </span> Ammar
-              Nadeem
+              <span className="font-semibold text-black">Name : </span> {userData.name}
             </p>
             <p className="text-gray-500 text-sm">
               <span className="font-semibold text-black">Phone : </span>
-              0345-1234654
+              {shippingData.phone}
             </p>
             <p className="text-gray-500 text-sm">
               <span className="font-semibold text-black">Address : </span>
-              H#12, S # 11, Wahdat Colony, Lahore.
+              {`${shippingData.address}, ${shippingData.city}, ${shippingData.state}, ${shippingData.country}.`}
             </p>
           </div>
           <p className="text-2xl font-semibold ">Payment</p>
           <div className="pl-8">
-            <p className="text-gray-500 text-sm">PAID</p>
+            <p className="text-green-800 font-semibold">PAID</p>
             <p className="text-gray-500 text-sm">
               <span className="font-semibold text-black">Amount : </span>$
-              567.43
+              {orderData.totalPrice}
             </p>
           </div>
           <p className="text-2xl font-semibold ">Order Status</p>
           <div className="pl-8">
-            <p className="text-gray-500 text-sm">Processing</p>
+            <p className={`font-semibold ${orderData.status=="Delivered"?"text-green-800":"text-red-800"}`}>{orderData.status}</p>
           </div>
           <p className="text-2xl font-semibold ">Your Cart items</p>
           {/* Cart Item */}
-          <div className="flex justify-start items-center w-full h-auto text-xs mb-1 pr-1 ">
-            <img src={M1} alt="" className="w-2/12 h-20" />
+          {cartItems.map((item)=>(
+
+          <div key={item._id} className="flex justify-start items-center w-full h-auto text-xs mb-1 pr-1 ">
+            <img src={item.image} alt="" className="w-2/12 h-20" />
             <div className="flex justify-between w-full h-full items-center translate-y-2">
               <p className="w-9/12 text-gray-500">
-                Apple MacBook Pro(8GB RAM, 256 GB SSD, 33.78cm, Space Gray)
+                {item.name}
               </p>
               <p className="w-4/12  text-gray-700  ">
-                10 * $34235.56 =
-                <span className="font-semibold text-black">$3452324.6</span>
+              {item.quantity} * ${item.price} = 
+                <span className="font-semibold text-black">$ {item.quantity * item.price}</span>
               </p>
             </div>
           </div>
+
+          ))
+          }
+          
         </div>
         {/* Right */}
+        {orderData.status != "Delivered" &&
         <div className="flex flex-col w-2/6 text-sm w- h-auto justify-start items-start px-5">
           <p className="text-center w-full text-2xl font-semibold border-b-2 border-gray-300 pb-2">
             Process Order
           </p>
-          <select className="border-2 border-gray-400 w-full py-1">
-            <option disabled selected>
-              Choose Category
-            </option>
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
+          <select  className="border-2 border-gray-400 w-full py-1">
+            <option value="Shipped">{orderData.status=="Processing"?"Shipped":"Delivered"}</option>
           </select>
-          <button className="w-full text-center py-2 text-white text-sm mt-2 bg-orange-600 hover:bg-orange-500">
+          <button onClick={handleStatus} className="cursor-pointer w-full text-center py-2 text-white text-sm mt-2 bg-orange-600 hover:bg-orange-500">
             Process
           </button>
         </div>
+        }
       </div>
       {/* end */}
     </div>

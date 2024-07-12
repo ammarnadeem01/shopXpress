@@ -89,3 +89,58 @@ exports.edituser=async(req,res)=>{
      })
   } 
 }
+
+
+
+exports.editProfile=async(req,res)=>{
+  try {
+    const updatedUser = await User.findByIdAndUpdate(req.params.id,req.body.newData,{new:true,runValidators:true});
+    res.status(201).json({
+            status:"Success",
+            data:{
+              updatedUser
+            }
+          })
+  } catch (error) {
+    res.status(404).json({
+            status:"Failure",
+            message:error.message
+          })
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// exports.changePassword=async(req,res)=>{
+//   try {
+//     const updatedUser = await User.findByIdAndUpdate(req.params.id,{password:newPassword},{new:true,runValidators:true});
+//     res.status(201).json({
+//       status:"Success",
+//       data:{
+//         updatedUser
+//       }
+//     })
+    
+//   } catch (error) {
+//     res.status(404).json({
+//       status:"Failure",
+//       message:error.message
+//     })
+    
+//   }
+// }

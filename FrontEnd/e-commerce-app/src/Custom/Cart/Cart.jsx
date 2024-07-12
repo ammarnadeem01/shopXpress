@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import EmptyCart from "./EmptyCart";
-import M1 from "../../Images/ProductImages/M1.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -73,7 +72,7 @@ function Cart() {
       {items.map((item) => (
         <div className="flex h-auto items-center rounded-md shadow-md w-11/12 justify-start" key={item._id}>
           <div className="w-4/6 flex items-center justify-start">
-            <img src={M1} alt="Camera" className="w-2/12 h-24 bg-black" />
+            <img src={item.productImages[0]} alt="Camera" className="w-2/12 h-24 bg-black" />
             <div className="flex w-10/12 flex-col justify-center items-start pt-1">
               <p>{item.name}</p>
               <p className="text-sm text-gray-500">Price: {item.price}</p>
@@ -81,23 +80,34 @@ function Cart() {
             </div>
           </div>
           <div className="flex w-1/6 items-center">
-            <p className="bg-gray-500 text-white w-5 h-7 text-center cursor-pointer" onClick={() => {
-              const updatedItems = items.map((prevItem) => ({
-                ...prevItem,
-                quantity: prevItem._id === item._id ? item.quantity + 1 : prevItem.quantity,
-              }));
-              setItems(updatedItems);
-              updateQuantity(item._id, item.quantity + 1);
-            }}>+</p>
+          
+          <p className="bg-gray-500 text-white w-5 h-7 text-center cursor-pointer" onClick={() => {
+            const updatedItems = items.map((prevItem) => ({
+              ...prevItem,
+              quantity: prevItem._id === item._id && prevItem.quantity < prevItem.stock ? prevItem.quantity + 1 : prevItem.quantity,
+            }));
+        
+            const newQuantity = item.quantity < item.stock ? item.quantity + 1 : item.quantity;
+        
+            setItems(updatedItems);
+            updateQuantity(item._id, newQuantity);
+          }}>+</p>
+
+
             <p className="w-auto px-2">{item.quantity}</p>
+            
+            
             <p className="bg-gray-500 text-white w-5 h-7 text-center cursor-pointer" onClick={() => {
-              const updatedItems = items.map((prevItem) => ({
-                ...prevItem,
-                quantity: prevItem._id === item._id ? item.quantity - 1 : prevItem.quantity,
-              }));
-              setItems(updatedItems);
-              updateQuantity(item._id, item.quantity - 1);
-            }}>-</p>
+            const updatedItems = items.map((prevItem) => ({
+              ...prevItem,
+              quantity: prevItem._id === item._id && prevItem.quantity >1  ? prevItem.quantity - 1 : prevItem.quantity,
+            }));
+        
+            const newQuantity = item.quantity > 1 ? item.quantity - 1 : item.quantity;
+        
+            setItems(updatedItems);
+            updateQuantity(item._id, newQuantity);
+          }}>-</p>
           </div>
           <p className="w-1/6 flex items-center justify-end font-semibold pr-2">
             {`${item.quantity} * ${item.price} = ${(item.quantity * item.price).toFixed(2)}`}

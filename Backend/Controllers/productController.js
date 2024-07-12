@@ -6,10 +6,21 @@ const uploadOnCloudinary = require("../Utils/cloudinary");
 // GetAllProducts
 exports.getAllProducts = async (req, res) => {
   try {
+    const outOfStockProducts= await Product.aggregate([
+      {
+        $match: {
+          stock:0 
+        }
+      }
+    ]);
+
+
+
     const product = await Product.find();
     res.status(200).json({
       status: "Success",
       length: product.length,
+      outOfStockProductsLength:outOfStockProducts.length,
       data: {
         product,
       },
@@ -71,26 +82,7 @@ exports.addNewProduct = async (req, res) => {
 //Update
 
 exports.updateProduct = async (req, res) => {
-  // try {
-  //   console.log("req.params.id",req.params.id)
-  //   console.log("req.body",req.body)
-  //   const updatedProduct = await Product.findByIdAndUpdate(
-  //     req.params.id,
-  //     req.body,
-  //     { new: true, runValidators: true }
-  //   );
-  //   res.status(200).json({
-  //     status: "Success",
-  //     data: {
-  //       updatedProduct,
-  //     },
-  //   });
-  // } catch (error) {
-  //   res.status(404).json({
-  //     status: "Fail",
-  //     message: error.message,
-  //   });
-  // }
+ 
   try {
     console.log("req.params.id",req.params.id)
     console.log("req.body",req.body)
@@ -134,3 +126,20 @@ exports.deleteSpecificProduct = async (req, res) => {
     });
   }
 };
+exports.stockUpdate=async(req,res)=>{
+  try {
+    console.log(req.body.stock)
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id,{stock:req.body.stock},{runValidators:true,new:true});
+    res.status(201).json({
+      status: "Success",
+      data: {
+        updatedProduct
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "Fail",
+      message: error.message,
+    });
+  }
+}

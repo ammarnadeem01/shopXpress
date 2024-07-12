@@ -52,6 +52,14 @@ function ShippingDetails() {
           type: "SET_SHIPPING_DATA",
           payload: response.data.data.newShippingInfo,
         });
+        // dispatch({
+        //   type: "SET_USER_PHONE",
+        //   payload: shippingFormData.phone,
+        // });
+        // dispatch({
+        //   type: "SET_USER_ADDRESS",
+        //   payload: `${shippingFormData.address},${shippingFormData.city},${shippingFormData.state},${shippingFormData.country}`,
+        // });
         nav("/checkout/confirm");
       });
   }

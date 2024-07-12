@@ -14,70 +14,96 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 const ProductDetails = () => {
-  const [allReviews, setAllReviews] = useState([]);
-  const [purchased, setPurchased] = useState(true)
-  const dispatch = useDispatch();
-  const {userId} = useSelector((state) => {
-    console.log("state.userReducer.userId : ", state.userReducer.userId);
-     return state.userReducer;
-  });
-  console.log(userId)
-
-  function handleReviewSubmission() {
-    if(existingReview)
-      {
-         axios
-        .put("http://localhost:3000/api/v3/reviews", {
-          productId: location.state.data._id,
-          userId,
-          review,
-          ratings,
-        })
-        .then((results) => {
-          console.log("results",results)
-          handleClose();
-        })
-        .catch((err) => console.log(err));
-
-      }
-      else{
-        axios
-          .post("http://localhost:3000/api/v3/reviews", {
-            productId: location.state.data._id,
-            userId,
-            review,
-            ratings,
-          })
-          .then((results) => {
-            console.log("results",results)
-            handleClose();
-          })
-          .catch((err) => console.log(err));
-      }
-  }
-
-  const [count, setCount] = useState(1);
   const location = useLocation();
+  const [allReviews, setAllReviews] = useState([]);
+  const [purchased, setPurchased] = useState(false);
+  const [existingReview, setExistingReview] = useState(false);
+  const dispatch = useDispatch();
+  const { userId } = useSelector((state) => state.userReducer);
+  const [count, setCount] = useState(1);
   const [open, setOpen] = useState(false);
-  const infoForCart = {
-    productId: location.state.data._id,
-    quantity: count,
-  };
+  const [review, setReview] = useState("");
+  const [ratings, setRatings] = useState(0);
   const nav = useNavigate();
 
-  function AddedToCartFunction() {
+  useEffect(() => {
+    const productId = location.state.data._id;
+
+    // Fetch product reviews
+    axios
+      .get(`http://localhost:3000/api/v3/reviews/product/${productId}`)
+      .then((results) => {
+        setAllReviews(results.data.data.reviews);
+        const userReview = results.data.data.reviews.find((r) => r.reviewedBy == userId);
+        if (userReview) {
+          setExistingReview(true);
+          setReview(userReview.review);
+          setRatings(userReview.ratings);
+        }
+      })
+      .catch((err) => console.log(err));
+    console.log("userId",userId)
+    // Check if user has purchased the product
+    axios
+      .get(`http://localhost:3000/api/v3/orders/user/${userId}`)
+      .then((results) => {
+        console.log("results",results)
+        const orders = results.data.data.order;
+        const hasPurchased = orders.some(order => order.orderedItems.some(product => product.item === productId));
+        console.log(hasPurchased)
+        setPurchased(hasPurchased);
+      })
+      .catch((err) => console.log(err));
+  }, [location.state.data._id, userId]);
+
+
+
+
+
+
+
+
+
+  const handleReviewSubmission = () => {
+    const reviewData = {
+      productId: location.state.data._id,
+      userId,
+      review,
+      ratings,
+    };
+    const Put_reviewData = {
+      review,
+      ratings,
+    };
+
+       const reviewApi = existingReview ? axios.put : axios.post;
+       const reviewUrl = `http://localhost:3000/api/v3/reviews${existingReview ? `/${reviewData.id}` : ''}`;
+       const reqBody=existingReview ? Put_reviewData : reviewData
+       reviewApi(reviewUrl, reqBody)
+         .then((results) => {
+           console.log("results", results);
+           handleClose();
+           setAllReviews((prevReviews) =>
+             existingReview
+               ? prevReviews.map((r) => (r.reviewedBy === userId ? results.data.data: r))
+               : [...prevReviews, results.data.data]
+           );
+         })
+         .catch((err) => console.log(err));
+       
+  };
+
+  const AddedToCartFunction = () => {
     console.log("Order added to cart");
     dispatch({
       type: "ADD_ITEM_TO_CART",
-      payload: infoForCart,
+      payload: {
+        productId: location.state.data._id,
+        quantity: count,
+      },
     });
-    dispatch({
-      type: "UPDATE_ITEM_IN_CART",
-      payload: infoForCart,
-    });
-
     nav("/products");
-  }
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -87,17 +113,6 @@ const ProductDetails = () => {
     setOpen(false);
   };
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/api/v3/reviews/product/${location.state.data._id}`)
-      .then((results) => {
-        console.log("results",allReviews)
-        setAllReviews(results.data.data.reviews);
-      }).catch((err)=>{console.log(err)})
-  }, []);
-  const [review, setReview] = useState("");
-  const [ratings, setRatings] = useState(0);
-
   return (
     <Fragment>
       <div className="flex w-max-screen justify-center items-center flex-wrap bg-gray-100 pt-10">
@@ -105,65 +120,34 @@ const ProductDetails = () => {
           {/* image */}
           <div className="w-1/2">
             <Carousel>
-              <Carousel.Item>
-                <img
-                  src={location.state.data.productImages[0]}
-                  className="carousel-image"
-                  alt="IMAGE 1"
-                />
-              </Carousel.Item>
-              <Carousel.Item>
-                <img
-                  src={location.state.data.productImages[1]}
-                  className="carousel-image"
-                  alt="IMAGE 2"
-                />
-              </Carousel.Item>
-              <Carousel.Item>
-                <img
-                  src={location.state.data.productImages[2]}
-                  className="carousel-image"
-                  alt="IMAGE 3"
-                />
-              </Carousel.Item>
+              {location.state.data.productImages.map((image, index) => (
+                <Carousel.Item key={index}>
+                  <img src={image} className="carousel-image" alt={`IMAGE ${index + 1}`} />
+                </Carousel.Item>
+              ))}
             </Carousel>
           </div>
 
           {/* detail */}
           <div className="w-1/2 p-6 flex flex-col bg-white justify-evenly items-start detail-container">
             <p className="text-2xl font-semibold">{location.state.data.name}</p>
-            <p className="text-xs text-gray-400">
-              Product # {location.state.data._id}
-            </p>
+            <p className="text-xs text-gray-400">Product # {location.state.data._id}</p>
             <div className="flex items-center border-y-2 border-gray-200 w-3/4 py-2">
-              <Rating
-                name="half-rating"
-                defaultValue={2.5}
-                readOnly
-                precision={0.5}
-              />
-              <p className="ml-2 mt-3 text-xs">(1 Reviews)</p>
+              <Rating name="half-rating" defaultValue={2.5} readOnly precision={0.5} />
+              <p className="ml-2 mt-3 text-xs">({allReviews.length} Reviews)</p>
             </div>
-            <p className="text-2xl font-semibold mb-2">
-              {location.state.data.price}
-            </p>
+            <p className="text-2xl font-semibold mb-2">{location.state.data.price}</p>
             <div className="flex mb-2">
               <p
                 className="bg-gray-500 text-white w-5 text-center cursor-pointer"
-                onClick={() => {
-                  setCount(
-                    count < location.state.data.stock ? count + 1 : count
-                  );
-                }}
+                onClick={() => setCount(count < location.state.data.stock ? count + 1 : count)}
               >
                 +
               </p>
               <p className="w-auto px-2">{count}</p>
               <p
                 className="bg-gray-500 text-white w-5 text-center cursor-pointer"
-                onClick={() => {
-                  setCount(count > 1 ? count - 1 : count);
-                }}
+                onClick={() => setCount(count > 1 ? count - 1 : count)}
               >
                 -
               </p>
@@ -175,37 +159,35 @@ const ProductDetails = () => {
               </p>
             </div>
             <p className="border-y-2 border-gray-200 w-3/4 py-2">
-              Status :
+              Status:
               <span
                 className={`font-semibold ml-2 ${
-                  location.state.data.stock == 0 ? "text-red-600" : "text-green-600"
+                  location.state.data.stock === 0 ? "text-red-600" : "text-green-600"
                 }`}
               >
-                {location.state.data.stock == 0 ? "Out Of Stock" : "In Stock"}
+                {location.state.data.stock === 0 ? "Out Of Stock" : "In Stock"}
               </span>
             </p>
             <p>
-              <span className="text-lg font-semibold">
-                Description : <br />
-              </span>
+              <span className="text-lg font-semibold">Description: <br /></span>
               {location.state.data.description}
             </p>
             <button
-              disabled={purchased === false}
+              disabled={!purchased}
               onClick={handleClickOpen}
-              className={`w-1/4 py-1.5 px-0.5 mt-2 text-center text-xs text-white rounded-lg
-                ${purchased==true?"bg-orange-500 hover:bg-orange-600 cursor-pointer":"bg-orange-200"}
-                `}
+              className={`w-1/4 py-1.5 px-0.5 mt-2 text-center text-xs text-white rounded-lg ${
+                purchased ? "bg-orange-500 hover:bg-orange-600 cursor-pointer" : "bg-orange-200"
+              }`}
             >
               Submit Review
-           </button>
+            </button>
             <Dialog open={open} onClose={handleClose}>
               <DialogTitle>Submit Review</DialogTitle>
               <DialogContent>
                 <DialogContentText>
                   <Rating
                     name="half-rating"
-                    value={+ratings}
+                    value={ratings}
                     precision={0.5}
                     onChange={(e) => setRatings(+e.target.value)}
                   />
@@ -216,13 +198,9 @@ const ProductDetails = () => {
                   className="outline outline-1 outline-gray-200 p-2"
                   cols="30"
                   rows="5"
-                  id="name"
-                  label="Email Address"
-                  type="email"
                   name="review"
-                  onChange={(e) => {
-                    setReview(e.target.value);
-                  }}
+                  onChange={(e) => setReview(e.target.value)}
+                  value={review}
                 />
               </DialogContent>
               <DialogActions>
@@ -236,9 +214,8 @@ const ProductDetails = () => {
           <div className="w-full flex justify-center text-2xl font-semibold">
             <p className="w-auto border-b-2 border-gray-500 pb-3 px-5">REVIEWS</p>
           </div>
-        {console.log("allReviews",allReviews)}
-          {allReviews && allReviews.map((review) => (
-              <ReviewCard key={review._id} data={review} />
+          {allReviews.map((review) => (
+            <ReviewCard key={review._id} data={review} />
           ))}
         </div>
       </div>

@@ -1,21 +1,24 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+import BasicSpeedDial from "./SpeedDial.jsx";
 function MyProfile() {
   const location = useLocation();
   const dispatch = useDispatch();
+  const {userId}=useSelector(state=>state.userReducer)
   const [data,setData]=useState({name:"",email:"",avatar:null});
   useEffect(() => {
-    dispatch({
-      type: "SET_USER_ID",
-      payload: location.state.data._id,
-    });
-    dispatch({
-      type: "SET_USER_NAME",
-      payload: location.state.data.name,
-    });
-    axios.get(`http://localhost:3000/api/v3/users/${location.state.data.email}`)
+    // dispatch({
+    //   type: "SET_USER_ID",
+    //   payload: location.state.data._id,
+    // });
+    // dispatch({
+    //   type: "SET_USER_NAME",
+    //   payload: location.state.data.name,
+    // });
+    if(userId){
+    axios.get(`http://localhost:3000/api/v3/users/${userId}`)
     .then((data)=>{
       setData({
         name:data.data.data.user.name,
@@ -24,9 +27,12 @@ function MyProfile() {
         avatar:data.data.data.user.avatar,
       })
     }).catch(err=>console.log(err))
-  }, []);
+  }
+  }, [userId]);
 
   return (
+    <div className="flex flex-wrap justify-center items-start w-max-screen pt-14">
+    <div className="w-full text-right absolute "><BasicSpeedDial/></div>
     <div className="flex w-max-screen h-auto justify-center flex-wrap items-center py-5">
       <p className="text-4xl font-semibold w-full text-center">My Profile</p>
       <div className="flex w-11/12 h-full bg-white ">
@@ -63,6 +69,7 @@ function MyProfile() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
