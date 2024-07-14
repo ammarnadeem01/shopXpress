@@ -6,7 +6,7 @@ const reviewRouter = require("./Routes/reviewRoutes");
 const shippingInfoRouter = require("./Routes/shipppingInfoRoutes");
 const messageRouter = require("./Routes/messageRoutes");
 const CustomError = require("./Utils/CustomError");
-const globalErrorHandler = require("./Controllers/authControllers")
+const globalErrorHandler = require("./Controllers/errorControllers")
 const cors = require("cors");
 const app = express();
 app.use(express.json());
@@ -19,11 +19,9 @@ app.use("/api/v3/users", userRouter);
 app.use("/api/v3/reviews", reviewRouter);
 app.use("/api/v3/shippinginfo", shippingInfoRouter);
 app.use("/api/v3/message", messageRouter);
-// app.all('*', (req, res, next) => {
-//     const err = new CustomError(`Can't find ${req.originalUrl} on the server!`, 404);
-//     next(err);
-// });
-
+app.all('*', (req, res, next) => {
+    const err = new CustomError(`Can't find ${req.originalUrl} on the server!`, 404);
+    next(err);
+});
 app.use(globalErrorHandler);
-
 module.exports = app;

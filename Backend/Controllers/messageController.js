@@ -1,8 +1,8 @@
 const Message = require("../Models/messageModel");
 const asyncErrorHandler = require('./../Utils/asyncErrorHandler');
 const CustomError = require('./../Utils/CustomError');
-exports.getAllMessages = async (req, res) => {
-  try {
+exports.getAllMessages = asyncErrorHandler(async (req, res,next) => {
+
     const messages = await User.find();
     res.status(200).json({
       status: "Success",
@@ -11,15 +11,9 @@ exports.getAllMessages = async (req, res) => {
         messages,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
-exports.addMessage = async (req, res) => {
-  try {
+
+})
+exports.addMessage = asyncErrorHandler( async (req, res,next) => {
     const newMessage = await Message.create(req.body)
     res.status(201).json({
       status: "Success",
@@ -27,17 +21,9 @@ exports.addMessage = async (req, res) => {
         newMessage,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "Fail",
-      error,
-      message: error.message,
-    });
-  }
-};
+})
 
-exports.getSpecificMessage = async (req, res) => {
-  try {
+exports.getSpecificMessage =asyncErrorHandler( async (req, res,next) => {
     const message = await Message.findById(req.params.id);
     res.status(200).json({
       status: "Success",
@@ -45,10 +31,5 @@ exports.getSpecificMessage = async (req, res) => {
         message,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
+ 
+})

@@ -1,4 +1,4 @@
-const CustomError = require('./../Utils/CustomError');
+const CustomError = require('../Utils/CustomError');
 
 const devErrors = (res, error) => {
     res.status(error.statusCode).json({
@@ -20,7 +20,6 @@ const duplicateKeyErrorHandler = (err) => {
  
  return new CustomError(msg, 400);
 }
-
 const validationErrorHandler = (err) => {
     const errors = Object.values(err.errors).map(val => val.message);
     const errorMessages = errors.join('. ');

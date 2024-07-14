@@ -3,8 +3,7 @@ const CustomError = require('./../Utils/CustomError');
 const Review = require("../Models/reviewModel");
 
 // createAReview
-exports.addReview = async (req, res) => {
-  try {
+exports.addReview = asyncErrorHandler(async (req, res,next) => {
     const userId = req.body.userId;
     const productId = req.body.productId;
     const review = req.body.review;
@@ -21,16 +20,9 @@ exports.addReview = async (req, res) => {
         newReview,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
+});
 
-exports.editReview=async(req,res)=>{
-    try {
+exports.editReview=asyncErrorHandler(async(req,res,next)=>{
       const editedReview = await Review.findByIdAndUpdate(req.params.id,{
             ratings:req.body.ratings,
             review:req.body.review
@@ -41,21 +33,11 @@ exports.editReview=async(req,res)=>{
           editedReview
         }
       })
-      
-    } catch (error) {
-      res.status(404).json({
-        status:"Failure",
-        message:error.message
-      }) 
-    }
-}
-
-
+})
 
 
 // // Controller method for product reviews
-exports.specificProductReviews = async (req, res) => {
-  try {
+exports.specificProductReviews =asyncErrorHandler( async (req, res,next) => {
     console.log(req.params.id)
     const productReviews = await Review.find({ reviewedProduct: req.params.id });
     res.status(200).json({
@@ -64,21 +46,14 @@ exports.specificProductReviews = async (req, res) => {
         reviews: productReviews,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
+});
 
 
 
 
 // Controller method for user reviews
-exports.specificUserReviews = async (req, res) => {
-  try {
-    
+exports.specificUserReviews = asyncErrorHandler(async (req, res,next) => {
+
     const userReviews = await Review.find({ reviewedBy: req.params.id });
     res.status(200).json({
       status: "Success",
@@ -86,17 +61,10 @@ exports.specificUserReviews = async (req, res) => {
         reviews: userReviews,
       },
     });
-  } catch (error) {
-    res.status(500).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
+});
 
 // Controller method for deleting a review
-exports.deleteSpecificReviews = async (req, res) => {
-  try {
+exports.deleteSpecificReviews = asyncErrorHandler(async (req, res,next) => {
     const review = await Review.findByIdAndRemove(req.params.id);
     if (!review) {
       return res.status(404).json({
@@ -108,10 +76,4 @@ exports.deleteSpecificReviews = async (req, res) => {
       status: "Success",
       data: null,
     });
-  } catch (error) {
-    res.status(500).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
+})

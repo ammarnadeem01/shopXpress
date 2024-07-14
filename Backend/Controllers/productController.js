@@ -2,10 +2,9 @@ const asyncErrorHandler = require('./../Utils/asyncErrorHandler');
 const CustomError = require('./../Utils/CustomError');
 const Product = require("../Models/productsModel");
 const uploadOnCloudinary = require("../Utils/cloudinary");
-
+const ApiFeatures = require("../Utils/ApiFeatures")
 // GetAllProducts
-exports.getAllProducts = async (req, res) => {
-  try {
+exports.getAllProducts = asyncErrorHandler( async (req, res,next) => {
     const outOfStockProducts= await Product.aggregate([
       {
         $match: {
@@ -13,10 +12,11 @@ exports.getAllProducts = async (req, res) => {
         }
       }
     ]);
-
-
-
-    const product = await Product.find();
+    // const product = await Product.find();
+    const features = new ApiFeatures(Movie.find(), req.query)
+    .sort()
+    .paginate();
+    let product = await features.query; 
     res.status(200).json({
       status: "Success",
       length: product.length,
@@ -25,16 +25,9 @@ exports.getAllProducts = async (req, res) => {
         product,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
+})
 //Get-One
-exports.getSpecificProduct = async (req, res) => {
-  try {
+exports.getSpecificProduct =asyncErrorHandler( async (req, res,next) => {
     const product = await Product.findById(req.params.id);
     res.status(200).json({
       status: "Success",
@@ -43,16 +36,9 @@ exports.getSpecificProduct = async (req, res) => {
         product,
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
+});
 //Add-One
-exports.addNewProduct = async (req, res) => {
-  try {
+exports.addNewProduct =asyncErrorHandler( async (req, res,next) => {
     const {name,description,price,category,stock}=req.body;
     const image1LocalePath = req.files[0].path;
     const image2LocalePath = req.files[1].path;
@@ -70,20 +56,12 @@ exports.addNewProduct = async (req, res) => {
         newProduct,
       },
     });
-  } catch (error) {
-    res.status(400).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
+});
 
 
 //Update
 
-exports.updateProduct = async (req, res) => {
- 
-  try {
+exports.updateProduct = asyncErrorHandler(async (req, res,next) => {
     console.log("req.params.id",req.params.id)
     console.log("req.body",req.body)
     const {name,description,price,category,stock}=req.body;
@@ -103,31 +81,18 @@ exports.updateProduct = async (req, res) => {
         updatedProduct,
       },
     });
-  } catch (error) {
-    res.status(400).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
+});
 
 //Delete-One
-exports.deleteSpecificProduct = async (req, res) => {
-  try {
+exports.deleteSpecificProduct =asyncErrorHandler( async (req, res,next) => {
     await Product.findByIdAndDelete(req.params.id);
     res.status(204).json({
       status: "Success",
       data: null,
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-};
-exports.stockUpdate=async(req,res)=>{
-  try {
+ 
+});
+exports.stockUpdate=asyncErrorHandler(async(req,res,next)=>{
     console.log(req.body.stock)
     const updatedProduct = await Product.findByIdAndUpdate(req.params.id,{stock:req.body.stock},{runValidators:true,new:true});
     res.status(201).json({
@@ -136,10 +101,4 @@ exports.stockUpdate=async(req,res)=>{
         updatedProduct
       },
     });
-  } catch (error) {
-    res.status(404).json({
-      status: "Fail",
-      message: error.message,
-    });
-  }
-}
+})

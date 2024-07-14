@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -20,8 +21,19 @@ const userSchema = new mongoose.Schema({
     minLength: [8, "Password should be greater than 8 characters"],
     select: false,
   },
-  avatar:{
-     type:String,
+  confirmPassword: {
+    type: String,
+    required: [true, "Please Confirm Your Password"],
+    validate: {
+      validator: function(value) {
+        console.log(`Validator: ${value} === ${this.password}`); // Debugging line
+        return value === this.password;
+      },
+      message: "Password and Confirm Passwords don't match"
+    }
+  },
+  avatar: {
+    type: String,
   },
   role: {
     type: String,
@@ -32,4 +44,17 @@ const userSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-module.exports = mongoose.model("User", userSchema);
+
+userSchema.pre('save', async function(next) {
+  if (!this.isModified("password")) return next();
+
+  // Encrypting password before it is saved
+  console.log(`Hashing password: ${this.password}`); // Debugging line
+  this.password = await bcrypt.hash(this.password, 12);
+  // this.confirmPassword = undefined;
+  next();
+});
+
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;
