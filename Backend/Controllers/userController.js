@@ -3,6 +3,13 @@ const CustomError = require('./../Utils/CustomError');
 const User = require("../Models/userModel");
 const uploadOnCloudinary = require("../Utils/cloudinary")
 const jwt = require('jsonwebtoken');
+
+function signToken(id) {
+  return jwt.sign({id},process.env.SECRET_STR,{ expiresIn: process.env.LOGIN_EXPIRES_IN });
+}
+
+
+
 exports.getAllUsers = asyncErrorHandler(async (req, res,next) => {
      const users = await User.find();
      res.status(200).json({
@@ -20,10 +27,10 @@ exports.createNewUser = asyncErrorHandler(async (req, res,next) => {
     const avatarLocalPath = req.file.path;
     const avatarui = await uploadOnCloudinary(avatarLocalPath);
     const newUser = await User.create({
-      name,password,email,confirmPassword,
+      name,password,email,
       avatar:avatarui.url
     });
-    var token = jwt.sign({ id:newUser._id},process.env.SECRET_STR,{ expiresIn: process.env.LOGIN_EXPIRES_IN });
+    const token = signToken(newUser._id)
     res.status(201).json({
       status: "Success",
       token,
@@ -33,15 +40,31 @@ exports.createNewUser = asyncErrorHandler(async (req, res,next) => {
     });
 })
 
-exports.getSpecificUser = asyncErrorHandler(async (req, res,next) => {
-    const user = await User.findOne({ email: req.params[0] });
-    res.status(200).json({
-      status: "Success",
-      data: {
-        user,
-      },
-    });
+exports.login = asyncErrorHandler(async (req, res,next) => {
+
+  const {email,password}=req.body;
+  if(!email || !password)
+  {
+    const err=new CustomError("Please enter Email and Password...",400)
+    return next(err)
+  }
+  const user=await User.findOne({email}).select("+password")
+  if(!user || !(await user.comparePasswords(password,user.password))) 
+  {
+    const err=new CustomError("Incorrect Email or Password...",400)
+    return next(err)
+  }
+  const token = signToken(user._id)
+  res.status(200).json({
+    status: "Success",
+    token,
+  });
 })
+
+
+
+
+
 
 exports.getSpecificUserWithId = asyncErrorHandler(async (req, res,next) => {
     const user = await User.findById(req.params.id);
@@ -85,7 +108,7 @@ exports.edituser= asyncErrorHandler(async(req,res,next)=>{
 
 
 
-exports.editProfile= asyncErrorHandler(async(req,res)=>{
+exports.editProfile= asyncErrorHandler(async(req,res,next)=>{
   
     const updatedUser = await User.findByIdAndUpdate(req.params.id,req.body.newData,{new:true,runValidators:true});
     res.status(201).json({
@@ -98,6 +121,41 @@ exports.editProfile= asyncErrorHandler(async(req,res)=>{
 })
 
 
+exports.protect=asyncErrorHandler(async(req,res,next)=>{
+  // Read the token if it exists or not
+   const testToken=req.headers.authorization;
+   let token;
+   if(testToken?.startsWith("Bearer"))
+   {
+       token = testToken.split(" ")[1];
+   }
+   if(!token)
+   {
+     const err=new CustomError("You are not Logged In...",401);
+     next(err)
+   }
+
+  // validate the token
+  const decodedToken=jwt.verify(token,process.env.SECRET_STR)
+  // if user exists
+  const user = await User.findById(decodedToken.id)
+  if(!user)
+  {
+    next(new CustomError("User with given JWT doesn't exist",401))
+  }
+  // if the user changed the token after it was issued
+  const isPasswordChanged=await  user.isPasswordChanged(decodedToken.iat)
+  if(isPasswordChanged)
+  {
+    next(new CustomError("Password has been changed recently. Please login again.",401))
+  }
+  // Allow user access to protected route
+  req.user=user;
+  next()
+
+
+  }
+)
 
 
 
@@ -105,8 +163,37 @@ exports.editProfile= asyncErrorHandler(async(req,res)=>{
 
 
 
+exports.restrict=function (role) {
+  return function (req,res,next) {
+    if(role!=req.user.role)
+    {
+      next(new CustomError("You don't have permission to perform this action,",403))
+    }
+    next()
+  }
+}
 
 
+exports.forgotPassword=asyncErrorHandler(async(req,res,next)=>{
+  //  1. Findinf user with email
+   const email=req.body.email;
+   const user = await User.findOne({email})
+   if(!user)
+   {
+    const err=new CustomError(`No user with email ${email} found. Please try again`,403);
+    next(err)
+   }
+  //  2. Generate a token  
+   const token=await user.createResetPasswordToken();
+   console.log(token)
+   await user.save({validateBeforeSave:false}); // we saved the 2 fields in the dbs which we created for token generator function, in function, we only set their values
+
+  //  3. Send token to given email
+
+})
+exports.resetPassword=asyncErrorHandler(async(req,res,next)=>{
+  
+})
 
 
 

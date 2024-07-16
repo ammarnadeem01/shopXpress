@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const crypto=require("crypto")
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -21,17 +22,20 @@ const userSchema = new mongoose.Schema({
     minLength: [8, "Password should be greater than 8 characters"],
     select: false,
   },
-  confirmPassword: {
-    type: String,
-    required: [true, "Please Confirm Your Password"],
-    validate: {
-      validator: function(value) {
-        console.log(`Validator: ${value} === ${this.password}`); // Debugging line
-        return value === this.password;
-      },
-      message: "Password and Confirm Passwords don't match"
-    }
-  },
+  // confirmPassword: {
+  //   type: String,
+  //   required: [true, "Please Confirm Your Password"],
+  //   validate: {
+  //     validator: function(value) {
+  //       console.log(`Validator: ${value} === ${this.password}`); // Debugging line
+  //       return value === this.password;
+  //     },
+  //     message: "Password and Confirm Passwords don't match"
+  //   }
+  // },
+  passwordChangedAt:Date,
+  ResetPasswordToken:String,
+  ResetPasswordTokenExpiresIn:Date,
   avatar: {
     type: String,
   },
@@ -54,6 +58,43 @@ userSchema.pre('save', async function(next) {
   // this.confirmPassword = undefined;
   next();
 });
+
+userSchema.methods.comparePasswords=async function(passwd,dbPasswd){
+  return await bcrypt.compare(passwd,dbPasswd)
+}
+
+
+userSchema.methods.isPasswordChanged=async function(JwtTimestamp){
+  if(this.passwordChangedAt)
+  {
+    const passwordChangedTimeStamp=parseInt(this.passwordChangedAt.getTime()/1000,10);
+    return passwordChangedTimeStamp > JwtTimestamp
+  }
+  return false;
+}
+
+
+userSchema.methods.createResetPasswordToken=async function () {
+    const resetToken=crypto.randomBytes(32).toString("hex")
+    this.ResetPasswordToken=crypto.createHash("sha256").update(resetToken).digest("hex");
+    this.ResetPasswordTokenExpiresIn=Date.now()*10*60*1000 // (10 m into ms)
+    console.log("ResetPasswordToken",this.ResetPasswordToken)
+    return resetToken // we excrypt password for db but send simple token to user
+}
+
+
+
+userSchema.methods.createRessetPasswordToken=async function () {
+  
+}
+
+
+
+
+
+
+
+
 
 const User = mongoose.model("User", userSchema);
 
