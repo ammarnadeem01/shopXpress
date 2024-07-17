@@ -77,16 +77,12 @@ userSchema.methods.isPasswordChanged=async function(JwtTimestamp){
 userSchema.methods.createResetPasswordToken=async function () {
     const resetToken=crypto.randomBytes(32).toString("hex")
     this.ResetPasswordToken=crypto.createHash("sha256").update(resetToken).digest("hex");
-    this.ResetPasswordTokenExpiresIn=Date.now()*10*60*1000 // (10 m into ms)
+    this.ResetPasswordTokenExpiresIn = Date.now() + 10 * 60 * 1000; // (10 minutes into ms)
     console.log("ResetPasswordToken",this.ResetPasswordToken)
+    console.log("ResetPasswordTokenExpiresIn",this.ResetPasswordTokenExpiresIn)
     return resetToken // we excrypt password for db but send simple token to user
 }
 
-
-
-userSchema.methods.createRessetPasswordToken=async function () {
-  
-}
 
 
 

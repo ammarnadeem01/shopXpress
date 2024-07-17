@@ -3,6 +3,8 @@ const CustomError = require('./../Utils/CustomError');
 const User = require("../Models/userModel");
 const uploadOnCloudinary = require("../Utils/cloudinary")
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const sendMail=require("../Utils/Email")
 
 function signToken(id) {
   return jwt.sign({id},process.env.SECRET_STR,{ expiresIn: process.env.LOGIN_EXPIRES_IN });
@@ -185,37 +187,123 @@ exports.forgotPassword=asyncErrorHandler(async(req,res,next)=>{
    }
   //  2. Generate a token  
    const token=await user.createResetPasswordToken();
-   console.log(token)
-   await user.save({validateBeforeSave:false}); // we saved the 2 fields in the dbs which we created for token generator function, in function, we only set their values
+   await user.save({validateBeforeSave:false}); // to save the 2 fields in the dbs which we created for token generator function, in function, we only set their values
 
   //  3. Send token to given email
+  const resetUrl= `${req.protocol}://${req.hostname}/api/v3/users/resetPassword/${token}`
+  const message=`We have  recieved a Password Reset Request. Please click on the link below to reset password.\n\n${resetUrl}`
+  console.log("resetUrl",resetUrl)
+  try {
+    console.log(1)
+    await sendMail({
+      email:user.email,
+      subject:"Reset Password Request",
+      message
+    })
+    console.log(2)
+     res.status(200).json({
+      status:"Success",
+      message:"Password reset link sent to user."
+     })
 
-})
-exports.resetPassword=asyncErrorHandler(async(req,res,next)=>{
+  } catch (error) {
+    user.ResetPasswordToken=undefined
+    user.ResetPasswordTokenExpiresIn=undefined
+    await user.save({validateBeforeSave:false})
+    const err=new CustomError("There was an error sending password reset email. Please try again later.",500)
+    return next(err)
+  } 
+
+
+
+
+
+
+
+
+
+
+  // try {
+  //   console.log(1);
+  //   await sendMail({
+  //     email: user.email,
+  //     subject: "Your password reset token (valid for 10 minutes)",
+  //     message,
+  //   });
+  //   console.log(2);
+  //   res.status(200).json({
+  //     status: "Success",
+  //     message: "Password reset link sent to user.",
+  //   });
+  // } catch (error) {
+  //   user.ResetPasswordToken = undefined;
+  //   user.ResetPasswordTokenExpiresIn = undefined;
+  //   await user.save({ validateBeforeSave: false }); // Ensure this operation is awaited
+  //   const err = new CustomError("There was an error sending the password reset email. Please try again later.", 500);
+  //   return next(err); // Ensure we stop execution here
+  // }
+
+
   
 })
+exports.resetPassword=asyncErrorHandler(async(req,res,next)=>{
+  // check if user exists and token is valid
+  const token=req.params.token;
+  const encryptedToken=crypto.createHash("sha256").update(token).digest("hex");
+  const user = await User.findOne({ResetPasswordToken:encryptedToken,ResetPasswordTokenExpiresIn:{$gt:Date.now()}})
+  if(!user)
+  {
+    const err=new CustomError("Token is invalid or has expired",400)
+    next(err)
+  }
+
+  // reset passwd
+   user.password=req.body.password;
+   user.ResetPasswordToken=undefined;
+   user.ResetPasswordTokenExpiresIn=undefined;
+   user.passwordChangedAt=Date.now()
+   user.save()
+
+   // automatic login
+   const loginToken = signToken(user._id)
+   res.status(200).json({
+     status: "Success",
+     loginToken,
+   });
+
+})
 
 
+exports.updatePassword=asyncErrorHandler(async(req,res,next)=>{
+  // get current user data 
+  const user = await User.findById(req.user._id).select("+password")
+  // check if user exist?
+  if(!user)
+  {
+    next(new CustomError("Email is incorrect..",400))
+  }
+  // check if passwords match
+  const isMatch=await user.comparePasswords(req.body.currentPassword,user.password)
+  if(!isMatch)
+  {
+    next(new CustomError("The current password you provided is wrong",401))
+  }
+  
+  // update passwd
+  user.password=req.body.newPassword
+  await user.save()
 
 
+  // login
+  const loginToken = signToken(user._id)
+  res.status(200).json({
+    status: "Success",
+    loginToken,
+    data:{
+      user
+    }
+  });
+
+})
 
 
-
-// exports.changePassword=async(req,res)=>{
-//   try {
-//     const updatedUser = await User.findByIdAndUpdate(req.params.id,{password:newPassword},{new:true,runValidators:true});
-//     res.status(201).json({
-//       status:"Success",
-//       data:{
-//         updatedUser
-//       }
-//     })
-    
-//   } catch (error) {
-//     res.status(404).json({
-//       status:"Failure",
-//       message:error.message
-//     })
-    
-//   }
-// }

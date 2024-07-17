@@ -12,11 +12,14 @@ router
   .route("/forgotpassword")
     .post(userControllers.forgotPassword);
 router
-  .route("/resetpassword")
-    .post(userControllers.resetPassword)  
+  .route("/resetpassword/:token")
+    .patch(userControllers.resetPassword)  
 router
   .route("/login")
-    .get(userControllers.login)  
+    .get(userControllers.login) ;
+router
+  .route("/updatePassword")
+    .patch(userControllers.protect,userControllers.updatePassword)     
 router 
   .route("/:id")
     .get(userControllers.getSpecificUserWithId)
