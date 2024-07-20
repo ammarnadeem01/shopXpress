@@ -9,14 +9,14 @@ function MyProfile() {
   const {userId}=useSelector(state=>state.userReducer)
   const [data,setData]=useState({name:"",email:"",avatar:null});
   useEffect(() => {
-    // dispatch({
-    //   type: "SET_USER_ID",
-    //   payload: location.state.data._id,
-    // });
-    // dispatch({
-    //   type: "SET_USER_NAME",
-    //   payload: location.state.data.name,
-    // });
+    dispatch({
+      type: "SET_USER_ID",
+      payload: location.state.data._id,
+    });
+    dispatch({
+      type: "SET_USER_NAME",
+      payload: location.state.data.name,
+    });
     if(userId){
     axios.get(`http://localhost:3000/api/v3/users/${userId}`)
     .then((data)=>{
@@ -28,7 +28,8 @@ function MyProfile() {
       })
     }).catch(err=>console.log(err))
   }
-  }, [userId]);
+});
+  // }, [userId]);
 
   return (
     <div className="flex flex-wrap justify-center items-start w-max-screen pt-14">

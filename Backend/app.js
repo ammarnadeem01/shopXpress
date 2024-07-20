@@ -22,7 +22,7 @@ const app = express();
 
 app.use(helmet())
 let limtier=rateLimit({
-    max:3, // max no of req from particular ip
+    max:1000, // max no of req from particular ip
     windowMs: 60*60*1000, // within time in ms
     message:"We have received too many requests from this ip. Please try again later."
 })

@@ -11,9 +11,9 @@ function signToken(id) {
 }
 
 
-
+// all users
 exports.getAllUsers = asyncErrorHandler(async (req, res,next) => {
-     const users = await User.find();
+     const users = await User.find(); 
      res.status(200).json({
       status: "Success",
       length: users.length,
@@ -24,14 +24,33 @@ exports.getAllUsers = asyncErrorHandler(async (req, res,next) => {
 });
 
 
+// signup
 exports.createNewUser = asyncErrorHandler(async (req, res,next) => {
     const {name,email,password}=req.body;
+    if(!name  || ! email || !password)
+    {
+      return next(new CustomError("Name, Email And Password are required.",400))
+    }
+    
+    if(!req.file?.path)
+    {
+      return next(new CustomError("Avatar is required.",400))
+    }
+
     const avatarLocalPath = req.file.path;
     const avatarui = await uploadOnCloudinary(avatarLocalPath);
+    if(!avatarui)
+      {
+        return next(new CustomError("Failed to upload avatar",400))
+      }
     const newUser = await User.create({
       name,password,email,
       avatar:avatarui.url
     });
+    if(!newUser)
+    {
+      return next(new CustomError("New User Creation Failed",500))
+    }
     const token = signToken(newUser._id)
     res.status(201).json({
       status: "Success",
@@ -42,6 +61,8 @@ exports.createNewUser = asyncErrorHandler(async (req, res,next) => {
     });
 })
 
+
+//login
 exports.login = asyncErrorHandler(async (req, res,next) => {
 
   const {email,password}=req.body;
@@ -64,12 +85,17 @@ exports.login = asyncErrorHandler(async (req, res,next) => {
 })
 
 
-
-
-
-
+// spexific user
 exports.getSpecificUserWithId = asyncErrorHandler(async (req, res,next) => {
+    if(!req.params?.id)
+    {
+      return next(new CustomError("User ID is required.",400))
+    }
     const user = await User.findById(req.params.id);
+    if(!user)
+    {
+      return next(new CustomError("No user with given ID found",404))
+    }
     res.status(200).json({
       status: "Success",
       data: {
@@ -80,7 +106,15 @@ exports.getSpecificUserWithId = asyncErrorHandler(async (req, res,next) => {
 
 
 exports.deleteSpecificUser =asyncErrorHandler( async(req,res,next)=>{
-    await User.findByIdAndDelete(req.params.id)
+    if(!req.params?.id)
+    {
+      return next(new CustomError("User ID is required.",400))
+    }
+   const deletedUser= await User.findByIdAndDelete(req.params.id)
+   if(!deletedUser)
+    {
+      return next(new CustomError("No user with given ID found.",404))
+    }
     res.status(202).json(
     {
       status:"Success",
@@ -89,16 +123,21 @@ exports.deleteSpecificUser =asyncErrorHandler( async(req,res,next)=>{
     )
 })
 
-
-
+// update user role (by admin)
 exports.edituser= asyncErrorHandler(async(req,res,next)=>{
-    console.log("req.body.role",req.body.role)
-    console.log(req.params[0])
-    const updatedUser = await User.findOneAndUpdate({ email: req.params[0] },{
+    if(!req.body?.email || !req.body?.role)
+    {
+      return next(new CustomError("Email and Role are required.",400))
+    }
+    const updatedUser = await User.findOneAndUpdate({ email: req.body.email },{
       $set: { role: req.body.role}
     },
     { new: true, runValidators: true } 
   )
+    if(!updatedUser)
+    {
+      return next(new CustomError("No user with given ID foundn",404))
+    }
     res.status(200).json(
     {
       status:"Success",
@@ -109,10 +148,14 @@ exports.edituser= asyncErrorHandler(async(req,res,next)=>{
 })
 
 
-
+// edit profile (by user)
 exports.editProfile= asyncErrorHandler(async(req,res,next)=>{
   
-    const updatedUser = await User.findByIdAndUpdate(req.params.id,req.body.newData,{new:true,runValidators:true});
+  const updatedUser = await User.findByIdAndUpdate(req.params.id,req.body.newData,{new:true,runValidators:true});
+  if(!updatedUser)
+  {
+    return next(new CustomError("User Updation Failed.Please Try Again",400))
+  }
     res.status(201).json({
             status:"Success",
             data:{
@@ -123,6 +166,8 @@ exports.editProfile= asyncErrorHandler(async(req,res,next)=>{
 })
 
 
+
+// is login?
 exports.protect=asyncErrorHandler(async(req,res,next)=>{
   // Read the token if it exists or not
    const testToken=req.headers.authorization;
@@ -134,7 +179,7 @@ exports.protect=asyncErrorHandler(async(req,res,next)=>{
    if(!token)
    {
      const err=new CustomError("You are not Logged In...",401);
-     next(err)
+     return next(err)
    }
 
   // validate the token
@@ -143,13 +188,13 @@ exports.protect=asyncErrorHandler(async(req,res,next)=>{
   const user = await User.findById(decodedToken.id)
   if(!user)
   {
-    next(new CustomError("User with given JWT doesn't exist",401))
+    return next(new CustomError("User with given JWT doesn't exist",401))
   }
   // if the user changed the token after it was issued
   const isPasswordChanged=await  user.isPasswordChanged(decodedToken.iat)
   if(isPasswordChanged)
   {
-    next(new CustomError("Password has been changed recently. Please login again.",401))
+    return next(new CustomError("Password has been changed recently. Please login again.",401))
   }
   // Allow user access to protected route
   req.user=user;
@@ -164,7 +209,7 @@ exports.protect=asyncErrorHandler(async(req,res,next)=>{
 
 
 
-
+// protecting routes
 exports.restrict=function (role) {
   return function (req,res,next) {
     if(role!=req.user.role)
@@ -175,7 +220,8 @@ exports.restrict=function (role) {
   }
 }
 
-
+// PASSWD FUNCTIONALITY
+// forgot passwd -I
 exports.forgotPassword=asyncErrorHandler(async(req,res,next)=>{
   //  1. Findinf user with email
    const email=req.body.email;
@@ -246,6 +292,9 @@ exports.forgotPassword=asyncErrorHandler(async(req,res,next)=>{
 
   
 })
+
+
+// reset password - II
 exports.resetPassword=asyncErrorHandler(async(req,res,next)=>{
   // check if user exists and token is valid
   const token=req.params.token;
@@ -273,7 +322,7 @@ exports.resetPassword=asyncErrorHandler(async(req,res,next)=>{
 
 })
 
-
+// update passwd (with old passwd)
 exports.updatePassword=asyncErrorHandler(async(req,res,next)=>{
   // get current user data 
   const user = await User.findById(req.user._id).select("+password")
@@ -307,3 +356,4 @@ exports.updatePassword=asyncErrorHandler(async(req,res,next)=>{
 })
 
 
+ 

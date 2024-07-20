@@ -5,18 +5,23 @@ const Order = require("../Models/orderModel");
 
 
 exports.placeOrder =asyncErrorHandler( async (req, res,next) => {
-  const userId = req.body.placedBy;
-  const orderedItems = req.body.orderedItems;
-  const { item, quantity } = orderedItems;
-  const totalPrice=req.body.totalPrice;
-  console.log(totalPrice)
+  const { placedBy, orderedItems, totalPrice } = req.body;
+  if (!placedBy || !orderedItems || totalPrice == null) {
+    return next(new CustomError("Missing required fields: placedBy, orderedItems, or totalPrice.", 400));
+  }
+  if (!Array.isArray(orderedItems) || orderedItems.length === 0) {
+    return next(new CustomError("orderedItems must be a non-empty array.", 400));
+  }
+
+  orderedItems.forEach(items => {
+    if (!items.item || !items.quantity) {
+      return next(new CustomError("Each ordered item must have an item and quantity.", 400));
+    }
+  });
     const order = await Order.create({
-      orderedItems: {
-        item,
-        quantity,
-      },
-      placedBy: userId,
-      totalPrice:totalPrice
+      orderedItems: 
+      placedBy,
+      totalPrice
     });
     res.status(200).json({
       status: "Success",
@@ -63,8 +68,16 @@ exports.getAllOrders =  asyncErrorHandler( async (req, res,next) => {
 
 
 exports.getSpecificOrder=asyncErrorHandler( async(req,res,next)=>{
-  
-    const order = await Order.findById(req.params.id);
+  const id= req.params?.id;
+  if(!id)
+  {
+    return next(new CustomError("orderID is required.",400))
+  }
+    const order = await Order.findById(id);
+    if(!order)
+      {
+        return next(new CustomError("Order with given id not found.",404))
+      }
     res.status(200).json({
       status: "Success",
       data: {
@@ -75,8 +88,21 @@ exports.getSpecificOrder=asyncErrorHandler( async(req,res,next)=>{
 }
 )
 exports.updateOrderStatus=asyncErrorHandler( async(req,res,next)=>{
- 
-    const order = await Order.findByIdAndUpdate(req.params.id,{status:req.body.status},{runValidators:true,new:true});
+    const id= req.params?.id;
+    if(!id)
+    {
+      return next(new CustomError("orderID is required.",400))
+    }
+    const status=req.body?.status;
+    if(!status)
+      {
+        return next(new CustomError("status is required.",400))
+      }
+    const order = await Order.findByIdAndUpdate(id,{status},{runValidators:true,new:true});
+    if(!order)
+      {
+        return next(new CustomError("Order with given id not found.",404))
+      }
     res.status(200).json({
       status: "Success",
       data: {
@@ -89,9 +115,17 @@ exports.updateOrderStatus=asyncErrorHandler( async(req,res,next)=>{
 
 
 exports.specificUserOrder=asyncErrorHandler( async(req,res,next)=>{
-  
-     console.log(req.params.id)
-     const order = await Order.find({placedBy:req.params.id});
+    const id = req.params?.id; 
+     if(!id)
+     {
+       return next(new CustomError("userId is required.",400))
+     }
+
+     const order = await Order.find({placedBy:id});
+     if(!order)
+      {
+        return next(new CustomError("Order with given user ID not found.",404))
+      }
      console.log(order)
      res.status(200).json({
        status: "Success",
@@ -104,9 +138,16 @@ exports.specificUserOrder=asyncErrorHandler( async(req,res,next)=>{
  
 
 exports.deleteOrder=asyncErrorHandler( async(req,res,next)=>{
-
-    console.log(req.params.id)
+   const id = req.params?.id; 
+   if(!id)
+   {
+     return next(new CustomError("userId and ordereditems are required.",400))
+   }
     const deletedOrder = await Order.findByIdAndRemove(req.params.id);
+    if(!deletedOrder)
+    {
+      return next(new CustomError("Order with given ID not found.",404))
+    }
     res.status(202).json({
       status: "Success",
       data: {
@@ -114,3 +155,41 @@ exports.deleteOrder=asyncErrorHandler( async(req,res,next)=>{
       },
     });
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
