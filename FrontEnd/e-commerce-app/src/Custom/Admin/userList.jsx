@@ -2,26 +2,39 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LeftBar from "./LeftBar";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 function UserList() {
-  const [users, setUsers] = useState([])
-  const nav = useNavigate()
+  const [users, setUsers] = useState([]);
+  const nav = useNavigate();
 
-  
-  const deleteUser=(userid)=>{
-    axios.delete(`http://localhost:3000/api/v3/users/${userid}`).then((res)=>console.log(res))
-    .catch((err)=>console.log(err))
-  }
+  const deleteUser = (userid) => {
+    axios
+      .delete(`http://localhost:3000/api/v3/users/${userid}`)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+  const { accessToken } = useSelector((state) => {
+    return state.userReducer;
+  });
 
   useEffect(() => {
-     axios.get("http://localhost:3000/api/v3/users").then((result)=>{
-      setUsers(result.data.data.users)
-     }).catch((err)=>{
-      console.log("Error Fetching Data")
-     })
-  }, [users])
-  
+    axios
+      .get("http://localhost:3000/api/v3/users", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((result) => {
+        console.log("users", result);
+        setUsers(result.data.data.users);
+      })
+      .catch((err) => {
+        console.log("Error Fetching Data", err);
+      });
+  }, [users, accessToken]);
+
   return (
     <div className="flex w-max-screen ">
       {/*  Left Bar */}
@@ -39,24 +52,37 @@ function UserList() {
             <p className="w-1/12 ">Role</p>
             <p className="w-1/12">Actions</p>
           </div>
-          {
-            users.map((user)=>(
-            <div key={user._id} className="flex w-full h-auto bg-gray-300 justify-center items-center flex-wrap py-2">
-            <p className="w-1/4  ">{user._id}</p>
-            <p className="w-1/4  ">{user.email}</p>
-            <p className="w-1/4  ">{user.name}</p>
-            <p className="w-1/12 ">{user.role}</p>
-            <p className="w-1/12 flex gap-2">
-              <EditIcon className="cursor-pointer" onClick={()=>{nav("/admin/updateuser",{state:{
-                name:user.name,
-                email:user.email,
-                role:user.role
-              }})}} />
-              <DeleteIcon  className="cursor-pointer" onClick={()=>{deleteUser(user._id)}}/>
-            </p>
-          </div>
-            ))
-          } 
+          {users.map((user) => (
+            <div
+              key={user._id}
+              className="flex w-full h-auto bg-gray-300 justify-center items-center flex-wrap py-2"
+            >
+              <p className="w-1/4  ">{user._id}</p>
+              <p className="w-1/4  ">{user.email}</p>
+              <p className="w-1/4  ">{user.name}</p>
+              <p className="w-1/12 ">{user.role}</p>
+              <p className="w-1/12 flex gap-2">
+                <EditIcon
+                  className="cursor-pointer"
+                  onClick={() => {
+                    nav("/admin/updateuser", {
+                      state: {
+                        name: user.name,
+                        email: user.email,
+                        role: user.role,
+                      },
+                    });
+                  }}
+                />
+                <DeleteIcon
+                  className="cursor-pointer"
+                  onClick={() => {
+                    deleteUser(user._id);
+                  }}
+                />
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </div>

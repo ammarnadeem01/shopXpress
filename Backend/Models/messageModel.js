@@ -23,6 +23,12 @@ const messageSchema = new mongoose.Schema({
   phoneNumber:{
     type:String,
     required:true,
+    validate: {
+      validator: function(v) {
+        return validator.isMobilePhone(v, 'any', { strictMode: false });
+      },
+      message: "Please Enter a valid Phone Number"
+    },
   },
   createdAt: {
     type: Date,

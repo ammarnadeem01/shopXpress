@@ -21,7 +21,9 @@ function ConfirmOrder() {
     const fetchItems = async () => {
       try {
         const fetchPromises = cartItems.map(async (cartItem) => {
-          const response = await axios.get(`http://localhost:3000/api/v3/products/${cartItem.productId}`);
+          const response = await axios.get(
+            `http://localhost:3000/api/v3/products/${cartItem.productId}`
+          );
           const item = response.data.data.product;
           item.quantity = cartItem.quantity;
           return item;
@@ -31,7 +33,10 @@ function ConfirmOrder() {
         setItems(fetchedItems);
 
         // Calculate and set the gross total
-        const total = fetchedItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+        const total = fetchedItems.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        );
         setGrossTotal(total);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -68,30 +73,39 @@ function ConfirmOrder() {
   return (
     <div className="flex items-center justify-center bg-gray-50 w-max-screen my-3 h-auto">
       <div className="bg-white shadow-lg shadow-gray-400 w-11/12 h-full py-3">
-        <Checkout step="2" />
+        <Checkout step={2} />
         <div className="flex flex-row justify-between items-center flex-wrap w-max-screen h-auto">
           {/* Left */}
           <div className="w-3/4 pl-20 border-r-2 border-gray-300 h-auto flex flex-col justify-center items-start">
             <p className="text-2xl font-semibold">Shipping Info</p>
             <p className="text-gray-500 text-sm">
-              <span className="font-semibold text-black">Name: </span>{userName}
+              <span className="font-semibold text-black">Name: </span>
+              {userName}
             </p>
             <p className="text-gray-500 text-sm">
-              <span className="font-semibold text-black">Phone: </span>{shippingData.phone}
+              <span className="font-semibold text-black">Phone: </span>
+              {shippingData.phone}
             </p>
             <p className="text-gray-700 text-sm">
-              <span className="font-semibold text-black">Address: </span>{`${shippingData.address}, ${shippingData.city}, ${shippingData.state}, ${shippingData.country}`}
+              <span className="font-semibold text-black">Address: </span>
+              {`${shippingData.address}, ${shippingData.city}, ${shippingData.state}, ${shippingData.country}`}
             </p>
             <p className="text-2xl font-semibold">Your Cart Items</p>
 
             {/* Cart Items */}
             {items.map((item) => (
-              <div key={item._id} className="flex justify-start items-center w-full h-auto text-sm mb-1">
+              <div
+                key={item._id}
+                className="flex justify-start items-center w-full h-auto text-sm mb-1"
+              >
                 <img src={M1} alt="" className="w-2/12 h-20" />
                 <div className="flex justify-between w-full h-full items-center translate-y-2">
                   <p className="w-9/12 text-gray-500">{item.name}</p>
                   <p className="w-3/12 text-gray-900">
-                    {item.quantity} * ${item.price} = <span className="font-semibold text-black text-sm">$ {item.quantity * item.price}</span>
+                    {item.quantity} * ${item.price} ={" "}
+                    <span className="font-semibold text-black text-sm">
+                      $ {item.quantity * item.price}
+                    </span>
                   </p>
                 </div>
               </div>
@@ -100,7 +114,9 @@ function ConfirmOrder() {
 
           {/* Right */}
           <div className="flex flex-col text-sm w-1/4 h-auto justify-start items-start px-5">
-            <p className="text-center w-full text-2xl font-semibold border-b-2 border-gray-300 pb-2">Order Summary</p>
+            <p className="text-center w-full text-2xl font-semibold border-b-2 border-gray-300 pb-2">
+              Order Summary
+            </p>
             <div className="flex w-full justify-between">
               <p>Subtotal:</p>
               <p className="text-gray-500">$ {grossTotal.toFixed(2)}</p>
@@ -119,7 +135,9 @@ function ConfirmOrder() {
             </div>
             <button
               className="w-full text-center py-2 text-white text-sm bg-orange-600 hover:bg-orange-500"
-              onClick={() => nav("/checkout/payment",{state:{items,total}})}
+              onClick={() =>
+                nav("/checkout/payment", { state: { items, total } })
+              }
             >
               Proceed To Payment
             </button>

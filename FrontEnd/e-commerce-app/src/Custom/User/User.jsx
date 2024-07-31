@@ -3,14 +3,15 @@ import { NavLink, useNavigate } from "react-router-dom";
 import BadgeIcon from "@mui/icons-material/Badge";
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import axios from "axios";
+
 const User = () => {
   const [loginForm, setLoginForm] = useState(true);
   const [registerForm, setRegisterForm] = useState(false);
   const nav = useNavigate();
-  // =================================== Password Show n Hide ============================================= 
+  // =================================== Password Show n Hide =============================================
   const [show, setShow] = useState(false);
 
   // =================================== REGISTER =============================================
@@ -58,10 +59,13 @@ const User = () => {
   function handleLoginSubmit(e) {
     e.preventDefault();
     axios
-      .get(`http://localhost:3000/api/v3/users/${logFormData.email}`)
+      .post(`http://localhost:3000/api/v3/users/login`, logFormData)
       .then((results) => {
+        console.log(results);
+        results.data.user.token = results.data.token;
+        results.data.user.expiresIn = results.data.expiresIn;
         nav("/profile", {
-          state: { data: results.data.data.user },
+          state: { data: results.data.user },
         });
       })
       .catch((err) => {
@@ -132,8 +136,18 @@ const User = () => {
                 onChange={handleLoginChange}
                 value={logFormData.password}
               />
-              {show &&<VisibilityIcon onClick={()=>setShow(false)} className=" cursor-pointer absolute -translate-x-8 translate-y-3" />}
-              {!show &&<VisibilityOffIcon onClick={()=>setShow(true)} className=" cursor-pointer absolute -translate-x-8 translate-y-3" />}
+              {show && (
+                <VisibilityIcon
+                  onClick={() => setShow(false)}
+                  className=" cursor-pointer absolute -translate-x-8 translate-y-3"
+                />
+              )}
+              {!show && (
+                <VisibilityOffIcon
+                  onClick={() => setShow(true)}
+                  className=" cursor-pointer absolute -translate-x-8 translate-y-3"
+                />
+              )}
             </div>
             <p
               onClick={() => {
@@ -189,9 +203,19 @@ const User = () => {
                 onChange={handleRegChange}
                 name="password"
               />
-              
-              {show &&<VisibilityIcon onClick={()=>setShow(false)} className=" cursor-pointer absolute -translate-x-8 translate-y-3" />}
-              {!show &&<VisibilityOffIcon onClick={()=>setShow(true)} className=" cursor-pointer absolute -translate-x-8 translate-y-3" />}
+
+              {show && (
+                <VisibilityIcon
+                  onClick={() => setShow(false)}
+                  className=" cursor-pointer absolute -translate-x-8 translate-y-3"
+                />
+              )}
+              {!show && (
+                <VisibilityOffIcon
+                  onClick={() => setShow(true)}
+                  className=" cursor-pointer absolute -translate-x-8 translate-y-3"
+                />
+              )}
             </div>
             <div className="w-2/3">
               <input
@@ -202,8 +226,10 @@ const User = () => {
                 id="avatar"
                 onChange={handleRegChange}
               />
-              <label htmlFor="avatar"
-              className="bg-gray-800 text-white w-full mt-2 text-center py-2 px-4 rounded-md cursor-pointer hover:bg-gray-600">
+              <label
+                htmlFor="avatar"
+                className="bg-gray-800 text-white w-full mt-2 text-center py-2 px-4 rounded-md cursor-pointer hover:bg-gray-600"
+              >
                 Choose Avatar
               </label>
             </div>

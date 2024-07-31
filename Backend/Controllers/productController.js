@@ -1,38 +1,36 @@
-const asyncErrorHandler = require('./../Utils/asyncErrorHandler');
-const CustomError = require('./../Utils/CustomError');
+const asyncErrorHandler = require("./../Utils/asyncErrorHandler");
+const CustomError = require("./../Utils/CustomError");
 const Product = require("../Models/productsModel");
 const uploadOnCloudinary = require("../Utils/cloudinary");
-const ApiFeatures = require("../Utils/ApiFeatures")
+const ApiFeatures = require("../Utils/ApiFeatures");
 // GetAllProducts
-exports.getAllProducts = asyncErrorHandler( async (req, res,next) => {
-    const outOfStockProducts= await Product.aggregate([
-      {
-        $match: {
-          stock:0 
-        }
-      }
-    ]);
-    const product = await Product.find();
-    // const features = new ApiFeatures(Movie.find(), req.query)
-    // .sort()
-    // .paginate();
-    // let product = await features.query; 
-    res.status(200).json({
-      status: "Success",
-      length: product.length,
-      outOfStockProductsLength:outOfStockProducts.length,
-      data: {
-        product,
+exports.getAllProducts = asyncErrorHandler(async (req, res, next) => {
+  const outOfStockProducts = await Product.aggregate([
+    {
+      $match: {
+        stock: 0,
       },
-    });
-})
-
+    },
+  ]);
+  const product = await Product.find();
+  // const features = new ApiFeatures(Movie.find(), req.query)
+  // .sort()
+  // .paginate();
+  // let product = await features.query;
+  res.status(200).json({
+    status: "Success",
+    length: product.length,
+    outOfStockProductsLength: outOfStockProducts.length,
+    data: {
+      product,
+    },
+  });
+});
 
 // Get Specific Product
 exports.getSpecificProduct = asyncErrorHandler(async (req, res, next) => {
-  if(!req.params.id)
-  {
-    return next(new CustomError("Id is required..",400))
+  if (!req.params.id) {
+    return next(new CustomError("Id is required..", 400));
   }
   const product = await Product.findById(req.params.id);
   if (!product) {
@@ -46,45 +44,56 @@ exports.getSpecificProduct = asyncErrorHandler(async (req, res, next) => {
   });
 });
 
-
-
 //Add-One
-exports.addNewProduct =asyncErrorHandler( async (req, res,next) => {
-    const {name,description,price,category,stock}=req.body;
-    if (!name || !description || !price || !category || stock == null) {
-      return next(new CustomError("Missing required fields: name, description, price, category, or stock.", 400));
-    }
-  
-    if (!req.files || req.files.length < 3) {
-      return next(new CustomError("At least 3 images are required.", 400));
-    }
-    const image1LocalePath = req.files[0].path;
-    const image2LocalePath = req.files[1].path;
-    const image3LocalePath = req.files[2].path;
-    const img1=await uploadOnCloudinary(image1LocalePath)
-    const img2=await uploadOnCloudinary(image2LocalePath)
-    const img3=await uploadOnCloudinary(image3LocalePath)
-    const newProduct=await Product.create({
-      name,description,price,category,stock,
-      productImages:[img1.url,img2.url,img3.url]
-    })
-    res.status(201).json({
-      status: "Success",
-      data: {
-        newProduct,
-      },
-    });
-});
+exports.addNewProduct = asyncErrorHandler(async (req, res, next) => {
+  const { name, description, price, category, stock } = req.body;
+  if (!name || !description || !price || !category || stock == null) {
+    return next(
+      new CustomError(
+        "Missing required fields: name, description, price, category, or stock.",
+        400
+      )
+    );
+  }
 
+  if (!req.files || req.files.length < 3) {
+    return next(new CustomError("At least 3 images are required.", 400));
+  }
+  const image1LocalePath = req.files[0].path;
+  const image2LocalePath = req.files[1].path;
+  const image3LocalePath = req.files[2].path;
+  const img1 = await uploadOnCloudinary(image1LocalePath);
+  const img2 = await uploadOnCloudinary(image2LocalePath);
+  const img3 = await uploadOnCloudinary(image3LocalePath);
+  const newProduct = await Product.create({
+    name,
+    description,
+    price,
+    category,
+    stock,
+    productImages: [img1.url, img2.url, img3.url],
+  });
+  res.status(201).json({
+    status: "Success",
+    data: {
+      newProduct,
+    },
+  });
+});
 
 //Update
 
-exports.updateProduct = asyncErrorHandler(async (req, res,next) => {
+exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
   const { name, description, price, category, stock } = req.body;
   const { id } = req.params;
 
   if (!name || !description || !price || !category || stock == null) {
-    return next(new CustomError("Missing required fields: name, description, price, category, or stock.", 400));
+    return next(
+      new CustomError(
+        "Missing required fields: name, description, price, category, or stock.",
+        400
+      )
+    );
   }
 
   const existingProduct = await Product.findById(id);
@@ -95,37 +104,44 @@ exports.updateProduct = asyncErrorHandler(async (req, res,next) => {
   if (!req.files || req.files.length < 3) {
     return next(new CustomError("At least 3 images are required.", 400));
   }
-    const image1LocalePath = req.files[0].path;
-    const image2LocalePath = req.files[1].path;
-    const image3LocalePath = req.files[2].path;
-    const img1=await uploadOnCloudinary(image1LocalePath)
-    const img2=await uploadOnCloudinary(image2LocalePath)
-    const img3=await uploadOnCloudinary(image3LocalePath)
-    const updatedProduct=await Product.findByIdAndUpdate(req.params.id,{
-      name,description,price,category,stock,
-      productImages:[img1.url,img2.url,img3.url]
-    }, { new: true, runValidators: true })
-    res.status(201).json({
-      status: "Success",
-      data: {
-        updatedProduct,
-      },
-    });
+  const image1LocalePath = req.files[0].path;
+  const image2LocalePath = req.files[1].path;
+  const image3LocalePath = req.files[2].path;
+  const img1 = await uploadOnCloudinary(image1LocalePath);
+  const img2 = await uploadOnCloudinary(image2LocalePath);
+  const img3 = await uploadOnCloudinary(image3LocalePath);
+  const updatedProduct = await Product.findByIdAndUpdate(
+    req.params.id,
+    {
+      name,
+      description,
+      price,
+      category,
+      stock,
+      productImages: [img1.url, img2.url, img3.url],
+    },
+    { new: true, runValidators: true }
+  );
+  res.status(201).json({
+    status: "Success",
+    data: {
+      updatedProduct,
+    },
+  });
 });
 
 //Delete-One
-exports.deleteSpecificProduct =asyncErrorHandler( async (req, res,next) => {
+exports.deleteSpecificProduct = asyncErrorHandler(async (req, res, next) => {
   const { id } = req.params;
   const product = await Product.findById(id);
   if (!product) {
     return next(new CustomError("No product found with the given ID.", 404));
-  }  
+  }
   await Product.findByIdAndDelete(req.params.id);
-    res.status(204).json({
-      status: "Success",
-      data: null,
-    });
- 
+  res.status(204).json({
+    status: "Success",
+    data: null,
+  });
 });
 // Update Stock
 exports.stockUpdate = asyncErrorHandler(async (req, res, next) => {
@@ -141,11 +157,15 @@ exports.stockUpdate = asyncErrorHandler(async (req, res, next) => {
     return next(new CustomError("No product found with the given ID.", 404));
   }
 
-  const updatedProduct = await Product.findByIdAndUpdate(id, { stock }, { runValidators: true, new: true });
+  const updatedProduct = await Product.findByIdAndUpdate(
+    id,
+    { stock },
+    { runValidators: true, new: true }
+  );
   res.status(200).json({
     status: "Success",
     data: {
-      updatedProduct
+      updatedProduct,
     },
   });
 });

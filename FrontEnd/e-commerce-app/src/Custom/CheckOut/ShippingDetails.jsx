@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Country, State,City } from "country-state-city";
+import { Country, State, City } from "country-state-city";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import Checkout from "./Checkout";
@@ -14,6 +14,7 @@ import LocationCityIcon from "@mui/icons-material/LocationCity";
 function ShippingDetails() {
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => {
+    console.log(state.userReducer);
     return state.userReducer;
   });
   const nav = useNavigate();
@@ -35,10 +36,12 @@ function ShippingDetails() {
 
   function handleShippingFormSubmit(e) {
     e.preventDefault();
+    console.log(shippingFormData);
     axios
-      .post("http://localhost:3000/api/v3/shippinginfo", {
-        ...shippingFormData,
-        customer: userId,
+      .post("http://localhost:3000/api/v3/shippinginfo", shippingFormData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
       .then((response) => {
         console.log("response: ", response);
@@ -61,13 +64,16 @@ function ShippingDetails() {
         //   payload: `${shippingFormData.address},${shippingFormData.city},${shippingFormData.state},${shippingFormData.country}`,
         // });
         nav("/checkout/confirm");
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 
   return (
     <div className="flex items-center justify-center bg-gray-50 w-max-screen my-3 h-auto">
       <div className="bg-white shadow-lg shadow-gray-400 w-11/12 h-full py-3">
-        <Checkout step="1" />
+        <Checkout step={1} />
         <div className="flex flex-col justify-center gap-2 items-center flex-wrap w-max-screen h-auto">
           <p className="text-xl font-semibold pb-2 border-b-2 border-gray-500 px-4">
             Shipping Details
@@ -87,7 +93,6 @@ function ShippingDetails() {
                 onChange={handleShippingFormChange}
               />
             </div>
-
 
             <div>
               <LocationOnIcon className="absolute translate-y-1 ml-3" />
@@ -163,16 +168,17 @@ function ShippingDetails() {
                 <option value="" disabled>
                   Choose City
                 </option>
-                {City.getCitiesOfState(shippingFormData.country,shippingFormData.state).map(
-                  (city) => (
-                    <option key={city.isoCode} value={city.isoCode}>
-                      {city.name}
-                    </option>
-                  )
-                )}
+                {City.getCitiesOfState(
+                  shippingFormData.country,
+                  shippingFormData.state
+                ).map((city) => (
+                  <option key={city.isoCode} value={city.isoCode}>
+                    {city.name}
+                  </option>
+                ))}
               </select>
             </div>
-             
+
             <button
               type="submit"
               className="text-center w-5/6 text-sm my-3 text-white bg-orange-600 hover:bg-orange-500 py-2 px-5"
