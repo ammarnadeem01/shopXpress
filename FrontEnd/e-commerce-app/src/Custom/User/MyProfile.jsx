@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import BasicSpeedDial from "./SpeedDial.jsx";
 function MyProfile() {
+  const nav = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.userReducer);
@@ -54,7 +55,12 @@ function MyProfile() {
           {/* LHS */}
           <div className="flex flex-col flex-wrap w-1/2 justify-evenly items-center gap-3">
             <img src={data.avatar} className="rounded-full w-2/4 h-3/4" />
-            <div className="py-3 px-5  bg-orange-600 hover:bg-orange-500 text-white">
+            <div
+              className="py-3 px-5  bg-orange-600 hover:bg-orange-500 text-white cursor-pointer"
+              onClick={() => {
+                nav("/editprofile", { state: data });
+              }}
+            >
               Edit Profile
             </div>
           </div>
@@ -75,10 +81,15 @@ function MyProfile() {
               </p>
             </div>
             <div className="w-full">
-              <p className="text-white text-center mb-3 bg-gray-700 hover:bg-gray-600 w-1/2 py-2">
+              <p className="text-white text-center mb-3 bg-gray-700 hover:bg-gray-600 w-1/2 py-2 cursor-pointer">
                 My Orders
               </p>
-              <p className="text-white text-center  bg-gray-700 hover:bg-gray-600 w-1/2 py-2">
+              <p
+                className="text-white text-center  bg-gray-700 hover:bg-gray-600 w-1/2 py-2 cursor-pointer"
+                onClick={() => {
+                  nav("/editpassword");
+                }}
+              >
                 Change Password
               </p>
             </div>

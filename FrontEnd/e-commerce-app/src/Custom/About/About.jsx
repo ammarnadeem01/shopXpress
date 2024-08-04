@@ -1,33 +1,104 @@
-import "../../index.css"
-import aboutImg from '../../Images/GraphicImages/aboutImage.jpg'
+// import "../../index.css"
+import aboutImg from "../../Images/GraphicImages/aboutImage.jpg";
 function About() {
   return (
     <div className="about flex bg-gray-50 justify-center items-center p-20">
-    <div className="flex sm:flex-col md:flex-row bg-white z-9 justify-center content-center items-center flex-wrap w-3/4 h-5/6 shadow-2xl shadow-black ">
-     
-      <p className="text-3xl p-2 text-red-700 w-full text-center">About Us</p>
-{/* Left side */}
-      <div className="w-1/2 flex flex-wrap justify-center items-center border-r-2  border-gray-300  space-y-3 h-auto my-6 p-10">
+      <div className="flex flex-col lg:flex-row bg-white z-9 justify-center content-center items-center flex-wrap w-3/4 h-5/6 shadow-2xl shadow-black ">
+        {/* Left side */}
+        <div className="w-full lg:w-1/2 flex flex-wrap justify-center items-center lg:border-r-2  border-gray-300  space-y-3 h-auto my-6 px-5">
           <div className="w-full flex justify-center items-center ">
-              <img src={aboutImg} alt="" className="w-60 h-60  text-center rounded-full" />  
-          </div>     
-          <p className="w-full text-xl text-center">Ammar Nadeem</p>  
-          <p className="w-full text-center">Visit Instagram</p>  
-          <p className="text-gray-600 text-sm  w-full text-center">This is an E-commerce website made by Ammar Nadeem just to get his hands dirty with some MERN (MongoDB, Express.js, React.js, Node.js) practice.</p>  
-      </div>
-
-{/* Right side */}
-        <div className="w-1/2 flex flex-wrap justify-center items-center  h-auto m-auto p-10">
-
-       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero asperiores maxime repellat corporis, mollitia at itaque dolorum fugiat corrupti nesciunt tenetur vero a, molestias consectetur commodi, nisi facilis doloribus odio! Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis dolorem aperiam odio quisquam. Expedita quasi quidem minus ullam veniam ipsam tenetur aspernatur necessitatibus quibusdam, commodi, illo doloribus reprehenderit cupiditate animi.</p>
-
+            <img
+              src={aboutImg}
+              alt=""
+              className="w-60 h-60  text-center rounded-full"
+            />
+          </div>
+          <p className="w-full text-xl font-semibold text-center text-red-800">
+            Ammar Nadeem
+          </p>
+          <p className="w-full text-center  text-blue-700">Visit Instagram</p>
+          <p className="text-gray-600 text-sm  w-full text-center">
+            This is an E-commerce website made by Ammar Nadeem just to get his
+            hands dirty with some MERN (MongoDB, Express.js, React.js, Node.js)
+            practice.
+          </p>
         </div>
 
-
-
+        {/* Right side */}
+        <div className="w-full lg:w-1/2 flex flex-wrap justify-center items-center  h-auto p-7 lg:p-10">
+          <p className="text-justify hyphens-auto">
+            Welcome to my <strong>E-Commerce</strong> project! This platform is
+            a <strong>full-stack </strong>
+            application developed using the <strong>MERN</strong> stack,
+            showcasing my ability to build <strong>robust</strong> and
+            <strong> scalable </strong> web applications. The site includes
+            features such as <strong>product listings</strong>,
+            <strong> user authentication</strong>, and a seamless shopping
+            experience.
+          </p>
+          <br />
+          <p className="text-justify hyphens-auto">
+            My aim with this project was to deepen my understanding of both
+            <strong> frontend </strong> and <strong> backend </strong>{" "}
+            technologies, while also creating a practical and
+            <strong> user-friendly interface</strong>. I hope you enjoy
+            exploring the site as much as I enjoyed building it!
+          </p>
+          <br />
+          <p className="text-justify hyphens-auto">
+            Stay tuned for more updates as I continue to
+            <strong> enhance</strong> the platform with new features and
+            improvements. <strong>Thank you for visiting!</strong>
+          </p>
+        </div>
+      </div>
     </div>
-    </div>
-  )
+  );
 }
 
-export default About
+export default About;
+
+// import "../../index.css";
+// import aboutImg from "../../Images/GraphicImages/aboutImage.jpg";
+
+// function About() {
+//   return (
+//     <div className="about flex bg-gray-50 justify-center items-center p-5 md:p-10 lg:p-20">
+//       <div className="flex flex-col md:flex-row bg-white z-10 justify-center items-center w-full max-w-screen-lg h-auto shadow-2xl shadow-black rounded-lg">
+//         {/* Left side */}
+//         <div className="flex flex-col items-center md:items-center md:w-1/2 border-b md:border-r-2 border-gray-300 p-6 md:p-10 space-y-6">
+//           <img
+//             src={aboutImg}
+//             alt="About"
+//             className="w-60 h-60 object-cover rounded-full mb-4 md:mb-0"
+//           />
+//           <div className="text-center md:text-left">
+//             <p className="text-xl font-semibold text-red-700">Ammar Nadeem</p>
+//             <p className="text-lg text-blue-500">Visit Instagram</p>
+//             <p className="text-gray-600 text-sm mt-2">
+//               This is an E-commerce website made by Ammar Nadeem just to get his
+//               hands dirty with some MERN (MongoDB, Express.js, React.js,
+//               Node.js) practice.
+//             </p>
+//           </div>
+//         </div>
+
+//         {/* Right side */}
+//         <div className="flex w-full md:w-1/2 justify-center items-center p-6 md:p-10">
+//           <p className="text-gray-800 text-base leading-relaxed">
+//             Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero
+//             asperiores maxime repellat corporis, mollitia at itaque dolorum
+//             fugiat corrupti nesciunt tenetur vero a, molestias consectetur
+//             commodi, nisi facilis doloribus odio! Lorem ipsum dolor sit amet
+//             consectetur adipisicing elit. Perferendis dolorem aperiam odio
+//             quisquam. Expedita quasi quidem minus ullam veniam ipsam tenetur
+//             aspernatur necessitatibus quibusdam, commodi, illo doloribus
+//             reprehenderit cupiditate animi.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default About;

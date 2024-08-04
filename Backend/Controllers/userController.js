@@ -151,7 +151,12 @@ exports.editProfile = asyncErrorHandler(async (req, res, next) => {
     { new: true, runValidators: true }
   );
   if (!updatedUser) {
-    return next(new CustomError("User Updation Failed.Please Try Again", 400));
+    return next(
+      new CustomError(
+        "Unable to update user details. Please try again later.",
+        400
+      )
+    );
   }
 
   res.status(201).json({
@@ -165,6 +170,7 @@ exports.editProfile = asyncErrorHandler(async (req, res, next) => {
 // is login?
 exports.protect = asyncErrorHandler(async (req, res, next) => {
   // Read the token if it exists or not
+  console.log(1);
   const testToken = req.headers.authorization;
   let token;
   if (testToken?.startsWith("Bearer")) {
@@ -174,7 +180,6 @@ exports.protect = asyncErrorHandler(async (req, res, next) => {
     const err = new CustomError("You are not Logged In...", 401);
     return next(err);
   }
-
   // validate the token
   const decodedToken = jwt.verify(token, process.env.SECRET_STR);
   // if user exists
@@ -194,6 +199,7 @@ exports.protect = asyncErrorHandler(async (req, res, next) => {
   }
   // Allow user access to protected route
   req.user = user;
+  console.log(req.user);
   next();
 });
 
@@ -230,7 +236,9 @@ exports.forgotPassword = asyncErrorHandler(async (req, res, next) => {
   await user.save({ validateBeforeSave: false }); // to save the 2 fields in the dbs which we created for token generator function, in function, we only set their values
 
   //  3. Send token to given email
-  const resetUrl = `${req.protocol}://${req.hostname}/api/v3/users/resetPassword/${token}`;
+  const resetUrl = `${req.protocol}://${req.get(
+    "host"
+  )}/api/v3/users/resetpassword/${token}`;
   const message = `We have  recieved a Password Reset Request. Please click on the link below to reset password.\n\n${resetUrl}`;
   console.log("resetUrl", resetUrl);
   try {
@@ -295,7 +303,7 @@ exports.resetPassword = asyncErrorHandler(async (req, res, next) => {
   }
 
   // reset passwd
-  user.password = req.body.password;
+  user.password = req.body.newPassword;
   user.ResetPasswordToken = undefined;
   user.ResetPasswordTokenExpiresIn = undefined;
   user.passwordChangedAt = Date.now();
@@ -312,6 +320,7 @@ exports.resetPassword = asyncErrorHandler(async (req, res, next) => {
 // update passwd (with old passwd)
 exports.updatePassword = asyncErrorHandler(async (req, res, next) => {
   // get current user data
+  console.log(req.user);
   const user = await User.findById(req.user._id).select("+password");
   // check if user exist?
   if (!user) {

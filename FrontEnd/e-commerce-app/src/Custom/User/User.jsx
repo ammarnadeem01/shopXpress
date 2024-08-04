@@ -151,7 +151,7 @@ const User = () => {
             </div>
             <p
               onClick={() => {
-                displayFormControl("register");
+                nav("/forgotpassword");
               }}
               className="no-underline w-full text-center cursor-pointer text-blue-600"
             >

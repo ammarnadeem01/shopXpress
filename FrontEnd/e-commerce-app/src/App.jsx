@@ -30,10 +30,15 @@ import AllOrders from "./Custom/Admin/AllOrders";
 import AllReviews from "./Custom/Admin/AllReviews";
 import ShippingInfo from "./Custom/Admin/ShippingInfo";
 import EmptyCart from "./Custom/Cart/EmptyCart";
+import ForgotPassword from "./Custom/User/ForgotPassword";
+import ResetPassword from "./Custom/User/ResetPassword";
+import VerifyEmail from "./Custom/User/VerifyEmail";
+import EditPassword from "./Custom/User/EditPassword";
+import EditProfile from "./Custom/User/EditProfile";
 //
 function App() {
   return (
-    <>
+    <div className="box-border p-0 m-0 w-full">
       <BrowserRouter>
         <Navbar />
         <Routes>
@@ -60,11 +65,16 @@ function App() {
           <Route path="/checkout/shipping" element={<ShippingDetails />} />
           <Route path="/placed" element={<OrderPlaced />} />
           <Route path="/empty" element={<EmptyCart />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/resetpassword/:token" element={<ResetPassword />} />
+          <Route path="/verifyemail" element={<VerifyEmail />} />
+          <Route path="/editpassword" element={<EditPassword />} />
+          <Route path="/editprofile" element={<EditProfile />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 

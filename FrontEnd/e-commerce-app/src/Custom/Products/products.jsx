@@ -56,7 +56,7 @@ function Products() {
   //   // Fetch reviews
   //   const fetchPromises = currentData.map(async (data) => {
   //     const results = await axios.get(
-  //       `http://localhost:3000/api/v3/reviews/product/${data._id}`
+  //       http://localhost:3000/api/v3/reviews/product/${data._id}
   //     );
   //     console.log("results", results);
   //     const item = results.data.data.productReviews;
@@ -156,7 +156,7 @@ function Products() {
     //   });
 
     //   const fetchPromises = currentData.map(async (data) => {
-    //     const results=await axios.get(`http://localhost:3000/api/v3/reviews/product/${data._id}`);
+    //     const results=await axios.get(http://localhost:3000/api/v3/reviews/product/${data._id});
     //     console.log("results",results)
     //     const item = results.data.data.productReviews;
     //     return item;
@@ -184,7 +184,7 @@ function Products() {
   }
 
   return (
-    <div className="my-16">
+    <div className="max-w-full">
       <p
         className="text-3xl font-semibold text-center mb-5
         border-b-2 border-gray-700

@@ -5,11 +5,11 @@ const router = express.Router();
 router
   .route("/")
   .get(productControllers.getAllProducts)
-  .post(upload.array('productImages',3),productControllers.addNewProduct);
+  .post(upload.array("productImages", 3), productControllers.addNewProduct);
 router
   .route("/:id")
   .get(productControllers.getSpecificProduct)
-  .put(upload.array('productImages',3),productControllers.updateProduct)
+  .put(upload.array("productImages", 3), productControllers.updateProduct)
   .delete(productControllers.deleteSpecificProduct)
-  .patch(productControllers.stockUpdate)
+  .patch(productControllers.stockUpdate);
 module.exports = router;

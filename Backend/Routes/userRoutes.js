@@ -6,13 +6,13 @@ const userControllers = require("../Controllers/userController");
 router
   .route("/")
   .get(
-    userControllers.protect,
-    userControllers.restrict("Admin"),
+    // userControllers.protect,
+    // userControllers.restrict("Admin"),
     userControllers.getAllUsers
   )
   .post(upload.single("avatar"), userControllers.createNewUser);
 router.route("/forgotpassword").post(userControllers.forgotPassword);
-router.route("/resetpassword/:token").patch(userControllers.resetPassword);
+router.route("/resetpassword/:token").post(userControllers.resetPassword);
 router.route("/login").post(userControllers.login);
 router
   .route("/updatePassword")
@@ -26,5 +26,4 @@ router
     userControllers.deleteSpecificUser
   )
   .patch(userControllers.editProfile);
-
 module.exports = router;

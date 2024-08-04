@@ -14,37 +14,35 @@ function CreateProduct() {
     description: "",
     category: "Laptop",
     stock: 1,
-    productImages:[],
+    productImages: [],
   });
   function handleChange(e) {
-    const { name, value,type,files } = e.target;
-    console.log(files)
-    if(type=="file")
-      {
-       setProductData({...productData,[name]:Array.from(files)})
-      }
-      else{
-        setProductData({ ...productData, [name]: value });
-      }
+    const { name, value, type, files } = e.target;
+    console.log(files);
+    if (type == "file") {
+      setProductData({ ...productData, [name]: Array.from(files) });
+    } else {
+      setProductData({ ...productData, [name]: value });
+    }
   }
   function handleCreateProduct(e) {
     e.preventDefault();
-   const formData= new FormData();
-   formData.append("name",productData.name)
-   formData.append("description",productData.description)
-   formData.append("stock",productData.stock)
-   formData.append("category",productData.category)
-   formData.append("price",productData.price)
-   
-   productData.productImages.map((img)=>{
-    formData.append("productImages",img)
-   })
-   
-   axios
-      .post("http://localhost:3000/api/v3/products", formData,{
-        headers:{
-          "Content-Type":"multipart/form-data"
-        }        
+    const formData = new FormData();
+    formData.append("name", productData.name);
+    formData.append("description", productData.description);
+    formData.append("stock", productData.stock);
+    formData.append("category", productData.category);
+    formData.append("price", productData.price);
+
+    productData.productImages.map((img) => {
+      formData.append("productImages", img);
+    });
+
+    axios
+      .post("http://localhost:3000/api/v3/products", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then(() => {
         console.log("Product Created.");
@@ -67,7 +65,7 @@ function CreateProduct() {
               <SpellcheckIcon className="absolute translate-x-2 translate-y-2.5" />
               <input
                 type="string"
-                className="border-2 border-gray-400 w-full py-2 pl-10 rounded-md"
+                className="border-2 border-gray-400 w-full py-2 pl-10 "
                 placeholder="Product's Name"
                 onChange={handleChange}
                 name="name"
@@ -77,7 +75,7 @@ function CreateProduct() {
               <AttachMoneyIcon className="absolute translate-x-2 translate-y-2.5" />
               <input
                 type="number"
-                className="border-2 border-gray-400 w-full py-2 pl-10 rounded-md"
+                className="border-2 border-gray-400 w-full py-2 pl-10"
                 placeholder="Price"
                 onChange={handleChange}
                 name="price"
@@ -87,7 +85,7 @@ function CreateProduct() {
               <DescriptionIcon className="absolute translate-x-2 translate-y-2.5" />
               <input
                 type="string"
-                className="border-2 border-gray-400 w-full py-2 pl-10 rounded-md"
+                className="border-2 border-gray-400 w-full py-2 pl-10 "
                 placeholder="Description"
                 onChange={handleChange}
                 name="description"
@@ -98,7 +96,7 @@ function CreateProduct() {
               <select
                 name="category"
                 id=""
-                className="border-2 border-gray-400 w-full py-2 pl-10 rounded-md"
+                className="border-2 border-gray-400 w-full py-2 pl-10 "
                 value={productData.category}
                 onChange={handleChange}
               >
@@ -115,13 +113,13 @@ function CreateProduct() {
               <StorageIcon className="absolute translate-x-2 translate-y-2.5" />
               <input
                 type="string"
-                className="border-2 border-gray-400 w-full py-2 pl-10 rounded-md"
+                className="border-2 border-gray-400 w-full py-2 pl-10 "
                 placeholder="Stocks"
                 onChange={handleChange}
                 name="stock"
               />
             </div>
-             <div className="w-full h-auto">
+            <div className="w-full h-auto">
               <input
                 type="file"
                 multiple
@@ -136,7 +134,7 @@ function CreateProduct() {
               >
                 Choose Images
               </label>
-              </div>
+            </div>
             <button
               className="bg-gray-800 mt-2 cursor-pointer  hover:bg-gray-600 rounded-md text-center text-white w-full py-1.5"
               onClick={handleCreateProduct}

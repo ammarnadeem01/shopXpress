@@ -1,7 +1,7 @@
-import { Field, Form, Formik ,ErrorMessage} from "formik";
-import gmailIcon from "../../Images/GraphicImages/gmailIcon.jpg";
-import postOffice from "../../Images/GraphicImages/postOffice.jpg";
-import phoneIcon from "../../Images/GraphicImages/phoneIcon.png";
+import { Field, Form, Formik, ErrorMessage } from "formik";
+import EmailIcon from "@mui/icons-material/Email";
+import CallIcon from "@mui/icons-material/Call";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import * as Yup from "yup";
 import axios from "axios";
 
@@ -26,7 +26,7 @@ function Contact() {
       .min(1, "Bio must be at least 1 character")
       .max(300, "Message cannot exceeds 300 characters"),
   });
-  function handleFormSubmit(values, {resetForm }) {
+  function handleFormSubmit(values, { resetForm }) {
     axios
       .post("http://localhost:3000/api/v3/message", values)
       .then((result) => {
@@ -39,9 +39,9 @@ function Contact() {
   }
   return (
     <div className="flex justify-center max-w-screen h-auto items-center p-10">
-      <div className="flex sm:flex-col md:flex-row justify-center w-5/6 h-auto p-10 bg-white shadow-2xl items-center">
+      <div className="flex flex-col lg:flex-row justify-center w-5/6 h-auto p-10 bg-white shadow-2xl items-center">
         {/* left side */}
-        <div className="flex w-1/2 max-h-full justify-center items-center ">
+        <div className="flex w-full border-b-2 pb-5 lg:pb-0 lg:border-b-0 border-b-gray-700 lg:w-1/2 max-h-full lg:mx-10 justify-center items-center ">
           <Formik
             initialValues={messageData}
             validationSchema={validationSchema}
@@ -66,7 +66,11 @@ function Contact() {
                   className="w-80 p-2 rounded-md"
                   style={{ border: "0.5px solid gray" }}
                 ></Field>
-                <ErrorMessage name="name" component="div" className="text-red-500" />
+                <ErrorMessage
+                  name="name"
+                  component="div"
+                  className="text-red-500"
+                />
                 <br />
               </div>
               <div>
@@ -81,7 +85,11 @@ function Contact() {
                   className="w-80 p-2 rounded-md"
                   style={{ border: "0.5px solid gray" }}
                 ></Field>
-                 <ErrorMessage name="email" component="div" className="text-red-500" />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-red-500"
+                />
                 <br />
               </div>
               <div>
@@ -95,7 +103,11 @@ function Contact() {
                   className="w-80 p-2 rounded-md"
                   style={{ border: "0.5px solid gray" }}
                 ></Field>
-                 <ErrorMessage name="phoneNumber" component="div" className="text-red-500" />
+                <ErrorMessage
+                  name="phoneNumber"
+                  component="div"
+                  className="text-red-500"
+                />
                 <br />
               </div>
               <div>
@@ -109,7 +121,11 @@ function Contact() {
                   className="w-80 p-2 rounded-md"
                   style={{ border: "0.5px solid gray", resize: "none" }}
                 />
-                 <ErrorMessage name="message" component="div" className="text-red-500" />
+                <ErrorMessage
+                  name="message"
+                  component="div"
+                  className="text-red-500"
+                />
                 <br />
               </div>
               <div>
@@ -126,13 +142,15 @@ function Contact() {
         </div>
 
         {/* right side */}
-        <div className="flex flex-wrap w-1/2 h-full justify-center items-center">
+        <div className="flex mt-4 w-full lg:w-1/2 flex-wrap h-full justify-center items-center">
           {/* </div> */}
-          <p className="w-full text-2xl font-semibold">Contact Detail</p>
+          <p className="text-3xl text-center mb-7 font-semibold">
+            Contact Details
+          </p>
           {/* email */}
           <div className="w-full flex rounded-md">
             <div className="w-1/6">
-              <img src={gmailIcon} alt="" />
+              <EmailIcon fontSize="large" />
             </div>
             <div className="flex flex-col flex-wrap justify-center items-center">
               <p className="w-full font-semibold text-lg">Email</p>
@@ -143,8 +161,8 @@ function Contact() {
           {/* phone */}
 
           <div className="w-full flex rounded-md ">
-            <div className="w-1/6">
-              <img src={phoneIcon} alt="" />
+            <div className="w-1/6 ">
+              <CallIcon fontSize="large" />
             </div>
             <div className="flex flex-col flex-wrap justify-center items-center">
               <p className="w-full font-semibold text-lg">Phone</p>
@@ -155,7 +173,7 @@ function Contact() {
 
           <div className="w-full flex rounded-md ">
             <div className="w-1/6">
-              <img src={postOffice} alt="" />
+              <LocationOnIcon fontSize="large" />
             </div>
             <div className="flex flex-col flex-wrap justify-center items-center">
               <p className="w-full font-semibold text-lg">Mail Office</p>
