@@ -38,8 +38,8 @@ function Contact() {
       });
   }
   return (
-    <div className="flex justify-center max-w-screen h-auto items-center p-10">
-      <div className="flex flex-col lg:flex-row justify-center w-5/6 h-auto p-10 bg-white shadow-2xl items-center">
+    <div className="flex justify-center max-w-screen h-auto items-center bg-white">
+      <div className="flex flex-col lg:flex-row justify-center xs:w-full md:w-5/6 h-auto p-1 lg:p-10 bg-white shadow-2xl items-center">
         {/* left side */}
         <div className="flex w-full border-b-2 pb-5 lg:pb-0 lg:border-b-0 border-b-gray-700 lg:w-1/2 max-h-full lg:mx-10 justify-center items-center ">
           <Formik
@@ -142,25 +142,25 @@ function Contact() {
         </div>
 
         {/* right side */}
-        <div className="flex mt-4 w-full lg:w-1/2 flex-wrap h-full justify-center items-center">
+        <div className="flex mt-4 w-full sm:gap-1 lg:gap-0 lg:w-1/2 flex-wrap h-full justify-center items-center">
           {/* </div> */}
-          <p className="text-3xl text-center mb-7 font-semibold">
+          <p className="text-3xl w-full text-center mb-7 font-semibold">
             Contact Details
           </p>
           {/* email */}
-          <div className="w-full flex rounded-md">
-            <div className="w-1/6">
+          <div className="sm:w-1/2 xs:w-3/4 lg:w-full flex rounded-md ">
+            <div className="w-1/6 flex flex-col flex-wrap justify-center">
               <EmailIcon fontSize="large" />
             </div>
-            <div className="flex flex-col flex-wrap justify-center items-center">
+            <div className="flex flex-col flex-wrap justify-center">
               <p className="w-full font-semibold text-lg">Email</p>
               <p className="w-full">ammarnadeem@gmail.com</p>
             </div>
           </div>
 
           {/* phone */}
-
-          <div className="w-full flex rounded-md ">
+          {/* xs:ml-10 sm:ml-32 md:ml-32 */}
+          <div className="sm:w-1/2 xs:w-3/4 lg:w-full flex rounded-md">
             <div className="w-1/6 ">
               <CallIcon fontSize="large" />
             </div>
@@ -171,7 +171,7 @@ function Contact() {
           </div>
           {/* mail office */}
 
-          <div className="w-full flex rounded-md ">
+          <div className="sm:w-1/2 xs:w-3/4 lg:w-full flex rounded-md">
             <div className="w-1/6">
               <LocationOnIcon fontSize="large" />
             </div>

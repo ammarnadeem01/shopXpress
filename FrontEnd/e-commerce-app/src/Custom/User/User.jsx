@@ -90,9 +90,9 @@ const User = () => {
   }
 
   return (
-    <div className="flex bg-gray-50 flex-wrap justify-center items-center w-max-screen h-auto py-10">
+    <div className="flex bg-gray-50 flex-wrap justify-center items-center max-w-full h-auto py-10">
       {/*login/ register button */}
-      <div className="flex flex-wrap bg-white shadow-lg shadow-slate-500 rounded-md justify-evenly w-1/3 items-center">
+      <div className="flex flex-wrap bg-white shadow-lg shadow-slate-500 rounded-md justify-evenly xs:w-full sm:w-5/6 800:w-7/12 lg:w-1/2 xl:w-5/12 items-center">
         <NavLink
           className="w-1/2 no-underline text-center text-2xl active:text-white active:bg-gray-500 py-2 font-semibold"
           onClick={() => {
@@ -115,7 +115,8 @@ const User = () => {
             action=""
             className="flex flex-wrap justify-center items-center gap-2  mt-2 h-auto w-full py-4"
           >
-            <div className="w-2/3">
+            <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
+              {" "}
               <EmailIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
               <input
                 type="text"
@@ -126,7 +127,8 @@ const User = () => {
                 value={logFormData.email}
               />
             </div>
-            <div className="w-2/3">
+            <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
+              {" "}
               <LockIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
               <input
                 type={show ? "text" : "password"}
@@ -171,7 +173,8 @@ const User = () => {
             action=""
             className="flex flex-wrap justify-center items-center gap-2  mt-2 h-auto w-full py-4"
           >
-            <div className="w-2/3">
+            <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
+              {" "}
               <BadgeIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
               <input
                 type="text"
@@ -182,7 +185,8 @@ const User = () => {
                 name="name"
               />
             </div>
-            <div className="w-2/3">
+            <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
+              {" "}
               <EmailIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
               <input
                 type="text"
@@ -193,7 +197,7 @@ const User = () => {
                 name="email"
               />
             </div>
-            <div className="w-2/3">
+            <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
               <LockIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
               <input
                 type={show ? "text" : "password"}
@@ -217,7 +221,7 @@ const User = () => {
                 />
               )}
             </div>
-            <div className="w-2/3">
+            <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
               <input
                 type="file"
                 placeholder="avatar"
@@ -236,7 +240,7 @@ const User = () => {
             <button
               type="submit"
               onClick={handleRegSubmit}
-              className="w-2/5 text-white bg-gray-700 px-3 py-2 rounded-md hover:bg-gray-600"
+              className="block w-2/5 text-white bg-gray-700 px-3 py-2 rounded-md hover:bg-gray-600"
             >
               Register
             </button>

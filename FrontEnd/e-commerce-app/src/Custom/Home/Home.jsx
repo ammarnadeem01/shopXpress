@@ -11,7 +11,7 @@ function Home() {
         <div className="flex min-w-screen min-h-screen ">
           <div className="imgDiv  min-w-full min-h-full flex flex-col no-underline text-white justify-center items-center  gap-16">
             <p className="text-2xl font-semibold">Welcome To E-commerce</p>
-            <p className="text-4xl font-semibold">
+            <p className="text-4xl font-semibold text-center">
               FIND AMAZING PRODUCTS BELOW
             </p>
             <a

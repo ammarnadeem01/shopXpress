@@ -37,12 +37,16 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="flex bg-gray-50 flex-wrap justify-center items-center w-max-screen h-auto py-10">
-      <div className="flex flex-wrap bg-white shadow-lg shadow-slate-500 rounded-md justify-evenly w-1/3 items-center">
+    // <div className="flex bg-gray-50 flex-wrap justify-center items-center  h-auto py-10">
+    //   <div className="flex flex-wrap bg-white shadow-lg shadow-slate-500 rounded-md justify-evenly xs:w-full md:w-1/2 lg:w-5/12 items-center">
+    <div className="flex bg-gray-50 flex-wrap justify-center max-w-full items-center w-max-screen h-auto py-10">
+      <div className="flex flex-wrap bg-white shadow-lg shadow-slate-500 rounded-md justify-evenly xs:w-full md:w-1/2 lg:w-5/12 items-center">
         <div className="pt-3">
           <div className="text-center text-9xl font-semibold">
             <LockResetIcon fontSize="inherit" />
-            <h3>Reset Password</h3>
+            <p className="text-2xl xs:mb-2 sm:mb-3 md:mb-5 lg:mb-7">
+              Reset Password
+            </p>
           </div>
         </div>
         <Formik
@@ -51,8 +55,8 @@ const ResetPassword = () => {
           onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
-            <Form className="flex w-3/4 flex-wrap justify-center items-center gap-2  mt-2 h-auto py-4">
-              <div className="w-100">
+            <Form className="flex flex-wrap justify-center items-center gap-2 mt-2 h-auto w-full py-4">
+              <div className="sm:w-2/3 xs:w-11/12 md:w-10/12 450:w-2/3 lg:w-3/4 xl:2/3 2xl:w-1/2">
                 <label className="font-semibold text-xl" htmlFor="newPassword">
                   New Password
                 </label>
@@ -64,7 +68,7 @@ const ResetPassword = () => {
                 />
                 <ErrorMessage name="newPassword" component="div" />
               </div>
-              <div className="w-100">
+              <div className="sm:w-2/3 xs:w-11/12 md:w-10/12 450:w-2/3 lg:w-3/4 xl:2/3 2xl:w-1/2 lg:mx-10">
                 <label
                   className="font-semibold text-xl"
                   htmlFor="confirmPassword"
@@ -83,7 +87,7 @@ const ResetPassword = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-2/5 text-white bg-gray-700 px-3 py-2 my-2 rounded-md hover:bg-gray-600"
+                className="w-2/5 text-white mt-2 bg-gray-700 px-3 py-2 my-2 rounded-md hover:bg-gray-600"
               >
                 Reset Password
               </button>

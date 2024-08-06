@@ -54,9 +54,9 @@ function MyProfile() {
         <div className="flex w-11/12 h-full bg-white ">
           {/* LHS */}
           <div className="flex flex-col flex-wrap w-1/2 justify-evenly items-center gap-3">
-            <img src={data.avatar} className="rounded-full w-2/4 h-3/4" />
+            <img src={data.avatar} className="xs:rounded-full w-2/3 h-3/4" />
             <div
-              className="py-3 px-5  bg-orange-600 hover:bg-orange-500 text-white cursor-pointer"
+              className="py-3 px-5 w-1/2 bg-orange-600 hover:bg-orange-500 text-white text-center cursor-pointer"
               onClick={() => {
                 nav("/editprofile", { state: data });
               }}

@@ -184,7 +184,7 @@ function Products() {
   }
 
   return (
-    <div className="max-w-full">
+    <div className="max-w-full w-screen box-border">
       <p
         className="text-3xl font-semibold text-center mb-5
         border-b-2 border-gray-700
@@ -192,9 +192,9 @@ function Products() {
       >
         Products
       </p>
-      <div className="flex flex-row justify-center h-auto items-start">
+      <div className="flex md:flex-row xs:flex-col justify-center h-auto xs:items-center lg:items-start">
         {/* Left */}
-        <div className="flex flex-col justify-start items-start w-1/5 pt-3 px-2 h-auto mt-20">
+        <div className="lg:flex flex-col  justify-start items-start  xs:w-3/6 md:w-1/5 pt-3 px-2 h-auto mt-20">
           <div className="px-3 w-full text-lg font-semibold">
             <p>Price</p>
             <Slider
@@ -238,7 +238,7 @@ function Products() {
         {/* Right */}
         <div
           id="container"
-          className="flex flex-row flex-wrap justify-evenly items-baseline w-4/5 h-auto gap-3 py-10 space-y-5"
+          className="flex flex-row flex-wrap justify-evenly items-baseline  xs:w-full md:w-4/5 h-auto gap-3 py-10 space-y-5"
         >
           {filteredData.map((product) => (
             <ProductCard key={product._id} data={product} />
