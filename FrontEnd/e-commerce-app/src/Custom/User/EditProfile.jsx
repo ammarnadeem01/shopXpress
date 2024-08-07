@@ -78,33 +78,35 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="flex bg-gray-50 flex-wrap justify-center items-center w-full h-auto py-10">
-      <div className="flex flex-wrap bg-white shadow-lg shadow-slate-500 rounded-md justify-evenly w-1/3 items-center">
+    <div className="flex bg-gray-50 flex-wrap justify-center max-w-full items-center w-max-screen h-auto py-10">
+      <div className="flex flex-wrap bg-white shadow-lg shadow-slate-500 rounded-md justify-evenly xs:w-full md:w-1/2 lg:w-5/12 items-center">
         <div className="pt-3">
-          <h1 className="font-semibold">Edit Profile</h1>
+          <div className="text-center  border-b-4 px-4 border-b-gray-600 text-9xl font-semibold">
+            <p className="text-5xl mb-2">Edit Profile</p>
+          </div>
         </div>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
-          {({ isSubmitting, setFieldValue }) => (
-            <Form className="flex w-3/4 flex-wrap justify-center items-center gap-2 mt-2 h-auto py-4">
-              <div className="w-full relative">
+          {({ isSubmitting }) => (
+            <Form className="flex flex-wrap justify-center items-center gap-2 mt-2 h-auto w-full py-4">
+              <div className="sm:w-2/3 xs:w-11/12 md:w-10/12 450:w-2/3 lg:w-3/4 xl:2/3 2xl:w-1/2">
                 <BadgeIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
                 <Field
                   type="text"
                   placeholder="Name"
-                  className="border-2 border-gray-600 rounded-md w-full pl-14 py-2"
                   name="name"
+                  className="border-2 border-gray-600 rounded-md w-full pl-14 py-2"
                 />
                 <ErrorMessage
                   name="name"
                   component="div"
-                  className="text-red-500 mt-1 text-sm"
+                  className="border-2 border-gray-600 rounded-md w-full px-3 py-2"
                 />
               </div>
-              <div className="w-full relative">
+              <div className="sm:w-2/3 xs:w-11/12 md:w-10/12 450:w-2/3 lg:w-3/4 xl:2/3 2xl:w-1/2">
                 <EmailIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
                 <Field
                   type="text"
@@ -115,10 +117,11 @@ const EditProfile = () => {
                 <ErrorMessage
                   name="email"
                   component="div"
-                  className="text-red-500 mt-1 text-sm"
+                  className="border-2 border-gray-600 rounded-md w-full px-3 py-2"
                 />
               </div>
-              <div className="w-full">
+
+              <div className="sm:w-2/3 xs:w-11/12 md:w-10/12 450:w-2/3 lg:w-3/4 xl:2/3 2xl:w-1/2 lg:mx-10">
                 <input
                   type="file"
                   className="hidden"
@@ -130,11 +133,12 @@ const EditProfile = () => {
                 />
                 <label
                   htmlFor="avatar"
-                  className="bg-gray-800 text-white w-full mt-2 text-center py-2 px-4 rounded-md cursor-pointer hover:bg-gray-600"
+                  className="border-2 text-center text-white border-gray-600 rounded-md w-full px-3 py-2 cursor-pointer hover:bg-gray-600 bg-gray-800"
                 >
                   Choose Avatar
                 </label>
               </div>
+
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -147,6 +151,77 @@ const EditProfile = () => {
         </Formik>
       </div>
     </div>
+
+    //  old
+    // <div className="flex bg-gray-50 flex-wrap justify-center items-center w-full h-auto py-10">
+    //   <div className="flex flex-wrap bg-white shadow-lg shadow-slate-500 rounded-md justify-evenly w-1/3 items-center">
+    //     <div className="pt-3">
+    //       <h1 className="font-semibold">Edit Profile</h1>
+    //     </div>
+    //     <Formik
+    //       initialValues={initialValues}
+    //       validationSchema={validationSchema}
+    //       onSubmit={onSubmit}
+    //     >
+    //       {({ isSubmitting, setFieldValue }) => (
+    //         <Form className="flex w-3/4 flex-wrap justify-center items-center gap-2 mt-2 h-auto py-4">
+    //           <div className="w-full relative">
+    //             <BadgeIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
+    //             <Field
+    //               type="text"
+    //               placeholder="Name"
+    //               name="name"
+    //               className="border-2 border-gray-600 rounded-md w-full pl-14 py-2"
+    //             />
+    //             <ErrorMessage
+    //               name="name"
+    //               component="div"
+    //               className="text-red-500 mt-1 text-sm"
+    //             />
+    //           </div>
+    //           <div className="w-full relative">
+    //             <EmailIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
+    //             <Field
+    //               type="text"
+    //               placeholder="Email"
+    //               className="border-2 border-gray-600 rounded-md w-full pl-14 py-2"
+    //               name="email"
+    //             />
+    //             <ErrorMessage
+    //               name="email"
+    //               component="div"
+    //               className="text-red-500 mt-1 text-sm"
+    //             />
+    //           </div>
+    //           <div className="w-full">
+    //             <input
+    //               type="file"
+    //               className="hidden"
+    //               id="avatar"
+    //               name="avatar"
+    //               onChange={(event) =>
+    //                 setFieldValue("avatar", event.currentTarget.files[0])
+    //               }
+    //             />
+    //             <label
+    //               htmlFor="avatar"
+    //               className="bg-gray-800 text-white w-full mt-2 text-center py-2 px-4 rounded-md cursor-pointer hover:bg-gray-600"
+    //             >
+    //               Choose Avatar
+    //             </label>
+    //           </div>
+    //           <button
+    //             type="submit"
+    //             disabled={isSubmitting}
+    //             className="w-2/5 text-white bg-gray-700 px-3 py-2 my-2 rounded-md hover:bg-gray-600"
+    //           >
+    //             Update Profile
+    //           </button>
+    //         </Form>
+    //       )}
+    //     </Formik>
+    //   </div>
+    // </div>
   );
 };
 

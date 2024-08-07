@@ -34,7 +34,9 @@ const ProductDetails = () => {
       .get(`http://localhost:3000/api/v3/reviews/product/${productId}`)
       .then((results) => {
         setAllReviews(results.data.data.reviews);
-        const userReview = results.data.data.reviews.find((r) => r.reviewedBy == userId);
+        const userReview = results.data.data.reviews.find(
+          (r) => r.reviewedBy == userId
+        );
         if (userReview) {
           setExistingReview(true);
           setReview(userReview.review);
@@ -42,27 +44,21 @@ const ProductDetails = () => {
         }
       })
       .catch((err) => console.log(err));
-    console.log("userId",userId)
+    console.log("userId", userId);
     // Check if user has purchased the product
     axios
       .get(`http://localhost:3000/api/v3/orders/user/${userId}`)
       .then((results) => {
-        console.log("results",results)
+        console.log("results", results);
         const orders = results.data.data.order;
-        const hasPurchased = orders.some(order => order.orderedItems.some(product => product.item === productId));
-        console.log(hasPurchased)
+        const hasPurchased = orders.some((order) =>
+          order.orderedItems.some((product) => product.item === productId)
+        );
+        console.log(hasPurchased);
         setPurchased(hasPurchased);
       })
       .catch((err) => console.log(err));
   }, [location.state.data._id, userId]);
-
-
-
-
-
-
-
-
 
   const handleReviewSubmission = () => {
     const reviewData = {
@@ -76,21 +72,24 @@ const ProductDetails = () => {
       ratings,
     };
 
-       const reviewApi = existingReview ? axios.put : axios.post;
-       const reviewUrl = `http://localhost:3000/api/v3/reviews${existingReview ? `/${reviewData.id}` : ''}`;
-       const reqBody=existingReview ? Put_reviewData : reviewData
-       reviewApi(reviewUrl, reqBody)
-         .then((results) => {
-           console.log("results", results);
-           handleClose();
-           setAllReviews((prevReviews) =>
-             existingReview
-               ? prevReviews.map((r) => (r.reviewedBy === userId ? results.data.data: r))
-               : [...prevReviews, results.data.data]
-           );
-         })
-         .catch((err) => console.log(err));
-       
+    const reviewApi = existingReview ? axios.put : axios.post;
+    const reviewUrl = `http://localhost:3000/api/v3/reviews${
+      existingReview ? `/${reviewData.id}` : ""
+    }`;
+    const reqBody = existingReview ? Put_reviewData : reviewData;
+    reviewApi(reviewUrl, reqBody)
+      .then((results) => {
+        console.log("results", results);
+        handleClose();
+        setAllReviews((prevReviews) =>
+          existingReview
+            ? prevReviews.map((r) =>
+                r.reviewedBy === userId ? results.data.data : r
+              )
+            : [...prevReviews, results.data.data]
+        );
+      })
+      .catch((err) => console.log(err));
   };
 
   const AddedToCartFunction = () => {
@@ -102,6 +101,20 @@ const ProductDetails = () => {
         quantity: count,
       },
     });
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // =======================================================================================================
+    //  updation In Code -updated cart to avoid redundancy
+    dispatch({
+      type: "UPDATE_ITEM_IN_CART",
+      payload: {
+        productId: location.state.data._id,
+        quantity: count,
+      },
+    });
+    // =======================================================================================================
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     nav("/products");
   };
 
@@ -122,7 +135,11 @@ const ProductDetails = () => {
             <Carousel>
               {location.state.data.productImages.map((image, index) => (
                 <Carousel.Item key={index}>
-                  <img src={image} className="carousel-image" alt={`IMAGE ${index + 1}`} />
+                  <img
+                    src={image}
+                    className="carousel-image"
+                    alt={`IMAGE ${index + 1}`}
+                  />
                 </Carousel.Item>
               ))}
             </Carousel>
@@ -131,16 +148,29 @@ const ProductDetails = () => {
           {/* detail */}
           <div className="w-1/2 p-6 flex flex-col bg-white justify-evenly items-start detail-container">
             <p className="text-2xl font-semibold">{location.state.data.name}</p>
-            <p className="text-xs text-gray-400">Product # {location.state.data._id}</p>
+            <p className="text-xs text-gray-400">
+              Product # {location.state.data._id}
+            </p>
             <div className="flex items-center border-y-2 border-gray-200 w-3/4 py-2">
-              <Rating name="half-rating" defaultValue={2.5} readOnly precision={0.5} />
+              <Rating
+                name="half-rating"
+                defaultValue={2.5}
+                readOnly
+                precision={0.5}
+              />
               <p className="ml-2 mt-3 text-xs">({allReviews.length} Reviews)</p>
             </div>
-            <p className="text-2xl font-semibold mb-2">{location.state.data.price}</p>
+            <p className="text-2xl font-semibold mb-2">
+              {location.state.data.price}
+            </p>
             <div className="flex mb-2">
               <p
                 className="bg-gray-500 text-white w-5 text-center cursor-pointer"
-                onClick={() => setCount(count < location.state.data.stock ? count + 1 : count)}
+                onClick={() =>
+                  setCount(
+                    count < location.state.data.stock ? count + 1 : count
+                  )
+                }
               >
                 +
               </p>
@@ -151,32 +181,43 @@ const ProductDetails = () => {
               >
                 -
               </p>
-              <p
-                className="bg-orange-600 cursor-pointer hover:bg-orange-500 ml-3 text-center text-xs flex items-center text-white px-4 rounded-3xl"
+              <button
+                className={`cursor-pointer ml-3 text-center text-xs flex items-center text-white px-4 rounded-3xl ${
+                  location.state.data.stock === 0
+                    ? "bg-orange-300"
+                    : "bg-orange-600 hover:bg-orange-500"
+                }`}
+                disabled={location.state.data.stock === 0}
                 onClick={AddedToCartFunction}
               >
                 Add to Cart
-              </p>
+              </button>
             </div>
             <p className="border-y-2 border-gray-200 w-3/4 py-2">
               Status:
               <span
                 className={`font-semibold ml-2 ${
-                  location.state.data.stock === 0 ? "text-red-600" : "text-green-600"
+                  location.state.data.stock === 0
+                    ? "text-red-600"
+                    : "text-green-600"
                 }`}
               >
                 {location.state.data.stock === 0 ? "Out Of Stock" : "In Stock"}
               </span>
             </p>
             <p>
-              <span className="text-lg font-semibold">Description: <br /></span>
+              <span className="text-lg font-semibold">
+                Description: <br />
+              </span>
               {location.state.data.description}
             </p>
             <button
               disabled={!purchased}
               onClick={handleClickOpen}
               className={`w-1/4 py-1.5 px-0.5 mt-2 text-center text-xs text-white rounded-lg ${
-                purchased ? "bg-orange-500 hover:bg-orange-600 cursor-pointer" : "bg-orange-200"
+                purchased
+                  ? "bg-orange-500 hover:bg-orange-600 cursor-pointer"
+                  : "bg-orange-200"
               }`}
             >
               Submit Review
@@ -212,7 +253,13 @@ const ProductDetails = () => {
         </div>
         <div className="flex justify-evenly gap-4 space-y-10 mb-10 w-screen items-center flex-wrap mt-10">
           <div className="w-full flex justify-center text-2xl font-semibold">
-            <p className="w-auto border-b-2 border-gray-500 pb-3 px-5">REVIEWS</p>
+            <p
+              className={`w-auto border-b-2 border-gray-500 pb-3 px-5 ${
+                allReviews.length === 0 ? "hidden" : "block"
+              }`}
+            >
+              REVIEWS
+            </p>
           </div>
           {allReviews.map((review) => (
             <ReviewCard key={review._id} data={review} />

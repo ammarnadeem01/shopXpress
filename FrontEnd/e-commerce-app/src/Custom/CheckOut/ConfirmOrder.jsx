@@ -74,9 +74,9 @@ function ConfirmOrder() {
     <div className="flex items-center justify-center bg-gray-50 w-max-screen my-3 h-auto">
       <div className="bg-white shadow-lg shadow-gray-400 w-11/12 h-full py-3">
         <Checkout step={2} />
-        <div className="flex flex-row justify-between items-center flex-wrap w-max-screen h-auto">
+        <div className="flex 900:flex-row xs:max-900:flex-col justify-between items-center flex-wrap w-max-screen h-auto">
           {/* Left */}
-          <div className="w-3/4 pl-20 border-r-2 border-gray-300 h-auto flex flex-col justify-center items-start">
+          <div className="xs:max-md:w-full sm:w-2/3 900:w-3/4 xs:max-900:pl-4 pl-20 900:border-r-2 gap-2 border-gray-300 h-auto flex flex-col justify-center items-start">
             <p className="text-2xl font-semibold">Shipping Info</p>
             <p className="text-gray-500 text-sm">
               <span className="font-semibold text-black">Name: </span>
@@ -113,7 +113,7 @@ function ConfirmOrder() {
           </div>
 
           {/* Right */}
-          <div className="flex flex-col text-sm w-1/4 h-auto justify-start items-start px-5">
+          <div className="flex flex-col text-sm xs:max-sm:w-2/3 w-1/3 900:w-1/4 h-auto gap-2 justify-start items-start md:px-1 lg:px-5">
             <p className="text-center w-full text-2xl font-semibold border-b-2 border-gray-300 pb-2">
               Order Summary
             </p>

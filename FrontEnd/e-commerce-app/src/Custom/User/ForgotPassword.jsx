@@ -47,8 +47,8 @@ const ForgotPassword = () => {
           onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
-            <Form className="flex flex-wrap justify-center items-center gap-2 2xl:space-x-52  mt-2 h-auto w-full py-4">
-              <div className="sm:w-2/3 xs:w-11/12 md:w-10/12 450:w-2/3 lg:w-3/4 xl:2/3 2xl:w-1/2">
+            <Form className="flex flex-wrap justify-center items-center gap-2   mt-2 h-auto w-full py-4">
+              <div className="sm:w-2/3 xs:w-11/12 md:w-10/12 450:w-2/3 lg:w-3/4 xl:2/3 2xl:w-7/12">
                 <EmailIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
                 <Field
                   type="email"
@@ -65,7 +65,7 @@ const ForgotPassword = () => {
               </div>
               <button
                 type="submit"
-                className="sm:w-1/3 xs:w-2/3 450:w-1/3 lg:w-1/3 2xl:w-1/4 mt-2 text-white bg-gray-700 px-3 py-2 rounded-md hover:bg-gray-600"
+                className="sm:w-1/3 xs:w-2/3 450:w-1/3 lg:w-1/3 2xl:w-5/12 mt-2 text-white bg-gray-700 px-3 py-2 rounded-md hover:bg-gray-600"
                 disabled={isSubmitting}
               >
                 Submit

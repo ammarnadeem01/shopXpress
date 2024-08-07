@@ -194,7 +194,7 @@ function Products() {
       </p>
       <div className="flex md:flex-row xs:flex-col justify-center h-auto xs:items-center lg:items-start">
         {/* Left */}
-        <div className="lg:flex flex-col  justify-start items-start  xs:w-3/6 md:w-1/5 pt-3 px-2 h-auto mt-20">
+        <div className="lg:flex flex-col  justify-start items-start  xs:w-2/3 450:w-1/2 md:w-1/5 pt-3 px-2 h-auto mt-20">
           <div className="px-3 w-full text-lg font-semibold">
             <p>Price</p>
             <Slider

@@ -71,7 +71,7 @@ function ShippingDetails() {
   }
 
   return (
-    <div className="flex items-center justify-center bg-gray-50 w-max-screen my-3 h-auto">
+    <div className="flex items-center min-w-full max-w-full justify-center bg-gray-50 w-max-screen my-3 h-auto">
       <div className="bg-white shadow-lg shadow-gray-400 w-11/12 h-full py-3">
         <Checkout step={1} />
         <div className="flex flex-col justify-center gap-2 items-center flex-wrap w-max-screen h-auto">
@@ -80,9 +80,9 @@ function ShippingDetails() {
           </p>
           <form
             action=""
-            className="flex flex-col flex-wrap justify-evenly items-center gap-2 "
+            className="flex flex-col xs:max-sm:w-11/12 flex-wrap justify-evenly items-center gap-2 "
           >
-            <div>
+            <div className="relative w-11/12 sm:w-5/6">
               <HomeIcon className="absolute translate-y-1 ml-3" />
               <input
                 className="border-2 w-full pl-12 border-gray-300 py-1"
@@ -94,10 +94,10 @@ function ShippingDetails() {
               />
             </div>
 
-            <div>
+            <div className="relative w-11/12 sm:w-5/6">
               <LocationOnIcon className="absolute translate-y-1 ml-3" />
               <input
-                className="border-2 pl-12 border-gray-300 py-1"
+                className="border-2 w-full pl-12 border-gray-300 py-1"
                 placeholder="PIN Code"
                 type="number"
                 name="pin"
@@ -106,10 +106,10 @@ function ShippingDetails() {
               />
             </div>
 
-            <div>
+            <div className="relative w-11/12 sm:w-5/6">
               <PhoneEnabledIcon className="absolute translate-y-1 ml-3" />
               <input
-                className="border-2 pl-12 border-gray-300 py-1"
+                className="border-2 w-full pl-12 border-gray-300 py-1"
                 placeholder="Phone Number"
                 type="text"
                 name="phone"
@@ -118,10 +118,10 @@ function ShippingDetails() {
               />
             </div>
 
-            <div className="w-5/6 flex bg-fuchsia-700">
+            <div className="relative w-11/12 sm:w-5/6">
               <PublicIcon className="absolute translate-y-1 ml-3" />
               <select
-                className="w-full border-2 pl-12 border-gray-300 py-1"
+                className="border-2 min-w-full max-w-full pl-12 border-gray-300 py-1"
                 name="country"
                 value={shippingFormData.country}
                 onChange={handleShippingFormChange}
@@ -137,10 +137,10 @@ function ShippingDetails() {
               </select>
             </div>
 
-            <div className="w-5/6 flex bg-fuchsia-700">
+            <div className="relative w-11/12 sm:w-5/6">
               <LocationCityIcon className="absolute translate-y-1 ml-3" />
               <select
-                className="border-2 pl-12 w-full border-gray-300 py-1"
+                className="border-2 min-w-full max-w-full pl-12 border-gray-300 py-1"
                 name="state"
                 value={shippingFormData.state}
                 onChange={handleShippingFormChange}
@@ -157,10 +157,11 @@ function ShippingDetails() {
                 )}
               </select>
             </div>
-            <div className="w-5/6 flex bg-fuchsia-700">
+
+            <div className="relative w-11/12 sm:w-5/6">
               <ApartmentIcon className="absolute translate-y-1 ml-3" />
               <select
-                className="border-2 pl-12 w-full border-gray-300 py-1"
+                className="border-2 min-w-full max-w-full pl-12 border-gray-300 py-1"
                 name="city"
                 value={shippingFormData.city}
                 onChange={handleShippingFormChange}
@@ -186,6 +187,110 @@ function ShippingDetails() {
             >
               Continue
             </button>
+            {/* <div className="w-11/12 sm:w-5/6  flex">
+              <HomeIcon className="absolute translate-y-1 ml-3" />
+              <input
+                className="border-2 w-full pl-12 border-gray-300 py-1"
+                placeholder="Address"
+                type="text"
+                name="address"
+                value={shippingFormData.address}
+                onChange={handleShippingFormChange}
+              />
+            </div>
+
+            <div className="w-11/12 sm:w-5/6  flex">
+              <LocationOnIcon className="absolute translate-y-1 ml-3" />
+              <input
+                className="border-2 pl-12 border-gray-300 py-1"
+                placeholder="PIN Code"
+                type="number"
+                name="pin"
+                value={shippingFormData.pin}
+                onChange={handleShippingFormChange}
+              />
+            </div>
+
+            <div className="w-11/12 sm:w-5/6  flex">
+              <PhoneEnabledIcon className="absolute translate-y-1 ml-3" />
+              <input
+                className="border-2 pl-12 border-gray-300 py-1"
+                placeholder="Phone Number"
+                type="text"
+                name="phone"
+                value={shippingFormData.phone}
+                onChange={handleShippingFormChange}
+              />
+            </div>
+
+            <div className="w-11/12 sm:w-5/6  flex">
+              <PublicIcon className="absolute translate-y-1 ml-3" />
+              <select
+                className="min-w-full max-w-full border-2 pl-12 border-gray-300 py-1"
+                name="country"
+                value={shippingFormData.country}
+                onChange={handleShippingFormChange}
+              >
+                <option value="" disabled>
+                  Choose Country
+                </option>
+                {Country.getAllCountries().map((country) => (
+                  <option key={country.isoCode} value={country.isoCode}>
+                    {country.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="w-11/12 sm:w-5/6 flex">
+              <LocationCityIcon className="absolute translate-y-1 ml-3" />
+              <select
+                className="border-2 pl-12 min-w-full max-w-full border-gray-300 py-1"
+                name="state"
+                value={shippingFormData.state}
+                onChange={handleShippingFormChange}
+              >
+                <option value="" disabled>
+                  Choose State
+                </option>
+                {State.getStatesOfCountry(shippingFormData.country).map(
+                  (state) => (
+                    <option key={state.isoCode} value={state.isoCode}>
+                      {state.name}
+                    </option>
+                  )
+                )}
+              </select>
+            </div>
+            <div className="w-11/12 sm:w-5/6 flex ">
+              <ApartmentIcon className="absolute translate-y-1 ml-3" />
+              <select
+                className="border-2 pl-12 min-w-full max-w-full border-gray-300 py-1"
+                name="city"
+                value={shippingFormData.city}
+                onChange={handleShippingFormChange}
+              >
+                <option value="" disabled>
+                  Choose City
+                </option>
+                {City.getCitiesOfState(
+                  shippingFormData.country,
+                  shippingFormData.state
+                ).map((city) => (
+                  <option key={city.isoCode} value={city.isoCode}>
+                    {city.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              className="text-center w-5/6 text-sm my-3 text-white bg-orange-600 hover:bg-orange-500 py-2 px-5"
+              onClick={handleShippingFormSubmit}
+            >
+              Continue
+            </button> */}
           </form>
         </div>
       </div>
