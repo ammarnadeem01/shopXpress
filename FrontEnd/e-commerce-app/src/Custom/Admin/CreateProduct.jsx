@@ -9,6 +9,7 @@ import { useState } from "react";
 import Hamburger from "hamburger-react";
 
 function CreateProduct() {
+  const [errMsg, setErrMsg] = useState("");
   const [productData, setProductData] = useState({
     name: "",
     price: 0,
@@ -50,6 +51,7 @@ function CreateProduct() {
       })
       .catch((err) => {
         console.log("Error Occurred.", err);
+        setErrMsg(err.response.data.message);
       });
   }
   const [isOpen, setOpen] = useState(true);
@@ -65,10 +67,8 @@ function CreateProduct() {
       </div>
       {/*  Left Bar */}
       <LeftBar data={isOpen} />
-      {/*  Left Bar */}
-      <LeftBar />
       {/* Right Bar */}
-      <div className="flex bg-gray-300 w-4/5 h-full xs:max-lg:w-full">
+      <div className="flex bg-gray-300 w-4/5 h-full xs:max-1150:w-full">
         <div className="flex justify-center items-center w-full h-screen flex-wrap">
           <div className="w-1/4 xs:max-450:w-5/6 450:max-sm:w-2/3 sm:max-900:w-1/2 900:max-lg:w-1/2 lg:max-2xl:w-1/3 h-3/5 flex flex-col justify-evenly items-center ">
             <p className="text-2xl font-semibold">Create Product</p>
@@ -147,6 +147,7 @@ function CreateProduct() {
                 Choose Images
               </label>
             </div>
+            {errMsg && <p style={{ color: "red" }}>{errMsg}</p>}
             <button
               className="bg-gray-800 mt-2 cursor-pointer  hover:bg-gray-600 rounded-md text-center text-white w-full py-1.5"
               onClick={handleCreateProduct}

@@ -10,6 +10,7 @@ import axios from "axios";
 const User = () => {
   const [loginForm, setLoginForm] = useState(true);
   const [registerForm, setRegisterForm] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const nav = useNavigate();
   // =================================== Password Show n Hide =============================================
   const [show, setShow] = useState(false);
@@ -68,8 +69,13 @@ const User = () => {
           state: { data: results.data.user },
         });
       })
-      .catch((err) => {
-        console.log("Error Occurred : ", err);
+      .catch((error) => {
+        console.log("Error Occurred : ", error);
+        if (error.response && error.response.data.message) {
+          setErrorMessage(error.response.data.message);
+        } else {
+          setErrorMessage("An error occurred. Please try again.");
+        }
       });
   }
   function handleLoginChange(e) {
@@ -151,6 +157,7 @@ const User = () => {
                 />
               )}
             </div>
+            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
             <p
               onClick={() => {
                 nav("/forgotpassword");
@@ -174,7 +181,6 @@ const User = () => {
             className="flex flex-wrap justify-center items-center gap-2  mt-2 h-auto w-full py-4"
           >
             <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
-              {" "}
               <BadgeIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
               <input
                 type="text"
@@ -186,7 +192,6 @@ const User = () => {
               />
             </div>
             <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
-              {" "}
               <EmailIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
               <input
                 type="text"

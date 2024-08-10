@@ -5,6 +5,7 @@ const uploadOnCloudinary = require("../Utils/cloudinary");
 const ApiFeatures = require("../Utils/ApiFeatures");
 // GetAllProducts
 exports.getAllProducts = asyncErrorHandler(async (req, res, next) => {
+  console.log("request");
   const outOfStockProducts = await Product.aggregate([
     {
       $match: {

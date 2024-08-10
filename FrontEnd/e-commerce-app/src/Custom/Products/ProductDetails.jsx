@@ -1,7 +1,7 @@
 import Rating from "@mui/material/Rating";
 import { Fragment, useEffect, useState } from "react";
 import ReviewCard from "./ReviewCard";
-import Carousel from "react-bootstrap/Carousel";
+// import Carousel from "react-bootstrap/Carousel";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
@@ -12,6 +12,12 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+
+///
+
+import { Carousel } from "flowbite-react";
+
+///
 
 const ProductDetails = () => {
   const location = useLocation();
@@ -129,9 +135,9 @@ const ProductDetails = () => {
   return (
     <Fragment>
       <div className="flex w-max-screen justify-center items-center flex-wrap bg-gray-100 pt-10">
-        <div className="flex w-4/5 h-4/5 rounded-md shadow-lg flex-wrap">
+        <div className="flex w-4/5 rounded-md xs:max-md:flex-col shadow-lg flex-wrap">
           {/* image */}
-          <div className="w-1/2">
+          {/* <div className="w-1/2 xs:max-md:w-full">
             <Carousel>
               {location.state.data.productImages.map((image, index) => (
                 <Carousel.Item key={index}>
@@ -143,10 +149,18 @@ const ProductDetails = () => {
                 </Carousel.Item>
               ))}
             </Carousel>
+          </div> */}
+          {/* <div className="w-1/2 xs:max-md:w-full xs:max-500:h-52 500:max-sm:h-72 sm:max-md:h-96 "> */}
+          <div className="w-1/2 bg-black xs:max-md:w-full xs:max-md:h-[50vh]">
+            <Carousel>
+              {location.state.data.productImages.map((image, index) => (
+                <img src={image} className="h-full w-full" />
+              ))}
+            </Carousel>
           </div>
 
           {/* detail */}
-          <div className="w-1/2 p-6 flex flex-col bg-white justify-evenly items-start detail-container">
+          <div className="w-1/2  bg-white p-6 flex xs:max-md:w-full flex-col  justify-evenly items-start detail-container">
             <p className="text-2xl font-semibold">{location.state.data.name}</p>
             <p className="text-xs text-gray-400">
               Product # {location.state.data._id}
@@ -251,7 +265,7 @@ const ProductDetails = () => {
             </Dialog>
           </div>
         </div>
-        <div className="flex justify-evenly gap-4 space-y-10 mb-10 w-screen items-center flex-wrap mt-10">
+        <div className="flex justify-evenly sm:gap-1 md:gap-2 lg:gap-3 xs:space-y-2 md:space-y-10 mb-10 w-screen items-center flex-wrap mt-10">
           <div className="w-full flex justify-center text-2xl font-semibold">
             <p
               className={`w-auto border-b-2 border-gray-500 pb-3 px-5 ${

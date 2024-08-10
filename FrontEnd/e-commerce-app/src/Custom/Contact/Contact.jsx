@@ -4,6 +4,7 @@ import CallIcon from "@mui/icons-material/Call";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import * as Yup from "yup";
 import axios from "axios";
+import { useState } from "react";
 
 function Contact() {
   const messageData = {
@@ -12,6 +13,7 @@ function Contact() {
     phoneNumber: "",
     message: "",
   };
+  const [errMsg, setErrMsg] = useState("");
   const validationSchema = Yup.object({
     name: Yup.string()
       .required("Username is required")
@@ -128,6 +130,7 @@ function Contact() {
                 />
                 <br />
               </div>
+              {errMsg && <p style={{ color: "red" }}>{errMsg}</p>}
               <div>
                 {" "}
                 <button

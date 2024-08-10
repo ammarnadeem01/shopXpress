@@ -77,7 +77,7 @@ function Search() {
      w-56 
     "
         >
-          1256
+          {datais.length}
           <span className="text-white ml-2  bg-gray-700 p-1 rounded-md text-xl ">
             Results
           </span>
@@ -171,30 +171,6 @@ function Search() {
             {datais.map((product) => {
               return <ProductCard key={product.id} data={product} />;
             })}
-            {/* <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard /> */}
           </div>
         </div>
       </div>
