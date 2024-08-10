@@ -1,4 +1,5 @@
 import { Doughnut, Line } from "react-chartjs-2";
+import Hamburger from "hamburger-react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -73,13 +74,21 @@ function Dashboard() {
     ],
     hoverOffset: 4,
   };
-
+  const [isOpen, setOpen] = useState(true);
   return (
     <div className="flex w-max-screen ">
+      <div className="absolute 1150:hidden z-10">
+        <Hamburger
+          direction="right"
+          duration={0.8}
+          toggled={isOpen}
+          toggle={setOpen}
+        />
+      </div>
       {/*  Left Bar */}
-      <LeftBar />
+      <LeftBar data={isOpen} />
       {/* Right Bar */}
-      <div className="flex bg-gray-300 w-4/5 h-full ">
+      <div className={`flex bg-gray-300 w-4/5 h-full xs:max-1150:w-full`}>
         <div className="flex flex-col w-full h-full items-start bg-white">
           <div className="flex justify-center items-center flex-wrap w-full h-auto text-xl text-gray-700 font-semibold">
             <p className="py-8">DASHBOARD</p>
@@ -90,31 +99,31 @@ function Dashboard() {
               <p>Total Amount</p>
               <p>$ {totalAmount.toFixed(2)}</p>
             </div>
-            <div className="flex w-full h-auto justify-center gap-8 items-center text-white mt-5">
+            <div className="flex w-full flex-wrap h-auto justify-center gap-8 xs:max-450:gap-2 items-center text-white mt-5 xs:max-450:px-2">
               <NavLink
                 to="/admin/products"
-                className="no-underline text-white rounded-full bg-orange-400 w-1/5 h-auto py-16 text-center"
+                className="xs:max-450:h-auto xs:max-450:py-1 xs:max-450:text-lg no-underline xs:max-450:w-8/12 xs:max-450:rounded-sm 450:max-sm:rounded-lg text-white rounded-full bg-orange-400 h-[25vw] w-[25vw] max-w-[200px] max-h-[200px] min-w-[50px] min-h-[50px] text-center flex items-center justify-center"
               >
                 Products <br /> {productCount}
               </NavLink>
               <NavLink
                 to="/admin/orders"
-                className="no-underline text-white rounded-full bg-pink-600 w-1/5 h-auto py-16 text-center "
+                className="xs:max-450:h-auto xs:max-450:py-1 xs:max-450:text-lg no-underline xs:max-450:w-8/12 xs:max-450:rounded-sm 450:max-sm:rounded-lg text-white rounded-full bg-pink-600 h-[25vw] w-[25vw] max-w-[200px] max-h-[200px] min-w-[50px] min-h-[50px] text-center flex items-center justify-center"
               >
                 Orders <br /> {orderCount}
               </NavLink>
               <NavLink
                 to="/admin/userlist"
-                className="no-underline text-white rounded-full bg-gray-600 w-1/5 h-auto py-16 text-center"
+                className="xs:max-450:h-auto xs:max-450:py-1 xs:max-450:text-lg no-underline xs:max-450:w-8/12 xs:max-450:rounded-sm 450:max-sm:rounded-lg text-white rounded-full bg-gray-600 h-[25vw] w-[25vw] max-w-[200px] max-h-[200px] min-w-[50px] min-h-[50px] text-center flex items-center justify-center"
               >
                 Users <br /> {userCount}
               </NavLink>
             </div>
-            <div className="flex justify-center items-center mt-10 w-3/4 h-96 py-3">
+            <div className="flex justify-center items-center w-[80vw] h-[50vh] 450:mt-10 xs:max-450:mt-2 xs:max-450:px-2 xs:max-450:w-full">
               <Line data={lineState} />
             </div>
             {!isLoading && (
-              <div className="flex justify-center items-center mt-10 w-3/4 h-96 my-3 mb-5">
+              <div className="flex justify-center items-center w-[80vw] h-[50vh]  450:mt-10 xs:max-450:mt-2 xs:max-450:px-2 xs:max-450:w-full">
                 <Doughnut data={doughnutState} />
               </div>
             )}

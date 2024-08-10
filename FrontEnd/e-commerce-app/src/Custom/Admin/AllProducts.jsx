@@ -4,54 +4,135 @@ import LeftBar from "./LeftBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Hamburger from "hamburger-react";
 
 function AllProducts() {
-  const nav=useNavigate()
-  function deleteProduct(prodId)
-  {
-    axios.delete(`http://localhost:3000/api/v3/products/${prodId}`)
-    .then((res)=>{console.log(res)})
-    .catch((err)=>{console.log(err)})
+  const nav = useNavigate();
+  const [items, setItems] = useState([]);
+  const [isOpen, setOpen] = useState(true);
 
-  }
-     const [items,setItems]=useState([])
-     useEffect(()=>{
-        axios.get("http://localhost:3000/api/v3/products")
-        .then((results)=>{
-          console.log(results)
-          setItems(results.data.data.product);
-        }).catch((err)=>{
-          console.log("Error Occurred.")
-        })
-     },[items])
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/v3/products")
+      .then((results) => {
+        console.log(results);
+        setItems(results.data.data.product);
+      })
+      .catch((err) => {
+        console.log("Error Occurred.");
+      });
+  }, [items]);
+
+  const deleteProduct = (prodId) => {
+    axios
+      .delete(`http://localhost:3000/api/v3/products/${prodId}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
-    <div className="flex w-max-screen ">
-      {/*  Left Bar */}
-      <LeftBar />
+    <div className="flex w-full min-h-screen bg-gray-100">
+      {/* Hamburger for Mobile */}
+      <div className="absolute 1150:hidden z-10 p-4">
+        <Hamburger
+          direction="right"
+          duration={0.8}
+          toggled={isOpen}
+          toggle={setOpen}
+          color="#ff5722"
+        />
+      </div>
+
+      {/* Left Bar */}
+      <LeftBar data={isOpen} />
+
       {/* Right Bar */}
-      <div className="flex bg-gray-300 w-4/5 h-full ">
-        <div className="flex flex-col w-full h-full items-start bg-white">
-          <div className="flex justify-center items-center w-full h-auto py-5 text-2xl text-gray-700 font-semibold">
-            <p>ALL PRODUCTS</p>
-          </div>
-          <div className="flex w-full h-auto bg-orange-600 text-white justify-evenly items-center flex-wrap py-2">
-            <p className="w-1/5 ">Products ID</p>
-            <p className="w-2/5 ">Name</p>
-            <p className="w-1/12 ">Stock</p>
-            <p className="w-2/12 ">Price</p>
-            <p className="w-1/12 ">Actions</p>
-          </div>
-          {items.map((item)=>(
-          <div className="flex w-full h-auto bg-gray-300 justify-evenly items-center flex-wrap py-2" key={item._id}>
-            <p className="w-1/5  ">{item._id}</p>
-            <p className="w-2/5  ">{item.name}</p>
-            <p className="w-1/12  ">{item.stock}</p>
-            <p className="w-2/12 ">${item.price}</p>
-            <p className="w-1/12 flex gap-2">
-              <EditIcon className="cursor-pointer" onClick={()=>{nav("/admin/editproduct",{state:item})}} />
-              <DeleteIcon className="cursor-pointer" onClick={()=>{deleteProduct(item._id)}}/>
-            </p>
-          </div>
+      <div className="w-4/5 xs:max-1150:w-full p-6">
+        <div className="text-2xl font-bold text-gray-800 mb-6 text-center">
+          All Products
+        </div>
+
+        {/* Table for Large Screens */}
+        <div className="hidden 1000:block bg-white shadow-lg rounded-lg overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-orange-500 text-white">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">
+                  Prod ID
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">
+                  Product Name
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">
+                  Stock
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">
+                  Price
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {items.map((item) => (
+                <tr key={item._id} className="hover:bg-gray-100 transition">
+                  <td className="px-6 py-4 whitespace-nowrap">{item._id}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.stock}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{item.price}</td>
+                  <td className="px-6 py-4 whitespace-nowrap flex gap-4">
+                    <EditIcon
+                      className="cursor-pointer text-blue-500 hover:text-blue-700"
+                      onClick={() => {
+                        nav("/admin/editproduct", { state: item });
+                      }}
+                    />
+                    <DeleteIcon
+                      className="cursor-pointer text-red-500 hover:text-red-700"
+                      onClick={() => {
+                        deleteProduct(item._id);
+                      }}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Card View for Small Screens */}
+        <div className="block 1000:hidden space-y-4">
+          {items.map((item) => (
+            <div
+              key={item._id}
+              className="bg-white p-6 rounded-lg shadow-md flex flex-col space-y-2"
+            >
+              <div className="text-lg font-semibold text-gray-800">
+                {item.name}
+              </div>
+              <div className="text-sm text-gray-500">ID: {item._id}</div>
+              <div className="text-sm text-gray-500">Stock: {item.stock}</div>
+              <div className="text-sm text-gray-500">Price: {item.price}</div>
+              <div className="flex justify-end space-x-4 mt-4">
+                <EditIcon
+                  className="cursor-pointer text-blue-500 hover:text-blue-700"
+                  onClick={() => {
+                    nav("/admin/editproduct", { state: item });
+                  }}
+                />
+                <DeleteIcon
+                  className="cursor-pointer text-red-500 hover:text-red-700"
+                  onClick={() => {
+                    deleteProduct(item._id);
+                  }}
+                />
+              </div>
+            </div>
           ))}
         </div>
       </div>

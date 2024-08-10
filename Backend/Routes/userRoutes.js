@@ -17,12 +17,17 @@ router.route("/login").post(userControllers.login);
 router
   .route("/updatePassword")
   .patch(userControllers.protect, userControllers.updatePassword);
+router.route("/editUser/:id").patch(
+  // userControllers.protect,
+  // userControllers.restrict("Admin"),
+  userControllers.editUser
+);
 router
   .route("/:id")
   .get(userControllers.getSpecificUserWithId)
   .delete(
-    userControllers.protect,
-    userControllers.restrict("Admin"),
+    // userControllers.protect,
+    // userControllers.restrict("Admin"),
     userControllers.deleteSpecificUser
   )
   .patch(userControllers.editProfile);

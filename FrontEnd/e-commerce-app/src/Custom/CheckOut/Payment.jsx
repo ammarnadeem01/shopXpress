@@ -49,7 +49,7 @@ function Payment() {
   }
   return (
     <div className="flex items-center justify-center bg-gray-50 w-max-screen my-3 h-auto">
-      <div className="bg-white shadow-lg shadow-gray-400 w-11/12 h-full py-3">
+      <div className="bg-white shadow-lg shadow-gray-400 xs:max-450:w-full w-11/12 h-full py-3">
         <Checkout step={3} />
         <div className="flex flex-col justify-center gap-3 items-center flex-wrap w-max-screen h-auto">
           <p className="text-xl font-semibold pb-2 border-b-2 border-gray-500 px-4">
@@ -65,7 +65,7 @@ function Payment() {
               <input
                 className="border-2 pl-12 border-gray-300 py-1"
                 type="text"
-                placeholder="1234 1234 1234"
+                placeholder="Account Number"
                 value={"1234 1234 1234"}
               />
             </div>

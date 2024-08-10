@@ -6,6 +6,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import LeftBar from "./LeftBar";
 import axios from "axios";
 import { useState } from "react";
+import Hamburger from "hamburger-react";
 
 function CreateProduct() {
   const [productData, setProductData] = useState({
@@ -51,14 +52,25 @@ function CreateProduct() {
         console.log("Error Occurred.", err);
       });
   }
+  const [isOpen, setOpen] = useState(true);
   return (
     <div className="flex w-max-screen ">
+      <div className="absolute lg:hidden z-10">
+        <Hamburger
+          direction="right"
+          duration={0.8}
+          toggled={isOpen}
+          toggle={setOpen}
+        />
+      </div>
+      {/*  Left Bar */}
+      <LeftBar data={isOpen} />
       {/*  Left Bar */}
       <LeftBar />
       {/* Right Bar */}
-      <div className="flex bg-gray-300 w-4/5 h-full ">
+      <div className="flex bg-gray-300 w-4/5 h-full xs:max-lg:w-full">
         <div className="flex justify-center items-center w-full h-screen flex-wrap">
-          <div className="w-1/4 h-3/5 flex flex-col justify-evenly items-center ">
+          <div className="w-1/4 xs:max-450:w-5/6 450:max-sm:w-2/3 sm:max-900:w-1/2 900:max-lg:w-1/2 lg:max-2xl:w-1/3 h-3/5 flex flex-col justify-evenly items-center ">
             <p className="text-2xl font-semibold">Create Product</p>
 
             <div className="w-full h-auto">

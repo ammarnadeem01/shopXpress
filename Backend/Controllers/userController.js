@@ -124,19 +124,26 @@ exports.deleteSpecificUser = asyncErrorHandler(async (req, res, next) => {
 
 // update user role (by admin)
 exports.editUser = asyncErrorHandler(async (req, res, next) => {
-  if (!req.body?.email || !req.body?.role) {
-    return next(new CustomError("Email and Role are required.", 400));
+  if (!req.body?.email || !req.body?.role || !req.body?.name) {
+    return next(new CustomError("Name, Email, and Role are required.", 400));
   }
-  const updatedUser = await User.findOneAndUpdate(
-    { email: req.body.email },
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.params.id,
     {
-      $set: { role: req.body.role },
+      $set: {
+        name: req.body.name,
+        email: req.body.newEmail || req.body.email,
+        role: req.body.role,
+      },
     },
     { new: true, runValidators: true }
   );
+
   if (!updatedUser) {
-    return next(new CustomError("No user with given ID foundn", 404));
+    return next(new CustomError("No user with given email found", 404));
   }
+
   res.status(200).json({
     status: "Success",
     data: updatedUser,
