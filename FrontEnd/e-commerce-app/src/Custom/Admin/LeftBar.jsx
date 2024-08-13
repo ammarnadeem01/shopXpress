@@ -14,9 +14,9 @@ function LeftBar({ data }) {
   useEffect(() => {
     setShowMenu(data);
     if (data) {
-      document.body.classList.add("overflow-y-hidden");
+      document.body.classList.add("xs:max-1150:overflow-y-hidden");
     } else {
-      document.body.classList.remove("overflow-y-hidden");
+      document.body.classList.remove("xs:max-1150:overflow-y-hidden");
     }
   }, [data]);
 

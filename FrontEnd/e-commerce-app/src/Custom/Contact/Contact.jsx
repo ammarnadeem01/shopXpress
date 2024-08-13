@@ -52,31 +52,26 @@ function Contact() {
             <Form
               action=""
               method="get"
-              className="flex flex-col gap-2 justify-center items-center"
+              className="flex flex-col gap-3 justify-center items-center"
             >
               <p className="text-3xl text-center mb-7 font-semibold">
                 Leave A Message
               </p>
-              <div>
-                <label htmlFor="" className="text-xl font-semibold">
-                  Name :
-                </label>
-                <br />
+              <div className="relative">
                 <Field
                   type="text"
                   name="name"
                   className="w-80 p-2 rounded-md"
                   style={{ border: "0.5px solid gray" }}
-                ></Field>
+                />
                 <ErrorMessage
                   name="name"
                   component="div"
-                  className="text-red-500"
+                  className="absolute text-red-500"
+                  style={{ top: "100%", left: "0" }}
                 />
-                <br />
               </div>
-              <div>
-                {" "}
+              <div className="relative">
                 <label htmlFor="" className="text-xl font-semibold">
                   Email :
                 </label>
@@ -90,11 +85,12 @@ function Contact() {
                 <ErrorMessage
                   name="email"
                   component="div"
-                  className="text-red-500"
+                  className="absolute text-red-500"
+                  style={{ top: "100%", left: "0" }}
                 />
                 <br />
               </div>
-              <div>
+              <div className="relative">
                 <label htmlFor="" className="text-xl font-semibold">
                   Phone Number :
                 </label>
@@ -108,11 +104,12 @@ function Contact() {
                 <ErrorMessage
                   name="phoneNumber"
                   component="div"
-                  className="text-red-500"
+                  className="absolute text-red-500"
+                  style={{ top: "100%", left: "0" }}
                 />
                 <br />
               </div>
-              <div>
+              <div className="relative">
                 <label htmlFor="" className="text-xl font-semibold">
                   Message
                 </label>
@@ -126,13 +123,13 @@ function Contact() {
                 <ErrorMessage
                   name="message"
                   component="div"
-                  className="text-red-500"
+                  className="absolute text-red-500"
+                  style={{ top: "100%", left: "0" }}
                 />
                 <br />
               </div>
               {errMsg && <p style={{ color: "red" }}>{errMsg}</p>}
               <div>
-                {" "}
                 <button
                   type="submit"
                   className="py-2 px-5 mt-2 text-white bg-gray-800 rounded-md hover:bg-gray-700"

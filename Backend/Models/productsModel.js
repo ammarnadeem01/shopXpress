@@ -10,10 +10,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     // required: [true, "Please Enter product Description"],
   },
-  productImages:[{
-      type:String,
-  }
-
+  productImages: [
+    {
+      type: String,
+    },
   ],
   price: {
     type: Number,

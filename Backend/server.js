@@ -8,6 +8,9 @@ const mongoose = require("mongoose");
 mongoose
   .connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
+    socketTimeoutMS: 45000,
+    connectTimeoutMS: 45000,
   })
   .then(() => {
     console.log("Database Connected Successfully");

@@ -1,11 +1,11 @@
 const asyncErrorHandler = require("./../Utils/asyncErrorHandler");
 const CustomError = require("./../Utils/CustomError");
 const Product = require("../Models/productsModel");
+const Review = require("../Models/reviewModel");
 const uploadOnCloudinary = require("../Utils/cloudinary");
 const ApiFeatures = require("../Utils/ApiFeatures");
 // GetAllProducts
 exports.getAllProducts = asyncErrorHandler(async (req, res, next) => {
-  console.log("request");
   const outOfStockProducts = await Product.aggregate([
     {
       $match: {
@@ -13,14 +13,25 @@ exports.getAllProducts = asyncErrorHandler(async (req, res, next) => {
       },
     },
   ]);
-  const product = await Product.find();
-  // const features = new ApiFeatures(Movie.find(), req.query)
-  // .sort()
-  // .paginate();
-  // let product = await features.query;
+  let features = new ApiFeatures(Product.find(), Review.find(), req.query)
+    .search()
+    .filter();
+
+  // let prod = await features;
+  // let product = prod.query;
+  // const prodlength = product.length;
+  // console.log("product", product);
+
+  features = new ApiFeatures(Product.find(), req.query).search();
+  await features.filter();
+  await features.paginate();
+  let prod = await features;
+  let product = prod.query;
+  console.log("product", product);
+
   res.status(200).json({
     status: "Success",
-    length: product.length,
+    length: prodlength,
     outOfStockProductsLength: outOfStockProducts.length,
     data: {
       product,

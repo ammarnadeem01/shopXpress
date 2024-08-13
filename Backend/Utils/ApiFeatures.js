@@ -1,29 +1,80 @@
-class Apifeatures{
-    constructor(query, queryStr){
-        this.query = query;
-        this.queryStr = queryStr;
-    }
+class ApiFeatures {
+  constructor(query, reviewQuery, queryStr) {
+    this.query = query;
+    this.queryStr = queryStr;
+    this.reviewQuery = reviewQuery;
+  }
 
-    sort(){
-          this.query = this.query.sort('-createdAt');
-          return this;
-    }
+  search() {
+    const keywordFilter = this.queryStr.keyword
+      ? {
+          $or: [
+            { name: { $regex: this.queryStr.keyword, $options: "i" } },
+            { description: { $regex: this.queryStr.keyword, $options: "i" } },
+          ],
+        }
+      : {};
 
-    paginate(){
-        const page = this.queryStr.page*1 || 1;
-        const limit = this.queryStr.limit*1 || 10;
-        const skip = (page -1) * limit;
-        this.query = this.query.skip(skip).limit(limit);
+    const categoryFilter = this.queryStr.category
+      ? {
+          category: { $regex: this.queryStr.category, $options: "i" },
+        }
+      : {};
 
-        // if(this.queryStr.page){
-        //     const moviesCount = await Movie.countDocuments();
-        //     if(skip >= moviesCount){
-        //         throw new Error("This page is not found!");
-        //     }
-        // }
+    const combinedFilters = { ...keywordFilter, ...categoryFilter };
 
-        return this;
-    }
+    this.query = this.query.find(combinedFilters);
+    console.log("this search", this);
+
+    return this;
+  }
+
+  async filter() {
+    const queryCopy = { ...this.queryStr };
+    const removeFields = ["keyword", "page", "limit", "category"];
+    removeFields.forEach((key) => delete queryCopy[key]);
+    let queryStr = JSON.stringify(queryCopy);
+    queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
+    queryStr = JSON.parse(queryStr);
+
+    // rating filter
+    const ratingFilter = queryStr.ratings;
+
+    delete queryStr["ratings"];
+    this.query = this.query.find(queryStr);
+
+    // all reviews
+    this.reviewQuery = await this.reviewQuery;
+
+    // filtered products [excluding ratings filter]
+    this.query = this.query.find(queryStr);
+    this.query = await this.query;
+
+    const maxRating = ratingFilter.$lte;
+    const minRating = ratingFilter.$gte;
+    this.query = this.query.filter((product) =>
+      this.reviewQuery.some((r) => {
+        return (
+          r.reviewedProduct.toString() == product._id.toString() &&
+          r.ratings >= minRating &&
+          r.ratings <= maxRating
+        );
+      })
+    );
+    console.log("this filter", this);
+    return this;
+  }
+
+  paginate() {
+    console.log(2);
+    console.log("this.query before", this.query);
+    const resultsPerPage = Number(this.queryStr.limit) || 7;
+    const currentPage = Number(this.queryStr.page) || 1;
+    const pagesToSkip = resultsPerPage * (currentPage - 1);
+    this.query = this.query.limit(resultsPerPage).skip(pagesToSkip);
+    console.log("this.query after", this.query);
+    return this;
+  }
 }
 
-module.exports = Apifeatures;
+module.exports = ApiFeatures;

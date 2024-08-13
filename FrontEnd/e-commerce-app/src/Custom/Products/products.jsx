@@ -2,185 +2,81 @@ import { Slider } from "@mui/material";
 import ProductCard from "../Home/ProductCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Pagination from "@mui/material/Pagination";
 
 function Products() {
   const [reviewsData, setReviewsData] = useState([]);
-  const [originalData, setOriginalData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [data, setData] = useState([]);
+
   const [ratingsValue, setRatingsValue] = useState([0.5, 5]);
-  const [priceValue, setPriceValue] = useState([0, 43000]);
+  const [priceValue, setPriceValue] = useState([0, 2500]);
+  const [filters, setFilters] = useState({
+    category: "smartphone",
+    keyword: "",
+    price: { gte: 0, lte: 43000 },
+    ratings: { gte: 0.5, lte: 5 },
+    page: 1,
+    limit: 2,
+  });
   const [category, setCategory] = useState([
+    "SmartPhone",
     "Laptop",
     "Footwear",
     "Bottom",
     "Tops",
     "Attire",
     "Camera",
-    "SmartPhone",
+    "Electronics",
+    "Accessories",
   ]);
-
-  // useEffect(() => {
-  //   filterData(ratingsValue, priceValue, category);
-  // }, [ratingsValue, priceValue, category]);
-
-  // function handleRatingsChange(e, newValue) {
-  //   setRatingsValue(newValue);
-  // }
-
-  // function handlePriceChange(e, newValue) {
-  //   setPriceValue(newValue);
-  // }
-
-  // function handleCategories(selectedCategory) {
-  //   setCategory(selectedCategory);
-  // }
-
-  // async function filterData(newRatingsValue, newPriceValue, newCategory) {
-  //   console.log(newRatingsValue, newPriceValue, newCategory);
-  //   let currentData = originalData;
-
-  //   // Filter by category
-  //   if (newCategory.length > 0) {
-  //     currentData = currentData.filter((product) =>
-  //       newCategory.includes(product.category)
-  //     );
-  //   }
-
-  //   // Filter by price
-  //   currentData = currentData.filter((product) => {
-  //     return (
-  //       product.price >= newPriceValue[0] && product.price <= newPriceValue[1]
-  //     );
-  //   });
-
-  //   // Fetch reviews
-  //   const fetchPromises = currentData.map(async (data) => {
-  //     const results = await axios.get(
-  //       http://localhost:3000/api/v3/reviews/product/${data._id}
-  //     );
-  //     console.log("results", results);
-  //     const item = results.data.data.productReviews;
-  //     return { ...data, reviews: item };
-  //   });
-
-  //   const fetchedItems = await Promise.all(fetchPromises);
-  //   console.log("fetchedItems", fetchedItems);
-  //   setReviewsData(fetchedItems);
-
-  //   // Filter by rating
-  //   currentData = fetchedItems.filter((product) => {
-  //     return (
-  //       product.rating >= newRatingsValue[0] &&
-  //       product.rating <= newRatingsValue[1]
-  //     );
-  //   });
-
-  //   setFilteredData(currentData);
-  // }
-
+  function getData() {
+    axios
+      .get("http://localhost:3000/api/v3/products", { params: filters })
+      .then((result) => {
+        setData(result.data.data.product);
+        console.log(result.data.data.product);
+      });
+  }
   useEffect(() => {
-    axios.get("http://localhost:3000/api/v3/products").then((result) => {
-      setOriginalData(result.data.data.product);
-      setFilteredData(result.data.data.product);
-    });
-  }, []);
+    getData();
+    console.log("data", data);
+    console.log("filters", filters);
+  }, [filters]);
 
   function handleRatingsChange(e, newValue) {
     setRatingsValue(newValue);
-    filterData(ratingsValue, priceValue, category);
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ratings: { gte: newValue[0], lte: newValue[1] },
+    }));
+    console.log("data", data);
   }
 
   function handlePriceChange(e, newValue) {
     setPriceValue(newValue);
-    filterData(ratingsValue, priceValue, category);
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      price: { gte: newValue[0], lte: newValue[1] },
+    }));
+  }
+
+  function handlePageChange(e, val) {
+    setCurrentPage(val);
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      page: val,
+    }));
+    getData();
   }
 
   function handleCategories(selectedCategory) {
     setCategory(selectedCategory);
-    filterData(ratingsValue, priceValue, category);
-  }
-
-  function filterData(newRatingsValue, newPriceValue, newCategory) {
-    console.log(newRatingsValue, newPriceValue, newCategory);
-    let currentData = originalData;
-    currentData = currentData.filter((product) =>
-      newCategory.includes(product.category)
-    );
-
-    currentData = currentData.filter((product) => {
-      return (
-        product.price >= newPriceValue[0] && product.price <= newPriceValue[1]
-      );
-    });
-
-    const fetchPromises = currentData.map(async (data) => {
-      const results = await axios.get(
-        `http://localhost:3000/api/v3/reviews/product/${data._id}`
-      );
-      console.log("results", results);
-      const item = results.data.data.productReviews;
-      return item;
-    });
-
-    Promise.all(fetchPromises).then((fetchedItems) => {
-      console.log("fetchedItems", fetchedItems[0]);
-      setReviewsData(fetchedItems[0]);
-    });
-
-    // old start
-
-    // function handleRatingsChange(e, newValue) {
-    //   setRatingsValue(newValue);
-    //   filterData({ newRatingsValue: newValue });
-    // }
-
-    // function handlePriceChange(e, newValue) {
-    //   setPriceValue(newValue);
-    //   filterData({ newPriceValue: newValue });
-    // }
-
-    // function handleCategories(selectedCategory) {
-    //   setCategory(selectedCategory);
-    //   filterData({ newCategory: selectedCategory });
-    // }
-
-    // function filterData({ newRatingsValue = ratingsValue, newPriceValue = priceValue, newCategory = category }={}) {
-    //   console.log(newRatingsValue,priceValue,category)
-    //   let currentData = originalData;
-    //   if (newCategory) {
-    //     currentData = currentData.filter(product => product.category === newCategory);
-    //   }
-
-    //   currentData = currentData.filter((product) => {
-    //     return product.price >= newPriceValue[0] && product.price <= newPriceValue[1];
-    //   });
-
-    //   const fetchPromises = currentData.map(async (data) => {
-    //     const results=await axios.get(http://localhost:3000/api/v3/reviews/product/${data._id});
-    //     console.log("results",results)
-    //     const item = results.data.data.productReviews;
-    //     return item;
-    //   });
-
-    //   Promise.all(fetchPromises)
-    //   .then((fetchedItems)=>{
-    //     console.log("fetchedItems",fetchedItems[0])
-    //     setReviewsData(fetchedItems[0])
-    //   })
-
-    //   currentData = currentData.filter((product) => {
-    //     return product.price >= rev[0] && product.price <= newPriceValue[1];
-    //   });
-
-    // old end
-
-    currentData = currentData.filter((product) => {
-      return (
-        product.rating >= newRatingsValue[0] &&
-        product.rating <= newRatingsValue[1]
-      );
-    });
-    setFilteredData(currentData);
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      category: selectedCategory,
+    }));
+    getData();
   }
 
   return (
@@ -201,7 +97,7 @@ function Products() {
               value={priceValue}
               onChange={handlePriceChange}
               valueLabelDisplay="auto"
-              max={42000}
+              max={3900}
               min={0}
             />
           </div>
@@ -209,13 +105,15 @@ function Products() {
             <p className="text-lg font-semibold">Categories</p>
             <div className="px-3 flex flex-col mb-2 cursor-pointer">
               {[
+                "SmartPhone",
                 "Laptop",
                 "Footwear",
                 "Bottom",
                 "Tops",
                 "Attire",
                 "Camera",
-                "SmartPhone",
+                "Electronics",
+                "Accessories",
               ].map((cat) => (
                 <p key={cat} onClick={() => handleCategories(cat)}>
                   {cat}
@@ -240,10 +138,23 @@ function Products() {
           id="container"
           className="flex flex-row flex-wrap justify-evenly items-baseline  xs:w-full md:w-4/5 h-auto gap-3 py-10 space-y-5"
         >
-          {filteredData.map((product) => (
+          {data.map((product) => (
             <ProductCard key={product._id} data={product} />
           ))}
         </div>
+      </div>
+      <p className="text-red-600">{currentPage}</p>
+      <div className="w-full flex justify-center items-center my-5">
+        <Pagination
+          count={10}
+          color="secondary"
+          defaultPage={1}
+          page={currentPage}
+          onChange={(e, val) => {
+            setCurrentPage(val);
+            handlePageChange();
+          }}
+        />
       </div>
     </div>
   );

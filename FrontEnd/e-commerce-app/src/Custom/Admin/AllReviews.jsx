@@ -215,17 +215,18 @@ function AllReviews() {
             <tbody className="bg-white divide-y divide-gray-200">
               {reviews.map((rev) => (
                 <tr key={rev._id} className="hover:bg-gray-100 transition">
+                  {console.log(rev)}
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500">
                     {rev._id}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap pl-2">
-                    {rev.user}
+                  <td className="px-6 py-4 whitespace-nowrap ">{rev.user}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {rev.review.length > 50
+                      ? `${rev.review.slice(0, 50)}...`
+                      : rev.review}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{rev.review}</td>
-                  <td className="px-6 py-4 whitespace-nowrap pl-4">
-                    {rev.ratings}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap pl-4 text-xs">
+                  <td className="px-6 py-4 whitespace-nowrap">{rev.ratings}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <DeleteIcon
                       className="cursor-pointer text-red-500 hover:text-red-700"
                       onClick={() => {
