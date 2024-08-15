@@ -4,9 +4,12 @@ import axios from "axios";
 function FeaturedProds() {
   const [datais, setdatais] = useState([]);
   useEffect(() => {
-    axios.get("http://localhost:3000/api/v3/products").then((result) => {
-      setdatais(result.data.data.product);
-    });
+    axios
+      .get("http://localhost:3000/api/v3/products/highest-rated-products")
+      .then((result) => {
+        setdatais(result.data.data.product);
+        console.log(result.data.data.product);
+      });
   }, []);
   return (
     <div className="my-16">

@@ -21,6 +21,7 @@ import { Carousel } from "flowbite-react";
 
 const ProductDetails = () => {
   const location = useLocation();
+  const [reviewId, setReviewId] = useState("");
   const [allReviews, setAllReviews] = useState([]);
   const [purchased, setPurchased] = useState(false);
   const [existingReview, setExistingReview] = useState(false);
@@ -30,19 +31,21 @@ const ProductDetails = () => {
   const [open, setOpen] = useState(false);
   const [review, setReview] = useState("");
   const [ratings, setRatings] = useState(0);
+  const [avgRating, setAvgRating] = useState(0.5);
   const nav = useNavigate();
 
   useEffect(() => {
     const productId = location.state.data._id;
+    setAvgRating(location.state.data.avgRating);
 
-    // Fetch product reviews
     axios
       .get(`http://localhost:3000/api/v3/reviews/product/${productId}`)
       .then((results) => {
         setAllReviews(results.data.data.reviews);
-        const userReview = results.data.data.reviews.find(
-          (r) => r.reviewedBy == userId
-        );
+        const userReview = results.data.data.reviews.find((r) => {
+          setReviewId(r._id);
+          return r.reviewedBy == userId;
+        });
         if (userReview) {
           setExistingReview(true);
           setReview(userReview.review);
@@ -50,21 +53,17 @@ const ProductDetails = () => {
         }
       })
       .catch((err) => console.log(err));
-    console.log("userId", userId);
-    // Check if user has purchased the product
     axios
       .get(`http://localhost:3000/api/v3/orders/user/${userId}`)
       .then((results) => {
-        console.log("results", results);
         const orders = results.data.data.order;
         const hasPurchased = orders.some((order) =>
           order.orderedItems.some((product) => product.item === productId)
         );
-        console.log(hasPurchased);
         setPurchased(hasPurchased);
       })
       .catch((err) => console.log(err));
-  }, [location.state.data._id, userId]);
+  }, [location.state.data._id, avgRating, userId]);
 
   const handleReviewSubmission = () => {
     const reviewData = {
@@ -73,16 +72,18 @@ const ProductDetails = () => {
       review,
       ratings,
     };
-    const Put_reviewData = {
+    const patchReviewData = {
       review,
       ratings,
     };
+    console.log("patchReviewData", patchReviewData);
+    console.log("reviewData", reviewData);
 
-    const reviewApi = existingReview ? axios.put : axios.post;
+    const reviewApi = existingReview ? axios.patch : axios.post;
     const reviewUrl = `http://localhost:3000/api/v3/reviews${
-      existingReview ? `/${reviewData.id}` : ""
+      existingReview ? `/${reviewId}` : ""
     }`;
-    const reqBody = existingReview ? Put_reviewData : reviewData;
+    const reqBody = existingReview ? patchReviewData : reviewData;
     reviewApi(reviewUrl, reqBody)
       .then((results) => {
         console.log("results", results);
@@ -136,21 +137,6 @@ const ProductDetails = () => {
     <Fragment>
       <div className="flex w-max-screen justify-center items-center flex-wrap bg-gray-100 pt-10">
         <div className="flex w-4/5 rounded-md xs:max-md:flex-col shadow-lg flex-wrap">
-          {/* image */}
-          {/* <div className="w-1/2 xs:max-md:w-full">
-            <Carousel>
-              {location.state.data.productImages.map((image, index) => (
-                <Carousel.Item key={index}>
-                  <img
-                    src={image}
-                    className="carousel-image"
-                    alt={`IMAGE ${index + 1}`}
-                  />
-                </Carousel.Item>
-              ))}
-            </Carousel>
-          </div> */}
-          {/* <div className="w-1/2 xs:max-md:w-full xs:max-500:h-52 500:max-sm:h-72 sm:max-md:h-96 "> */}
           <div className="w-1/2 bg-black xs:max-md:w-full xs:max-md:h-[50vh]">
             <Carousel>
               {location.state.data.productImages.map((image, index) => (
@@ -168,9 +154,10 @@ const ProductDetails = () => {
             <div className="flex items-center border-y-2 border-gray-200 w-3/4 py-2">
               <Rating
                 name="half-rating"
-                defaultValue={2.5}
+                defaultValue={avgRating}
                 readOnly
                 precision={0.5}
+                value={avgRating}
               />
               <p className="ml-2 mt-3 text-xs">({allReviews.length} Reviews)</p>
             </div>

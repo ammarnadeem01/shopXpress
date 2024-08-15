@@ -1,7 +1,20 @@
+import Rating from "@mui/material/Rating";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function ProductCard({ data }) {
+  const [reviewsLength, setReviewsLength] = useState(0);
   const nav = useNavigate();
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/api/v3/reviews/product/${data._id}`)
+      .then((response) => {
+        // console.log(response.data);
+        setReviewsLength(response.data.length);
+      });
+  }, []);
+
   return (
     <div
       className="cursor-pointer md:h-[175px]  lg:h-[450px] bg-white xs:h-[100px] sm:h-[150px] lg:w-1/5 w-11/12  flex flex-row flex-wrap rounded-md shadow-lg hover:-translate-y-3"
@@ -20,9 +33,17 @@ function ProductCard({ data }) {
           <p className="w-full xs:text-xs md:text-base xs:line-clamp-1 overflow-hidden md:line-clamp-2 text-gray-600 text-sm px-0.5">
             {data.description}
           </p>
-          <p className="w-fullxs: ">
-            {data.ratings} ⭐⭐⭐⭐⭐
-            <span className="xs:text-xs md:text-lg">(1234)</span>
+          <p className="w-full flex justify-start items-center ">
+            <Rating
+              name="half-rating"
+              defaultValue={data.avgRating}
+              readOnly
+              precision={0.5}
+              value={data.avgRating}
+            />
+            <span className="xs:text-xs md:text-sm">
+              ( {reviewsLength} reviews)
+            </span>
           </p>
           <p className="w-full text-red-700 xs:text-xs sm:text-sm md:text-base">
             $ {data.price}

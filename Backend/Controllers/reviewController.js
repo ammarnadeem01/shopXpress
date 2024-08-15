@@ -69,6 +69,7 @@ exports.specificProductReviews = asyncErrorHandler(async (req, res, next) => {
   const productReviews = await Review.find({ reviewedProduct: req.params.id });
   res.status(200).json({
     status: "Success",
+    length: productReviews.length,
     data: {
       reviews: productReviews,
     },

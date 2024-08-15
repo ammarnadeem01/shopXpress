@@ -24,6 +24,12 @@ const productSchema = new mongoose.Schema({
     type: String,
     // required: [true, "Please Enter Product Category"],
   },
+  avgRating: {
+    type: Number,
+    default: 0.5,
+    max: 5,
+    min: 0.5,
+  },
   stock: {
     type: Number,
     required: [true, "Please Enter product Stock"],

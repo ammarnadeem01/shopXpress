@@ -1,9 +1,16 @@
 const asyncErrorHandler = require("./../Utils/asyncErrorHandler");
 const CustomError = require("./../Utils/CustomError");
 const Product = require("../Models/productsModel");
-const Review = require("../Models/reviewModel");
 const uploadOnCloudinary = require("../Utils/cloudinary");
 const ApiFeatures = require("../Utils/ApiFeatures");
+
+exports.getHighestRated = (req, res, next) => {
+  req.query.limit = "8";
+  req.query.sort = "-avgRating";
+
+  next();
+};
+
 // GetAllProducts
 exports.getAllProducts = asyncErrorHandler(async (req, res, next) => {
   const outOfStockProducts = await Product.aggregate([
@@ -13,25 +20,29 @@ exports.getAllProducts = asyncErrorHandler(async (req, res, next) => {
       },
     },
   ]);
-  let features = new ApiFeatures(Product.find(), Review.find(), req.query)
+  const prodlength = await Product.countDocuments();
+  console.log("prodlength,", prodlength);
+  let features = new ApiFeatures(Product.find(), req.query)
     .search()
-    .filter();
+    .filter()
+    .sort();
+  // .paginate();
+  let product = await features.query;
+  let filteredProductsCount = product.length;
+  features = new ApiFeatures(Product.find(), req.query)
+    .search()
+    .filter()
+    .sort()
+    .paginate();
 
-  // let prod = await features;
-  // let product = prod.query;
-  // const prodlength = product.length;
+  product = await features.query;
+
   // console.log("product", product);
-
-  features = new ApiFeatures(Product.find(), req.query).search();
-  await features.filter();
-  await features.paginate();
-  let prod = await features;
-  let product = prod.query;
-  console.log("product", product);
 
   res.status(200).json({
     status: "Success",
     length: prodlength,
+    filteredProductsCount,
     outOfStockProductsLength: outOfStockProducts.length,
     data: {
       product,

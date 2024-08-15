@@ -5,19 +5,18 @@ import axios from "axios";
 import Pagination from "@mui/material/Pagination";
 
 function Products() {
-  const [reviewsData, setReviewsData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
-
   const [ratingsValue, setRatingsValue] = useState([0.5, 5]);
   const [priceValue, setPriceValue] = useState([0, 2500]);
+  const [prodLength, setProdLength] = useState(0);
   const [filters, setFilters] = useState({
-    category: "smartphone",
+    category: "",
     keyword: "",
-    price: { gte: 0, lte: 43000 },
-    ratings: { gte: 0.5, lte: 5 },
+    price: { gte: 0, lte: Infinity },
+    avgRating: { gte: 0.5, lte: 5 },
     page: 1,
-    limit: 2,
+    limit: 8,
   });
   const [category, setCategory] = useState([
     "SmartPhone",
@@ -35,22 +34,19 @@ function Products() {
       .get("http://localhost:3000/api/v3/products", { params: filters })
       .then((result) => {
         setData(result.data.data.product);
-        console.log(result.data.data.product);
+        setProdLength(result.data.filteredProductsCount);
       });
   }
   useEffect(() => {
     getData();
-    console.log("data", data);
-    console.log("filters", filters);
-  }, [filters]);
+  }, [filters, currentPage]);
 
   function handleRatingsChange(e, newValue) {
     setRatingsValue(newValue);
     setFilters((prevFilters) => ({
       ...prevFilters,
-      ratings: { gte: newValue[0], lte: newValue[1] },
+      avgRating: { gte: newValue[0], lte: newValue[1] },
     }));
-    console.log("data", data);
   }
 
   function handlePriceChange(e, newValue) {
@@ -61,13 +57,13 @@ function Products() {
     }));
   }
 
-  function handlePageChange(e, val) {
+  function handlePageChange(val) {
+    console.log("val", val);
     setCurrentPage(val);
     setFilters((prevFilters) => ({
       ...prevFilters,
       page: val,
     }));
-    getData();
   }
 
   function handleCategories(selectedCategory) {
@@ -76,7 +72,6 @@ function Products() {
       ...prevFilters,
       category: selectedCategory,
     }));
-    getData();
   }
 
   return (
@@ -143,16 +138,15 @@ function Products() {
           ))}
         </div>
       </div>
-      <p className="text-red-600">{currentPage}</p>
       <div className="w-full flex justify-center items-center my-5">
         <Pagination
-          count={10}
+          count={Math.ceil(prodLength / 8)}
           color="secondary"
           defaultPage={1}
           page={currentPage}
           onChange={(e, val) => {
             setCurrentPage(val);
-            handlePageChange();
+            handlePageChange(val);
           }}
         />
       </div>

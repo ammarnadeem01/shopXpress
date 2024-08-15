@@ -58,7 +58,7 @@ function AllProducts() {
 
         {/* Table for Large Screens */}
         <div className="hidden 1000:block bg-white shadow-lg rounded-lg overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
+          <table className="min-w-full">
             <thead className="bg-orange-500 text-white">
               <tr>
                 <th className="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">

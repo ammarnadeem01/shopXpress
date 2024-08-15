@@ -37,7 +37,7 @@ function LeftBar({ data }) {
         Dashboard
       </NavLink>
       <div
-        className="menu-item"
+        className="menu-item cursor-pointer"
         onClick={() => {
           setShowProductsSubmenu(!showProductsSubmenu);
         }}
