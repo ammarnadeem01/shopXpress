@@ -215,7 +215,6 @@ function AllReviews() {
             <tbody className="bg-white divide-y divide-gray-200">
               {reviews.map((rev) => (
                 <tr key={rev._id} className="hover:bg-gray-100 transition">
-                  {console.log(rev)}
                   <td className="px-6 py-4 whitespace-nowrap text-gray-500">
                     {rev._id}
                   </td>

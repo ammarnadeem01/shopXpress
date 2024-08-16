@@ -3,6 +3,7 @@ import ProductCard from "../Home/ProductCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Pagination from "@mui/material/Pagination";
+import BasicSpeedDial from "../User/SpeedDial";
 
 function Products() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -75,80 +76,85 @@ function Products() {
   }
 
   return (
-    <div className="max-w-full w-screen box-border">
-      <p
-        className="text-3xl font-semibold text-center mb-5
+    <div className="flex flex-wrap justify-center  items-start max-w-full pt-14">
+      <div className="w-full text-right absolute ">
+        <BasicSpeedDial />
+      </div>
+      <div className="max-w-full w-screen box-border">
+        <p
+          className="text-3xl font-semibold text-center mb-5
         border-b-2 border-gray-700
         m-auto w-48 pb-5"
-      >
-        Products
-      </p>
-      <div className="flex md:flex-row xs:flex-col justify-center h-auto xs:items-center lg:items-start">
-        {/* Left */}
-        <div className="lg:flex flex-col  justify-start items-start  xs:w-2/3 450:w-1/2 md:w-1/5 pt-3 px-2 h-auto mt-20">
-          <div className="px-3 w-full text-lg font-semibold">
-            <p>Price</p>
-            <Slider
-              value={priceValue}
-              onChange={handlePriceChange}
-              valueLabelDisplay="auto"
-              max={3900}
-              min={0}
-            />
-          </div>
-          <div className="flex flex-col h-auto w-full justify-center items-start px-3">
-            <p className="text-lg font-semibold">Categories</p>
-            <div className="px-3 flex flex-col mb-2 cursor-pointer">
-              {[
-                "SmartPhone",
-                "Laptop",
-                "Footwear",
-                "Bottom",
-                "Tops",
-                "Attire",
-                "Camera",
-                "Electronics",
-                "Accessories",
-              ].map((cat) => (
-                <p key={cat} onClick={() => handleCategories(cat)}>
-                  {cat}
-                </p>
-              ))}
+        >
+          Products
+        </p>
+        <div className="flex md:flex-row xs:flex-col justify-center h-auto xs:items-center lg:items-start">
+          {/* Left */}
+          <div className="lg:flex flex-col  justify-start items-start  xs:w-2/3 450:w-1/2 md:w-1/5 pt-3 px-2 h-auto mt-20">
+            <div className="px-3 w-full text-lg font-semibold">
+              <p>Price</p>
+              <Slider
+                value={priceValue}
+                onChange={handlePriceChange}
+                valueLabelDisplay="auto"
+                max={3900}
+                min={0}
+              />
+            </div>
+            <div className="flex flex-col h-auto w-full justify-center items-start px-3">
+              <p className="text-lg font-semibold">Categories</p>
+              <div className="px-3 flex flex-col mb-2 cursor-pointer">
+                {[
+                  "SmartPhone",
+                  "Laptop",
+                  "Footwear",
+                  "Bottom",
+                  "Tops",
+                  "Attire",
+                  "Camera",
+                  "Electronics",
+                  "Accessories",
+                ].map((cat) => (
+                  <p key={cat} onClick={() => handleCategories(cat)}>
+                    {cat}
+                  </p>
+                ))}
+              </div>
+            </div>
+            <div className="px-3 text-lg font-semibold w-full">
+              <p>Ratings Above</p>
+              <Slider
+                value={ratingsValue}
+                onChange={handleRatingsChange}
+                valueLabelDisplay="auto"
+                max={5}
+                min={0.5}
+                step={0.5}
+              />
             </div>
           </div>
-          <div className="px-3 text-lg font-semibold w-full">
-            <p>Ratings Above</p>
-            <Slider
-              value={ratingsValue}
-              onChange={handleRatingsChange}
-              valueLabelDisplay="auto"
-              max={5}
-              min={0.5}
-              step={0.5}
-            />
+          {/* Right */}
+          <div
+            id="container"
+            className="flex flex-row flex-wrap justify-evenly items-baseline  xs:w-full md:w-4/5 h-auto gap-3 py-10 space-y-5"
+          >
+            {data.map((product) => (
+              <ProductCard key={product._id} data={product} />
+            ))}
           </div>
         </div>
-        {/* Right */}
-        <div
-          id="container"
-          className="flex flex-row flex-wrap justify-evenly items-baseline  xs:w-full md:w-4/5 h-auto gap-3 py-10 space-y-5"
-        >
-          {data.map((product) => (
-            <ProductCard key={product._id} data={product} />
-          ))}
+        <div className="w-full flex justify-center items-center my-5">
+          <Pagination
+            count={Math.ceil(prodLength / 8)}
+            color="secondary"
+            defaultPage={1}
+            page={currentPage}
+            onChange={(e, val) => {
+              setCurrentPage(val);
+              handlePageChange(val);
+            }}
+          />
         </div>
-      </div>
-      <div className="w-full flex justify-center items-center my-5">
-        <Pagination
-          count={Math.ceil(prodLength / 8)}
-          color="secondary"
-          defaultPage={1}
-          page={currentPage}
-          onChange={(e, val) => {
-            setCurrentPage(val);
-            handlePageChange(val);
-          }}
-        />
       </div>
     </div>
   );

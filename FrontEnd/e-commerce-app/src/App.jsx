@@ -35,6 +35,7 @@ import ResetPassword from "./Custom/User/ResetPassword";
 import VerifyEmail from "./Custom/User/VerifyEmail";
 import EditPassword from "./Custom/User/EditPassword";
 import EditProfile from "./Custom/User/EditProfile";
+import ViewOrders from "./Custom/CheckOut/ViewOrders";
 //
 function App() {
   return (
@@ -63,13 +64,14 @@ function App() {
           <Route path="/checkout/confirm" element={<ConfirmOrder />} />
           <Route path="/checkout/payment" element={<Payment />} />
           <Route path="/checkout/shipping" element={<ShippingDetails />} />
-          <Route path="/placed" element={<OrderPlaced />} />
+          <Route path="/orderplaced" element={<OrderPlaced />} />
           <Route path="/empty" element={<EmptyCart />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword/:token" element={<ResetPassword />} />
           <Route path="/verifyemail" element={<VerifyEmail />} />
           <Route path="/editpassword" element={<EditPassword />} />
           <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/vieworders" element={<ViewOrders />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />

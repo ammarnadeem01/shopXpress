@@ -2,13 +2,14 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import KeyIcon from "@mui/icons-material/Key";
 import Checkout from "./Checkout";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 function Payment() {
   const [orders, setOrders] = useState([]);
   const loc = useLocation();
+  const nav = useNavigate();
   // console.log("loc.state", loc.state);
   const payment = loc.state.total;
   const items = loc.state.items;
@@ -16,6 +17,7 @@ function Payment() {
   const { userId } = useSelector((state) => {
     return state.userReducer;
   });
+
   // console.log("userId1", userId);
   // useEffect(() => {
   //   items.map((i) => {
@@ -41,6 +43,7 @@ function Payment() {
       })
       .then((res) => {
         console.log("res", res);
+        nav("/orderplaced", { state: userId });
         // console.log("userId", userId);
       })
       .catch((err) => {

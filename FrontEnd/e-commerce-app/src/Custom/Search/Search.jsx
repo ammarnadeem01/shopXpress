@@ -4,6 +4,7 @@ import { Slider } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import BasicSpeedDial from "../User/SpeedDial";
 function Search() {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
@@ -64,7 +65,6 @@ function Search() {
       ...prevFilters,
       page: val,
     }));
-    getData();
   }
 
   function handleCategories(selectedCategory) {
@@ -73,7 +73,6 @@ function Search() {
       ...prevFilters,
       category: selectedCategory,
     }));
-    getData();
   }
 
   function handleSearch() {
@@ -81,13 +80,15 @@ function Search() {
       ...prevFilters,
       keyword,
     }));
-    getData();
   }
 
   return (
     <Fragment>
       {/* Search  */}
       <div className="flex justify-center flex-wrap w-max-screen bg-gray-100">
+        {/* <div className="text-end w-full absolute pt-16">
+          <BasicSpeedDial />
+        </div> */}
         <div className="flex w-11/12 h-auto flex-wrap justify-center my-10 items-center space-y-5 rounded-lg shadow-xl bg-white py-10">
           <p className="xs:max-md:text-4xl w-full text-center text-5xl font-semibold">
             Search
