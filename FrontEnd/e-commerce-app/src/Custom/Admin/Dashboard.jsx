@@ -29,35 +29,82 @@ ChartJS.register(
 
 function Dashboard() {
   const [productCount, setProductCount] = useState(0);
+  const [ordertotalAmount, setOrderTotalAmount] = useState(0);
   const [orderCount, setOrderCount] = useState(0);
   const [userCount, setUserCount] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const [outOfStockProducts, setOutOfStockProducts] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [labels, setLabels] = useState(["", "", "", "", "", "", ""]);
+
   useEffect(() => {
+    const now = new Date();
+    const dateWeekAgo = new Date(now);
+    dateWeekAgo.setDate(now.getDate() - 7);
+    now.setHours(0, 0, 0, 0);
+
+    const initialData = Array(7).fill(0);
+    const prev7daysNames = Array.from({ length: 7 }, (_, i) => {
+      const date = new Date();
+      date.setDate(date.getDate() - (7 - i));
+      return date.toDateString();
+    });
+    setLabels(prev7daysNames);
+
+    const orderTotals = initialData.slice();
+
     axios.get("http://localhost:3000/api/v3/products").then((response) => {
       setProductCount(response.data.length);
-      console.log(response.data.outOfStockProducts);
       setOutOfStockProducts(response.data.outOfStockProductsLength);
       setIsLoading(false);
     });
     axios.get("http://localhost:3000/api/v3/orders").then((response) => {
+      const orders = response.data.data.order;
       setOrderCount(response.data.length);
       setTotalAmount(response.data.totalAmount);
+      orders
+        .filter(({ placedDate }) => {
+          const utcDate = new Date(placedDate);
+          const correctedDate = new Date(
+            utcDate.getUTCFullYear(),
+            utcDate.getUTCMonth(),
+            utcDate.getUTCDate()
+          );
+          const placedDateObject = correctedDate;
+          dateWeekAgo.setHours(0, 0, 0, 0);
+          return placedDateObject >= dateWeekAgo;
+        })
+        .forEach(({ totalPrice, placedDate }) => {
+          const utcDate = new Date(placedDate);
+          const correctedDate = new Date(
+            utcDate.getUTCFullYear(),
+            utcDate.getUTCMonth(),
+            utcDate.getUTCDate()
+          );
+          const orderDate = correctedDate;
+          now.setHours(0, 0, 0, 0);
+          const dayIndex =
+            7 - Math.floor((now - orderDate) / (1000 * 60 * 60 * 24));
+          if (dayIndex >= 0 && dayIndex < 7) {
+            orderTotals[dayIndex] += totalPrice;
+          }
+        });
+
+      setOrderTotalAmount(orderTotals);
+      console.log(orderTotals);
     });
     axios.get("http://localhost:3000/api/v3/users").then((response) => {
       setUserCount(response.data.length);
     });
   }, []);
-
   const lineState = {
-    labels: ["Initial Amount", "Amount Earned"],
+    labels: labels,
     datasets: [
       {
-        label: "TOTAL AMOUNT",
-        backgroundColor: ["tomato"],
-        hoverBackgroundColor: ["rgb(197, 72, 49)"],
-        data: [0, 1000],
+        label: "Order Total (Last 7 days)",
+        data: ordertotalAmount || [0, 0, 0, 0, 0, 0, 0],
+        backgroundColor: ["#00A6B4", "#6800B4"],
+        hoverBackgroundColor: ["#4B5000", "#35014F"],
       },
     ],
   };
