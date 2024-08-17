@@ -15,6 +15,7 @@ function ConfirmOrder() {
   const { cartItems } = useSelector((state) => state.cartReducer);
 
   const [items, setItems] = useState([]);
+  const { accessToken } = useSelector((state) => state.userReducer);
 
   // Fetch product details for items in the cart
   useEffect(() => {
@@ -22,7 +23,12 @@ function ConfirmOrder() {
       try {
         const fetchPromises = cartItems.map(async (cartItem) => {
           const response = await axios.get(
-            `http://localhost:3000/api/v3/products/${cartItem.productId}`
+            `http://localhost:3000/api/v3/products/${cartItem.productId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
           );
           const item = response.data.data.product;
           item.quantity = cartItem.quantity;
@@ -44,7 +50,7 @@ function ConfirmOrder() {
     };
 
     fetchItems();
-  }, [cartItems]);
+  }, [cartItems, accessToken]);
 
   // Set shipping charges based on country
   useEffect(() => {

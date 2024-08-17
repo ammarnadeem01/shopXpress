@@ -20,24 +20,20 @@ exports.getAllProducts = asyncErrorHandler(async (req, res, next) => {
       },
     },
   ]);
+
   const prodlength = await Product.countDocuments();
   console.log("prodlength,", prodlength);
+
   let features = new ApiFeatures(Product.find(), req.query)
     .search()
     .filter()
     .sort();
-  // .paginate();
+  let queryWithoutPagination = features.query.clone();
+
+  let filteredProductsCount = await queryWithoutPagination.countDocuments();
+
+  features.paginate();
   let product = await features.query;
-  let filteredProductsCount = product.length;
-  features = new ApiFeatures(Product.find(), req.query)
-    .search()
-    .filter()
-    .sort()
-    .paginate();
-
-  product = await features.query;
-
-  // console.log("product", product);
 
   res.status(200).json({
     status: "Success",

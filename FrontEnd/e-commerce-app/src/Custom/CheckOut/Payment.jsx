@@ -18,12 +18,8 @@ function Payment() {
     return state.userReducer;
   });
 
-  // console.log("userId1", userId);
-  // useEffect(() => {
-  //   items.map((i) => {
-  //     setOrders(...orders, { item: i._id, quantity: i.quantity });
-  //   });
-  // }, []);
+  const { accessToken } = useSelector((state) => state.userReducer);
+
   useEffect(() => {
     const newOrders = items.map((i) => ({
       item: i._id,
@@ -36,11 +32,19 @@ function Payment() {
     e.preventDefault();
     // console.log("userId", userId);
     axios
-      .post("http://localhost:3000/api/v3/orders", {
-        orderedItems: orders,
-        placedBy: userId,
-        totalPrice: payment,
-      })
+      .post(
+        "http://localhost:3000/api/v3/orders",
+        {
+          orderedItems: orders,
+          placedBy: userId,
+          totalPrice: payment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then((res) => {
         console.log("res", res);
         nav("/orderplaced", { state: userId });

@@ -1,5 +1,6 @@
 import React from "react";
 function ViewOrders({ data }) {
+  console.log("data", data);
   const formatDate = (date) => {
     const options = {
       year: "numeric",

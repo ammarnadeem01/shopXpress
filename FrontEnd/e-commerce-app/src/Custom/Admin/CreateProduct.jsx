@@ -7,8 +7,12 @@ import LeftBar from "./LeftBar";
 import axios from "axios";
 import { useState } from "react";
 import Hamburger from "hamburger-react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function CreateProduct() {
+  const { accessToken } = useSelector((state) => state.userReducer);
+  const nav = useNavigate();
   const [errMsg, setErrMsg] = useState("");
   const [productData, setProductData] = useState({
     name: "",
@@ -44,13 +48,14 @@ function CreateProduct() {
       .post("http://localhost:3000/api/v3/products", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${accessToken}`,
         },
       })
       .then(() => {
         console.log("Product Created.");
       })
       .catch((err) => {
-        console.log("Error Occurred.", err);
+        nav("/forbidden");
         setErrMsg(err.response.data.message);
       });
   }

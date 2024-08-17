@@ -13,11 +13,16 @@ function OrderPlaced() {
 
   const userId = location.state;
   console.log(userId);
+  const { accessToken } = useSelector((state) => state.userReducer);
 
   const handleOpen = () => {
     setOpen(!open);
     axios
-      .get(`http://localhost:3000/api/v3/orders/user/${userId}`)
+      .get(`http://localhost:3000/api/v3/orders/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((res) => {
         console.log(res.data.data.order);
         setOrderData(res.data.data.order);

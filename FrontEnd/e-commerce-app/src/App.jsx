@@ -36,6 +36,7 @@ import VerifyEmail from "./Custom/User/VerifyEmail";
 import EditPassword from "./Custom/User/EditPassword";
 import EditProfile from "./Custom/User/EditProfile";
 import ViewOrders from "./Custom/CheckOut/ViewOrders";
+import Forbidden from "./Custom/Admin/Forbidden";
 //
 function App() {
   return (
@@ -72,6 +73,7 @@ function App() {
           <Route path="/editpassword" element={<EditPassword />} />
           <Route path="/editprofile" element={<EditProfile />} />
           <Route path="/vieworders" element={<ViewOrders />} />
+          <Route path="/forbidden" element={<Forbidden />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />

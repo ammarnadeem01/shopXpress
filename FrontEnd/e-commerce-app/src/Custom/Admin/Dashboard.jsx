@@ -15,6 +15,7 @@ import LeftBar from "./LeftBar";
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 ChartJS.register(
   CategoryScale,
@@ -36,7 +37,7 @@ function Dashboard() {
   const [outOfStockProducts, setOutOfStockProducts] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [labels, setLabels] = useState(["", "", "", "", "", "", ""]);
-
+  const { accessToken } = useSelector((state) => state.userReducer);
   useEffect(() => {
     const now = new Date();
     const dateWeekAgo = new Date(now);
@@ -53,49 +54,67 @@ function Dashboard() {
 
     const orderTotals = initialData.slice();
 
-    axios.get("http://localhost:3000/api/v3/products").then((response) => {
-      setProductCount(response.data.length);
-      setOutOfStockProducts(response.data.outOfStockProductsLength);
-      setIsLoading(false);
-    });
-    axios.get("http://localhost:3000/api/v3/orders").then((response) => {
-      const orders = response.data.data.order;
-      setOrderCount(response.data.length);
-      setTotalAmount(response.data.totalAmount);
-      orders
-        .filter(({ placedDate }) => {
-          const utcDate = new Date(placedDate);
-          const correctedDate = new Date(
-            utcDate.getUTCFullYear(),
-            utcDate.getUTCMonth(),
-            utcDate.getUTCDate()
-          );
-          const placedDateObject = correctedDate;
-          dateWeekAgo.setHours(0, 0, 0, 0);
-          return placedDateObject >= dateWeekAgo;
-        })
-        .forEach(({ totalPrice, placedDate }) => {
-          const utcDate = new Date(placedDate);
-          const correctedDate = new Date(
-            utcDate.getUTCFullYear(),
-            utcDate.getUTCMonth(),
-            utcDate.getUTCDate()
-          );
-          const orderDate = correctedDate;
-          now.setHours(0, 0, 0, 0);
-          const dayIndex =
-            7 - Math.floor((now - orderDate) / (1000 * 60 * 60 * 24));
-          if (dayIndex >= 0 && dayIndex < 7) {
-            orderTotals[dayIndex] += totalPrice;
-          }
-        });
+    axios
+      .get("http://localhost:3000/api/v3/products", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        setProductCount(response.data.length);
+        setOutOfStockProducts(response.data.outOfStockProductsLength);
+        setIsLoading(false);
+      });
+    axios
+      .get("http://localhost:3000/api/v3/orders", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        const orders = response.data.data.order;
+        setOrderCount(response.data.length);
+        setTotalAmount(response.data.totalAmount);
+        orders
+          .filter(({ placedDate }) => {
+            const utcDate = new Date(placedDate);
+            const correctedDate = new Date(
+              utcDate.getUTCFullYear(),
+              utcDate.getUTCMonth(),
+              utcDate.getUTCDate()
+            );
+            const placedDateObject = correctedDate;
+            dateWeekAgo.setHours(0, 0, 0, 0);
+            return placedDateObject >= dateWeekAgo;
+          })
+          .forEach(({ totalPrice, placedDate }) => {
+            const utcDate = new Date(placedDate);
+            const correctedDate = new Date(
+              utcDate.getUTCFullYear(),
+              utcDate.getUTCMonth(),
+              utcDate.getUTCDate()
+            );
+            const orderDate = correctedDate;
+            now.setHours(0, 0, 0, 0);
+            const dayIndex =
+              7 - Math.floor((now - orderDate) / (1000 * 60 * 60 * 24));
+            if (dayIndex >= 0 && dayIndex < 7) {
+              orderTotals[dayIndex] += totalPrice;
+            }
+          });
 
-      setOrderTotalAmount(orderTotals);
-      console.log(orderTotals);
-    });
-    axios.get("http://localhost:3000/api/v3/users").then((response) => {
-      setUserCount(response.data.length);
-    });
+        setOrderTotalAmount(orderTotals);
+        console.log(orderTotals);
+      });
+    axios
+      .get("http://localhost:3000/api/v3/users", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        setUserCount(response.data.length);
+      });
   }, []);
   const lineState = {
     labels: labels,

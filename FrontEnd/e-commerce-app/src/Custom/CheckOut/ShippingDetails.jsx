@@ -18,6 +18,7 @@ function ShippingDetails() {
     return state.userReducer;
   });
   const nav = useNavigate();
+  const { accessToken } = useSelector((state) => state.userReducer);
 
   const [shippingFormData, setShippingFormData] = useState({
     address: "",
@@ -41,6 +42,7 @@ function ShippingDetails() {
       .post("http://localhost:3000/api/v3/shippinginfo", shippingFormData, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
       })
       .then((response) => {
@@ -55,14 +57,6 @@ function ShippingDetails() {
           type: "SET_SHIPPING_DATA",
           payload: response.data.data.newShippingInfo,
         });
-        // dispatch({
-        //   type: "SET_USER_PHONE",
-        //   payload: shippingFormData.phone,
-        // });
-        // dispatch({
-        //   type: "SET_USER_ADDRESS",
-        //   payload: `${shippingFormData.address},${shippingFormData.city},${shippingFormData.state},${shippingFormData.country}`,
-        // });
         nav("/checkout/confirm");
       })
       .catch((err) => {

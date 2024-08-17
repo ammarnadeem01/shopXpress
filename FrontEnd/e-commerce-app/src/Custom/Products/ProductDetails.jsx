@@ -1,7 +1,6 @@
 import Rating from "@mui/material/Rating";
 import { Fragment, useEffect, useState } from "react";
 import ReviewCard from "./ReviewCard";
-// import Carousel from "react-bootstrap/Carousel";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
@@ -12,12 +11,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-
-///
-
 import { Carousel } from "flowbite-react";
-
-///
 
 const ProductDetails = () => {
   const location = useLocation();
@@ -33,13 +27,17 @@ const ProductDetails = () => {
   const [ratings, setRatings] = useState(0);
   const [avgRating, setAvgRating] = useState(0.5);
   const nav = useNavigate();
-
+  const { accessToken } = useSelector((state) => state.userReducer);
   useEffect(() => {
     const productId = location.state.data._id;
     setAvgRating(location.state.data.avgRating);
 
     axios
-      .get(`http://localhost:3000/api/v3/reviews/product/${productId}`)
+      .get(`http://localhost:3000/api/v3/reviews/product/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((results) => {
         setAllReviews(results.data.data.reviews);
         const userReview = results.data.data.reviews.find((r) => {
@@ -54,7 +52,11 @@ const ProductDetails = () => {
       })
       .catch((err) => console.log(err));
     axios
-      .get(`http://localhost:3000/api/v3/orders/user/${userId}`)
+      .get(`http://localhost:3000/api/v3/orders/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((results) => {
         const orders = results.data.data.order;
         const hasPurchased = orders.some((order) =>
@@ -84,7 +86,11 @@ const ProductDetails = () => {
       existingReview ? `/${reviewId}` : ""
     }`;
     const reqBody = existingReview ? patchReviewData : reviewData;
-    reviewApi(reviewUrl, reqBody)
+    reviewApi(reviewUrl, reqBody, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
       .then((results) => {
         console.log("results", results);
         handleClose();

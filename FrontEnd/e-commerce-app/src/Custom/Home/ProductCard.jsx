@@ -1,19 +1,25 @@
 import Rating from "@mui/material/Rating";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function ProductCard({ data }) {
   const [reviewsLength, setReviewsLength] = useState(0);
+  const { accessToken } = useSelector((state) => state.userReducer);
+
   const nav = useNavigate();
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/v3/reviews/product/${data._id}`)
+      .get(`http://localhost:3000/api/v3/reviews/product/${data._id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((response) => {
-        // console.log(response.data);
         setReviewsLength(response.data.length);
       });
-  }, []);
+  });
 
   return (
     <div
