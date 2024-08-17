@@ -3,6 +3,7 @@ import EmptyCart from "./EmptyCart";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import api from "../../axiosConfig";
 
 function Cart() {
   const dispatch = useDispatch();
@@ -22,14 +23,13 @@ function Cart() {
 
   useEffect(() => {
     const fetchPromises = cartItems.map(async (cartItem) => {
-      const results = await axios.get(
-        `http://localhost:3000/api/v3/products/${cartItem.productId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+      // const results = await axios.get(
+      //   `http://localhost:3000/api/v3/products/${cartItem.productId}`,
+      const results = await api.get(`api/v3/products/${cartItem.productId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       const item = results.data.data.product;
       item.quantity = cartItem.quantity;
       return item;
@@ -161,12 +161,6 @@ function Cart() {
               ).toFixed(2)}`}
             </p>
           </div>
-
-          {/* <p className="w-1/6 bg-black flex items-center flex-wrap justify-end font-semibold md:pr-2">
-            {`${item.quantity} * ${item.price} = ${(
-              item.quantity * item.price
-            ).toFixed(2)}`}
-          </p> */}
         </div>
       ))}
       <div className="flex bg-white py-3 rounded-md shadow-md sm:w-11/12 xs:w-full xs:px-1 h-4/5 justify-evenly items-center flex-wrap">

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import BasicSpeedDial from "./SpeedDial.jsx";
+import api from "../../axiosConfig.js";
 function MyProfile() {
   const nav = useNavigate();
   const location = useLocation();
@@ -28,8 +29,10 @@ function MyProfile() {
     });
     if (userId) {
       console.log("UserId", userId);
-      axios
-        .get(`http://localhost:3000/api/v3/users/${userId}`)
+      // axios
+      //   .get(`http://localhost:3000/api/v3/users/${userId}`)
+      api
+        .get(`api/v3/users/${userId}`)
         .then((data) => {
           console.log(data);
           setData({

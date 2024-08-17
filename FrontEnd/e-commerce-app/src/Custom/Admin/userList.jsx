@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Hamburger from "hamburger-react";
 import { useSelector } from "react-redux";
 import "../../Custom/Loader.css";
+import api from "../../axiosConfig";
 
 function UserList() {
   const nav = useNavigate();
@@ -16,8 +17,10 @@ function UserList() {
 
   const { accessToken } = useSelector((state) => state.userReducer);
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/v3/users", {
+    // axios
+    //   .get("http://localhost:3000/api/v3/users", {
+    api
+      .get("api/v3/users", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -33,8 +36,10 @@ function UserList() {
   }, [users]);
 
   const deleteUser = (userid) => {
-    axios
-      .delete(`http://localhost:3000/api/v3/users/${userid}`, {
+    // axios
+    //   .delete(`http://localhost:3000/api/v3/users/${userid}`, {
+    api
+      .delete(`api/v3/users/${userid}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

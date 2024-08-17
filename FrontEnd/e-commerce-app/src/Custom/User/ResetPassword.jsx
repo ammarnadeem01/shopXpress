@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 import LockResetIcon from "@mui/icons-material/LockReset";
+import api from "../../axiosConfig";
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -23,8 +24,10 @@ const ResetPassword = () => {
 
   const onSubmit = (values, { setSubmitting }) => {
     console.log("Form data", values);
-    axios
-      .post(`http://localhost:3000/api/v3/users/resetpassword/${token}`, values)
+    // axios
+    //   .post(`http://localhost:3000/api/v3/users/resetpassword/${token}`, values)
+    api
+      .post(`api/v3/users/resetpassword/${token}`, values)
       .then((res) => {
         console.log(res);
       })

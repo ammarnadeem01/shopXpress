@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import { useSelector } from "react-redux";
+import api from "../../axiosConfig";
 
 const EditPassword = () => {
   const { accessToken } = useSelector((state) => {
@@ -28,8 +29,10 @@ const EditPassword = () => {
 
   const onSubmit = (values, { setSubmitting }) => {
     console.log("Form data", values);
-    axios
-      .patch(`http://localhost:3000/api/v3/users/updatePassword`, values, {
+    // axios
+    //   .patch(`http://localhost:3000/api/v3/users/updatePassword`, values, {
+    api
+      .patch(`api/v3/users/updatePassword`, values, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

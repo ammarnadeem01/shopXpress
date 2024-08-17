@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import api from "../../axiosConfig";
 
 function ProductCard({ data }) {
   const [reviewsLength, setReviewsLength] = useState(0);
@@ -10,8 +11,10 @@ function ProductCard({ data }) {
 
   const nav = useNavigate();
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/api/v3/reviews/product/${data._id}`, {
+    // axios
+    //   .get(`http://localhost:3000/api/v3/reviews/product/${data._id}`, {
+    api
+      .get(`api/v3/reviews/product/${data._id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

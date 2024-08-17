@@ -5,6 +5,7 @@ import Pagination from "@mui/material/Pagination";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import BasicSpeedDial from "../User/SpeedDial";
+import api from "../../axiosConfig";
 function Search() {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
@@ -32,12 +33,12 @@ function Search() {
     "Accessories",
   ]);
   function getData() {
-    axios
-      .get("http://localhost:3000/api/v3/products", { params: filters })
-      .then((result) => {
-        setData(result.data.data.product);
-        setProdLength(result.data.filteredProductsCount);
-      });
+    // axios
+    //   .get("http://localhost:3000/api/v3/products", { params: filters })
+    api.get("api/v3/products", { params: filters }).then((result) => {
+      setData(result.data.data.product);
+      setProdLength(result.data.filteredProductsCount);
+    });
   }
   useEffect(() => {
     getData();

@@ -4,6 +4,7 @@ import Checkout from "./Checkout";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import api from "../../axiosConfig";
 
 function ConfirmOrder() {
   const [shippingCharges, setShippingCharges] = useState(0);
@@ -22,8 +23,10 @@ function ConfirmOrder() {
     const fetchItems = async () => {
       try {
         const fetchPromises = cartItems.map(async (cartItem) => {
-          const response = await axios.get(
-            `http://localhost:3000/api/v3/products/${cartItem.productId}`,
+          // const response = await axios.get(
+          //   `http://localhost:3000/api/v3/products/${cartItem.productId}`,
+          const response = await api.get(
+            `api/v3/products/${cartItem.productId}`,
             {
               headers: {
                 Authorization: `Bearer ${accessToken}`,

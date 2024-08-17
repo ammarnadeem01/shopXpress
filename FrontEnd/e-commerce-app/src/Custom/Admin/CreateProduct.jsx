@@ -9,6 +9,7 @@ import { useState } from "react";
 import Hamburger from "hamburger-react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import api from "../../axiosConfig";
 
 function CreateProduct() {
   const { accessToken } = useSelector((state) => state.userReducer);
@@ -44,8 +45,10 @@ function CreateProduct() {
       formData.append("productImages", img);
     });
 
-    axios
-      .post("http://localhost:3000/api/v3/products", formData, {
+    // axios
+    //   .post("http://localhost:3000/api/v3/products", formData, {
+    api
+      .post("api/v3/products", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${accessToken}`,

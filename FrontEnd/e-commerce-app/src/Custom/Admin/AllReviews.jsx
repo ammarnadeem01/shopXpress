@@ -6,6 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Hamburger from "hamburger-react";
 import { useSelector } from "react-redux";
+import api from "../../axiosConfig";
 
 function AllReviews() {
   const [productId, setProductId] = useState("");
@@ -15,55 +16,13 @@ function AllReviews() {
   const [isOpen, setOpen] = useState(true);
   const nav = useNavigate();
   const { accessToken } = useSelector((state) => state.userReducer);
-  // function searchReviews() {
-  //   let revData;
-  //   axios
-  //     .get(`http://localhost:3000/api/v3/reviews/product/${productId}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     })
-  //     .then((results) => {
-  //       const reviewsData = results.data.data.reviews;
-  //       revData = reviewsData.map(async (review) => {
-  //         let response;
-  //         if (review.reviewedBy) {
-  //           response = await axios.get(
-  //             `http://localhost:3000/api/v3/users/${review.reviewedBy}`,
-  //             {
-  //               headers: {
-  //                 Authorization: `Bearer ${accessToken}`,
-  //               },
-  //             }
-  //           );
-  //           const userName = response.data.data.user.name;
-  //           console.log({ ...review, user: userName });
-  //           return { ...review, user: userName };
-  //         }
-  //       });
-
-  //       Promise.all(revData)
-  //         .then((updatedReviews) => {
-  //           console.log("updatedReviews", updatedReviews);
-  //           setReviews(updatedReviews);
-  //           setIsLoading(false);
-  //         })
-  //         .catch((error) => {
-  //           console.log(2);
-  //           console.error("Error fetching user names:", error);
-  //           // nav("/forbidden");
-  //         });
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       nav("/forbidden");
-  //     });
-  // }
 
   function searchReviews() {
     let revData;
-    axios
-      .get(`http://localhost:3000/api/v3/reviews/product/${productId}`, {
+    // axios
+    //   .get(`http://localhost:3000/api/v3/reviews/product/${productId}`, {
+    api
+      .get(`api/v3/reviews/product/${productId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -74,14 +33,13 @@ function AllReviews() {
           let response;
           if (review.reviewedBy) {
             try {
-              response = await axios.get(
-                `http://localhost:3000/api/v3/users/${review.reviewedBy}`,
-                {
-                  headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                  },
-                }
-              );
+              // response = await axios.get(
+              //   `http://localhost:3000/api/v3/users/${review.reviewedBy}`,
+              response = await api.get(`api/v3/users/${review.reviewedBy}`, {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              });
               const userName = response.data.data.user?.name;
               return { ...review, user: userName };
             } catch (error) {
@@ -115,8 +73,10 @@ function AllReviews() {
   }
 
   const deleteReview = (revid) => {
-    axios
-      .delete(`http://localhost:3000/api/v3/reviews/${revid}`, {
+    // axios
+    //   .delete(`http://localhost:3000/api/v3/reviews/${revid}`, {
+    api
+      .delete(`api/v3/reviews/${revid}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

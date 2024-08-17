@@ -5,21 +5,21 @@ import LeftBar from "./LeftBar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import api from "../../axiosConfig";
 function UpdateUser() {
   const nav = useNavigate();
   const loc = useLocation();
   function editUser() {
     console.log("userData", userData);
-    axios
-      .patch(
-        `http://localhost:3000/api/v3/users/edituser/${userData.id}`,
-        userData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+    // axios
+    //   .patch(
+    //     `http://localhost:3000/api/v3/users/edituser/${userData.id}`,
+    api
+      .patch(`api/v3/users/edituser/${userData.id}`, userData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((res) => {
         console.log("res", res);
         console.log("userData", userData);

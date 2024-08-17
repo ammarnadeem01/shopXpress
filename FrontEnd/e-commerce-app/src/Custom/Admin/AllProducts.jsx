@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Hamburger from "hamburger-react";
 import { useSelector } from "react-redux";
 import "../../Custom/Loader.css";
+import api from "../../axiosConfig";
 function AllProducts() {
   const nav = useNavigate();
   const [items, setItems] = useState([]);
@@ -16,8 +17,10 @@ function AllProducts() {
   const { accessToken } = useSelector((state) => state.userReducer);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/v3/products/admin/", {
+    // axios
+    //   .get("http://localhost:3000/api/v3/products/admin/", {
+    api
+      .get("api/v3/products/admin/", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -33,8 +36,10 @@ function AllProducts() {
   }, [items]);
 
   const deleteProduct = (prodId) => {
-    axios
-      .delete(`http://localhost:3000/api/v3/products/${prodId}`, {
+    // axios
+    //   .delete(`http://localhost:3000/api/v3/products/${prodId}`, {
+    api
+      .delete(`api/v3/products/${prodId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

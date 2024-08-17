@@ -16,6 +16,7 @@ import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import api from "../../axiosConfig";
 
 ChartJS.register(
   CategoryScale,
@@ -54,8 +55,10 @@ function Dashboard() {
 
     const orderTotals = initialData.slice();
 
-    axios
-      .get("http://localhost:3000/api/v3/products", {
+    // axios
+    //   .get("http://localhost:3000/api/v3/products", {
+    api
+      .get("api/v3/products", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -65,8 +68,10 @@ function Dashboard() {
         setOutOfStockProducts(response.data.outOfStockProductsLength);
         setIsLoading(false);
       });
-    axios
-      .get("http://localhost:3000/api/v3/orders", {
+    // axios
+    //   .get("http://localhost:3000/api/v3/orders", {
+    api
+      .get("api/v3/orders", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -106,8 +111,10 @@ function Dashboard() {
         setOrderTotalAmount(orderTotals);
         console.log(orderTotals);
       });
-    axios
-      .get("http://localhost:3000/api/v3/users", {
+    // axios
+    //   .get("http://localhost:3000/api/v3/users", {
+    api
+      .get("pi/v3/users", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

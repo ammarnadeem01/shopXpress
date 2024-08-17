@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import api from "../../axiosConfig";
 const ForgotPassword = () => {
   const nav = useNavigate();
   const initialValues = {
@@ -15,8 +16,11 @@ const ForgotPassword = () => {
   });
 
   const onSubmit = (values) => {
-    axios
-      .post("http://localhost:3000/api/v3/users/forgotpassword", values)
+    // axios
+    //   .post("http://localhost:3000/api/v3/users/forgotpassword", values)
+
+    api
+      .post("api/v3/users/forgotpassword", values)
       .then((res) => {
         console.log("res", res);
         nav("/verifyEmail");

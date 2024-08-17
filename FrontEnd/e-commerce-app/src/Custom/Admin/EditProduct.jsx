@@ -7,63 +7,58 @@ import LeftBar from "./LeftBar";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import api from "../../axiosConfig";
 
 function EditProduct() {
-  const loc =useLocation()
-  
+  const loc = useLocation();
+
   const [productData, setProductData] = useState({
     name: loc.state?.name,
     price: loc.state?.price,
     description: loc.state?.description,
-    category:loc.state?.category,
+    category: loc.state?.category,
     stock: loc.state?.stock,
-    productImages:loc.state?.productImages,
+    productImages: loc.state?.productImages,
   });
   function handleChange(e) {
-    const { name, value,type,files } = e.target;
-    console.log(files)
-    if(type=="file")
-      {
-       setProductData({...productData,[name]:Array.from(files)})
-      }
-      else{
-        console.log(name,value)
-        setProductData({ ...productData, [name]: value });
-      }
+    const { name, value, type, files } = e.target;
+    console.log(files);
+    if (type == "file") {
+      setProductData({ ...productData, [name]: Array.from(files) });
+    } else {
+      console.log(name, value);
+      setProductData({ ...productData, [name]: value });
+    }
   }
   function handleUpdateProduct(e) {
     e.preventDefault();
-   const formData= new FormData();
-   formData.append("name",productData.name)
-   formData.append("description",productData.description)
-   formData.append("stock",productData.stock)
-   formData.append("category",productData.category)
-   formData.append("price",productData.price)
-   
-   productData.productImages.map((img)=>{
-    formData.append("productImages",img)
-   })
-   console.log("formData",formData)
-   axios
-      .put(`http://localhost:3000/api/v3/products/${loc.state._id}`, formData,{
-        headers:{
-          "Content-Type":"multipart/form-data"
-        }        
+    const formData = new FormData();
+    formData.append("name", productData.name);
+    formData.append("description", productData.description);
+    formData.append("stock", productData.stock);
+    formData.append("category", productData.category);
+    formData.append("price", productData.price);
+
+    productData.productImages.map((img) => {
+      formData.append("productImages", img);
+    });
+    console.log("formData", formData);
+    //  axios
+    //     .put(`http://localhost:3000/api/v3/products/${loc.state._id}`, formData,{
+    api
+      .put(`api/v3/products/${loc.state._id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((res) => {
-        console.log(res)
+        console.log(res);
         console.log("Product Updated.");
       })
       .catch((err) => {
         console.log("Error Occurred.", err);
       });
   }
-
-
-
-
-
-
 
   return (
     <div className="flex w-max-screen ">
@@ -137,7 +132,7 @@ function EditProduct() {
                 name="stock"
               />
             </div>
-             <div className="w-full h-auto">
+            <div className="w-full h-auto">
               <input
                 type="file"
                 multiple
@@ -153,7 +148,7 @@ function EditProduct() {
               >
                 Choose Images
               </label>
-              </div>
+            </div>
             <button
               className="bg-gray-800 mt-2 cursor-pointer  hover:bg-gray-600 rounded-md text-center text-white w-full py-1.5"
               onClick={handleUpdateProduct}

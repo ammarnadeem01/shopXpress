@@ -1,18 +1,19 @@
 import { Rating } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import api from "../../axiosConfig";
 
 function ReviewCard({ data }) {
   const [name, setName] = useState("User Name");
   const [avatar, setAvatar] = useState("");
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/api/v3/users/${data.reviewedBy}`)
-      .then((results) => {
-        setName(results.data.data.user.name);
-        console.log("results.data.data.user : ", results.data.data.user);
-        setAvatar(results.data.data.user.avatar);
-      });
+    // axios
+    //   .get(`http://localhost:3000/api/v3/users/${data.reviewedBy}`)
+    api.get(`api/v3/users/${data.reviewedBy}`).then((results) => {
+      setName(results.data.data.user.name);
+      console.log("results.data.data.user : ", results.data.data.user);
+      setAvatar(results.data.data.user.avatar);
+    });
   }, [name]);
 
   return (

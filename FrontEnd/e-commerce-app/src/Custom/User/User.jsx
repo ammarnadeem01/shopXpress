@@ -6,6 +6,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import axios from "axios";
+import api from "../../axiosConfig";
 
 const User = () => {
   const [loginForm, setLoginForm] = useState(true);
@@ -24,8 +25,10 @@ const User = () => {
   });
   function handleRegSubmit(e) {
     e.preventDefault();
-    axios
-      .post("http://localhost:3000/api/v3/users", regFormData, {
+    // axios
+    //   .post("http://localhost:3000/api/v3/users", regFormData, {
+    api
+      .post("api/v3/users", regFormData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -59,8 +62,10 @@ const User = () => {
   });
   function handleLoginSubmit(e) {
     e.preventDefault();
-    axios
-      .post(`http://localhost:3000/api/v3/users/login`, logFormData)
+    // axios
+    //   .post(`http://localhost:3000/api/v3/users/login`, logFormData)
+    api
+      .post(`api/v3/users/login`, logFormData)
       .then((results) => {
         console.log(results);
         results.data.user.token = results.data.token;

@@ -3,13 +3,16 @@ import { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import "../../Custom/Loader.css";
 import axios from "axios";
+import api from "../../axiosConfig";
 function FeaturedProds() {
   const [isLoading, setIsLoading] = useState(true);
   const { accessToken } = useSelector((state) => state.userReducer);
   const [datais, setdatais] = useState([]);
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/v3/products/highest-rated-products", {
+    // axios
+    //   .get("http://localhost:3000/api/v3/products/highest-rated-products", {
+    api
+      .get("api/v3/products/highest-rated-products", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

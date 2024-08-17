@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Hamburger from "hamburger-react";
+import api from "../../axiosConfig";
 function ShippingInfo() {
   const [orderData, setOrderData] = useState([]);
   const [cartItems, setCartItems] = useState([]);
@@ -12,8 +13,10 @@ function ShippingInfo() {
   const orderId = loc.state;
 
   function handleStatus() {
-    axios
-      .patch(`http://localhost:3000/api/v3/orders/${orderId}`, {
+    // axios
+    //   .patch(`http://localhost:3000/api/v3/orders/${orderId}`, {
+    api
+      .patch(`api/v3/orders/${orderId}`, {
         status: orderData.status == "Processing" ? "Shipped" : "Delivered",
       })
       .then((response) => {
@@ -24,8 +27,10 @@ function ShippingInfo() {
             console.log("item.quantity", item.quantity);
             const newStock = item.stock - item.quantity;
             console.log(`Updating stock for product ${item.id} to ${newStock}`);
-            axios
-              .patch(`http://localhost:3000/api/v3/products/${item.id}`, {
+            // axios
+            //   .patch(`http://localhost:3000/api/v3/products/${item.id}`, {
+            api
+              .patch(`api/v3/products/${item.id}`, {
                 stock: newStock,
               })
               .then((response) => {
@@ -46,9 +51,10 @@ function ShippingInfo() {
   const fetchOrderDetails = async () => {
     try {
       // Fetch order data
-      const orderResponse = await axios.get(
-        `http://localhost:3000/api/v3/orders/${orderId}`
-      );
+      // const orderResponse = await axios.get(
+      //   `http://localhost:3000/api/v3/orders/${orderId}`
+      // );
+      const orderResponse = await api.get(`api/v3/orders/${orderId}`);
       const order = orderResponse.data.data.order;
       setOrderData(order);
 
@@ -56,8 +62,11 @@ function ShippingInfo() {
       const itemDetailsPromises = order.orderedItems.map(
         async (orderedItem) => {
           try {
-            const productResponse = await axios.get(
-              `http://localhost:3000/api/v3/products/${orderedItem.item}`
+            // const productResponse = await axios.get(
+            //   `http://localhost:3000/api/v3/products/${orderedItem.item}`
+            // );
+            const productResponse = await api.get(
+              `api/v3/products/${orderedItem.item}`
             );
             const productDetails = productResponse.data.data.product;
             console.log("productResponse", productResponse);
@@ -85,16 +94,18 @@ function ShippingInfo() {
       setCartItems(itemDetails);
 
       // Fetch user data
-      const userResponse = await axios.get(
-        `http://localhost:3000/api/v3/users/${order.placedBy}`
-      );
+      // const userResponse = await axios.get(
+      //   `http://localhost:3000/api/v3/users/${order.placedBy}`
+      // );
+      const userResponse = await api.get(`api/v3/users/${order.placedBy}`);
       const user = userResponse.data.data.user;
       setUserData(user);
 
       // Fetch shipping data
-      const shippingResponse = await axios.get(
-        `http://localhost:3000/api/v3/shippinginfo/${user._id}`
-      );
+      // const shippingResponse = await axios.get(
+      //   `http://localhost:3000/api/v3/shippinginfo/${user._id}`
+      // );
+      const shippingResponse = await api.get(`api/v3/shippinginfo/${user._id}`);
       const shippingInfo = shippingResponse.data.data.shippingInfo[0];
       setShippingData(shippingInfo);
     } catch (error) {

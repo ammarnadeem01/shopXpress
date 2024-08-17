@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useState } from "react";
 import BasicSpeedDial from "../User/SpeedDial";
+import api from "../../axiosConfig";
 
 function Contact() {
   const messageData = {
@@ -30,8 +31,10 @@ function Contact() {
       .max(300, "Message cannot exceeds 300 characters"),
   });
   function handleFormSubmit(values, { resetForm }) {
-    axios
-      .post("http://localhost:3000/api/v3/message", values)
+    // axios
+    //   .post("http://localhost:3000/api/v3/message", values)
+    api
+      .post("api/v3/message", values)
       .then((result) => {
         console.log(result);
         resetForm();

@@ -5,6 +5,7 @@ import ViewOrders from "./ViewOrders";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import api from "../../axiosConfig";
 
 function OrderPlaced() {
   const [open, setOpen] = useState(false);
@@ -17,8 +18,10 @@ function OrderPlaced() {
 
   const handleOpen = () => {
     setOpen(!open);
-    axios
-      .get(`http://localhost:3000/api/v3/orders/user/${userId}`, {
+    // axios
+    //   .get(`http://localhost:3000/api/v3/orders/user/${userId}`, {
+    api
+      .get(`api/v3/orders/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

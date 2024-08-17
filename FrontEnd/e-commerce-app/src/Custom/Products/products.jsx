@@ -1,12 +1,11 @@
 import { Slider } from "@mui/material";
 import ProductCard from "../Home/ProductCard";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Pagination from "@mui/material/Pagination";
-import BasicSpeedDial from "../User/SpeedDial";
+// import BasicSpeedDial from "../User/SpeedDial";
 import "../../Custom/Loader.css";
 import { useSelector } from "react-redux";
-
+import api from "../../../src/axiosConfig.js";
 function Products() {
   const [currentPage, setCurrentPage] = useState(1);
   const { accessToken } = useSelector((state) => state.userReducer);
@@ -36,9 +35,12 @@ function Products() {
   ]);
   function getData() {
     setIsLoading(true);
-    axios
+
+    // axios.get(
+    //   "http://localhost:3000/api/v3/products",
+    api
       .get(
-        "http://localhost:3000/api/v3/products",
+        "api/v3/products",
         { params: filters },
         {
           headers: {

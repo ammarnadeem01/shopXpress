@@ -5,6 +5,7 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import EmailIcon from "@mui/icons-material/Email";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import api from "../../axiosConfig";
 
 const EditProfile = () => {
   const dispatch = useDispatch();
@@ -33,8 +34,10 @@ const EditProfile = () => {
     if (values.avatar) formData.append("avatar", values.avatar);
     console.log(values);
 
-    axios
-      .patch(`http://localhost:3000/api/v3/users/${userId}`, formData, {
+    // axios
+    //   .patch(`http://localhost:3000/api/v3/users/${userId}`, formData, {
+    api
+      .patch(`api/v3/users/${userId}`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data",

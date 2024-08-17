@@ -6,6 +6,7 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import api from "../../axiosConfig";
 function Payment() {
   const [orders, setOrders] = useState([]);
   const loc = useLocation();
@@ -31,9 +32,12 @@ function Payment() {
   function setOrder(e) {
     e.preventDefault();
     // console.log("userId", userId);
-    axios
+    // axios
+    //   .post(
+    //     "http://localhost:3000/api/v3/orders",
+    api
       .post(
-        "http://localhost:3000/api/v3/orders",
+        "api/v3/orders",
         {
           orderedItems: orders,
           placedBy: userId,

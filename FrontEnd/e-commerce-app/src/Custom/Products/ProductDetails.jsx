@@ -12,6 +12,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { Carousel } from "flowbite-react";
+import api from "../../../src/axiosConfig.js";
 
 const ProductDetails = () => {
   const location = useLocation();
@@ -32,8 +33,11 @@ const ProductDetails = () => {
     const productId = location.state.data._id;
     setAvgRating(location.state.data.avgRating);
 
-    axios
-      .get(`http://localhost:3000/api/v3/reviews/product/${productId}`, {
+    // axios
+    //   .get(`http://localhost:3000/api/v3/reviews/product/${productId}`, {
+
+    api
+      .get(`api/v3/reviews/product/${productId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -51,8 +55,10 @@ const ProductDetails = () => {
         }
       })
       .catch((err) => console.log(err));
-    axios
-      .get(`http://localhost:3000/api/v3/orders/user/${userId}`, {
+    // axios
+    //   .get(`http://localhost:3000/api/v3/orders/user/${userId}`, {
+    api
+      .get(`api/v3/orders/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -81,10 +87,10 @@ const ProductDetails = () => {
     console.log("patchReviewData", patchReviewData);
     console.log("reviewData", reviewData);
 
-    const reviewApi = existingReview ? axios.patch : axios.post;
-    const reviewUrl = `http://localhost:3000/api/v3/reviews${
-      existingReview ? `/${reviewId}` : ""
-    }`;
+    // const reviewApi = existingReview ? axios.patch : axios.post;
+    // const reviewUrl = `http://localhost:3000/api/v3/reviews${
+    const reviewApi = existingReview ? api.patch : api.post;
+    const reviewUrl = `api/v3/reviews${existingReview ? `/${reviewId}` : ""}`;
     const reqBody = existingReview ? patchReviewData : reviewData;
     reviewApi(reviewUrl, reqBody, {
       headers: {
