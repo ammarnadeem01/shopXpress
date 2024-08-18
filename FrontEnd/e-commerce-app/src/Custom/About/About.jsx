@@ -1,6 +1,6 @@
-// import "../../index.css"
 import aboutImg from "../../Images/GraphicImages/aboutImage.jpg";
 import BasicSpeedDial from "../User/SpeedDial";
+
 function About() {
   return (
     <div className="flex flex-wrap justify-center  items-start max-w-full pt-14">
@@ -19,7 +19,10 @@ function About() {
               />
             </div>
             <p className="w-full text-xl font-semibold text-center text-red-800">
-              Ammar Nadeem
+              Ammar Nadeem{" "}
+              {console.log(
+                import.meta.env.REACT_APP_API_BASE_URL_PROD + "api/v3/products"
+              )}
             </p>
             <p className="w-full text-center  text-blue-700">Visit Instagram</p>
             <p className="text-gray-600 text-sm  w-full text-center">

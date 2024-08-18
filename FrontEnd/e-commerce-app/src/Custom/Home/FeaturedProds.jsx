@@ -9,6 +9,9 @@ function FeaturedProds() {
   const { accessToken } = useSelector((state) => state.userReducer);
   const [datais, setdatais] = useState([]);
   useEffect(() => {
+    console.log("URL-p", import.meta.env.REACT_APP_API_BASE_URL_PROD);
+    console.log("URL-d", import.meta.env.REACT_APP_API_BASE_URL_DEV);
+
     // axios
     //   .get("http://localhost:3000/api/v3/products/highest-rated-products", {
     api
