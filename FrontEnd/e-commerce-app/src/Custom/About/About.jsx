@@ -19,11 +19,7 @@ function About() {
               />
             </div>
             <p className="w-full text-xl font-semibold text-center text-red-800">
-              {/* Ammar Nadeem */}
-              {console.log("import.meta", import.meta.env)}
-              {console.log("process", process.env)}
-              {import.meta.env.REACT_APP_API_BASE_URL_PROD}
-              {process.env.REACT_APP_API_BASE_URL_PROD}
+              Ammar Nadeem
             </p>
             <p className="w-full text-center  text-blue-700">Visit Instagram</p>
             <p className="text-gray-600 text-sm  w-full text-center">

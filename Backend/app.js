@@ -35,7 +35,7 @@ app.use(xss());
 // app.use(cors());
 app.use(
   cors({
-    origin: "*",
+    origin: "https://shop-xpress-front-end.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
