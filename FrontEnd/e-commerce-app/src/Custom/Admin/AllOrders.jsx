@@ -34,13 +34,17 @@ function AllOrders() {
         console.log(err);
         nav("/forbidden");
       });
-  }, [accessToken]);
+  }, [accessToken, orders]);
 
   const deleteOrder = (orderId) => {
     // axios
     //   .delete(`http://localhost:3000/api/v3/orders/${orderId}`)
     api
-      .delete(`api/v3/orders/${orderId}`)
+      .delete(`api/v3/orders/${orderId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((res) => {
         console.log(res);
       })

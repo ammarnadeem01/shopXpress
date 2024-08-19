@@ -93,7 +93,7 @@ function Cart() {
               alt="Camera"
               className="xs:1/5 sm:w-1/6 sm:h-24 xs:h-16 "
             />
-            <div className="flex w-10/12 flex-col justify-center items-start pt-1">
+            <div className="flex pl-1 w-10/12 flex-col justify-center items-start pt-1">
               <p className="line-clamp-1">{item.name}</p>
               <p className="text-sm text-gray-500">Price: {item.price}</p>
               <button

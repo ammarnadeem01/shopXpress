@@ -36,6 +36,11 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   ResetPasswordToken: String,
   ResetPasswordTokenExpiresIn: Date,
+  active: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
   avatar: {
     type: String,
   },
@@ -47,6 +52,11 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+});
+
+userSchema.pre("find", function (next) {
+  this.find({ active: true });
+  next();
 });
 
 userSchema.pre("save", async function (next) {

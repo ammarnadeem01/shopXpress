@@ -6,12 +6,15 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import LeftBar from "./LeftBar";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../../axiosConfig";
+import { useSelector } from "react-redux";
 
 function EditProduct() {
   const loc = useLocation();
-
+  const { accessToken } = useSelector((state) => state.userReducer);
+  const [errMsg, setErrMsg] = useState("");
+  const nav = useNavigate();
   const [productData, setProductData] = useState({
     name: loc.state?.name,
     price: loc.state?.price,
@@ -49,14 +52,17 @@ function EditProduct() {
       .put(`api/v3/products/${loc.state._id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${accessToken}`,
         },
       })
       .then((res) => {
         console.log(res);
         console.log("Product Updated.");
+        nav("/admin/products");
       })
       .catch((err) => {
-        console.log("Error Occurred.", err);
+        console.log(err);
+        setErrMsg(err.response.data.message);
       });
   }
 
@@ -149,6 +155,7 @@ function EditProduct() {
                 Choose Images
               </label>
             </div>
+            {errMsg && <p style={{ color: "red" }}>{errMsg}</p>}
             <button
               className="bg-gray-800 mt-2 cursor-pointer  hover:bg-gray-600 rounded-md text-center text-white w-full py-1.5"
               onClick={handleUpdateProduct}

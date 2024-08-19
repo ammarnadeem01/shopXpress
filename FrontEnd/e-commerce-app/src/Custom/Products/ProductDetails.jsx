@@ -10,12 +10,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { Carousel } from "flowbite-react";
 import api from "../../../src/axiosConfig.js";
+import "../../Custom/Loader.css";
 
 const ProductDetails = () => {
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
   const [reviewId, setReviewId] = useState("");
   const [allReviews, setAllReviews] = useState([]);
   const [purchased, setPurchased] = useState(false);
@@ -69,11 +70,14 @@ const ProductDetails = () => {
           order.orderedItems.some((product) => product.item === productId)
         );
         setPurchased(hasPurchased);
+        setIsLoading(false);
       })
       .catch((err) => console.log(err));
-  }, [location.state.data._id, avgRating, userId]);
+  }, [location.state.data._id, avgRating, userId, open, isLoading]);
 
   const handleReviewSubmission = () => {
+    setIsLoading(true);
+    handleClose();
     const reviewData = {
       productId: location.state.data._id,
       userId,
@@ -98,8 +102,8 @@ const ProductDetails = () => {
       },
     })
       .then((results) => {
+        setIsLoading(false);
         console.log("results", results);
-        handleClose();
         setAllReviews((prevReviews) =>
           existingReview
             ? prevReviews.map((r) =>
@@ -149,7 +153,7 @@ const ProductDetails = () => {
     <Fragment>
       <div className="flex w-max-screen justify-center items-center flex-wrap bg-gray-100 pt-10">
         <div className="flex w-4/5 rounded-md xs:max-md:flex-col shadow-lg flex-wrap">
-          <div className="w-1/2 bg-black xs:max-md:w-full xs:max-md:h-[50vh]">
+          <div className="w-1/2  xs:max-md:w-full xs:max-md:h-[50vh]">
             <Carousel>
               {location.state.data.productImages.map((image, index) => (
                 <img src={image} className="h-full w-full" />
@@ -264,20 +268,24 @@ const ProductDetails = () => {
             </Dialog>
           </div>
         </div>
-        <div className="flex justify-evenly sm:gap-1 md:gap-2 lg:gap-3 xs:space-y-2 md:space-y-10 mb-10 w-screen items-center flex-wrap mt-10">
-          <div className="w-full flex justify-center text-2xl font-semibold">
-            <p
-              className={`w-auto border-b-2 border-gray-500 pb-3 px-5 ${
-                allReviews.length === 0 ? "hidden" : "block"
-              }`}
-            >
-              REVIEWS
-            </p>
+        {isLoading && <div className=".loader"></div>}
+        {!isLoading && (
+          <div className="flex justify-evenly sm:gap-1 md:gap-2 lg:gap-3 xs:space-y-2 md:space-y-10 mb-10 w-screen items-center flex-wrap mt-10">
+            <div className="w-full flex justify-center text-2xl font-semibold">
+              <p
+                className={`w-auto border-b-2 border-gray-500 pb-3 px-5 ${
+                  allReviews.length === 0 ? "hidden" : "block"
+                }`}
+              >
+                REVIEWS
+              </p>
+            </div>
+
+            {allReviews.map((review) => (
+              <ReviewCard key={review._id} data={review} />
+            ))}
           </div>
-          {allReviews.map((review) => (
-            <ReviewCard key={review._id} data={review} />
-          ))}
-        </div>
+        )}
       </div>
       <style>{`
         .carousel-image {

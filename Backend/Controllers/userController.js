@@ -112,10 +112,13 @@ exports.deleteSpecificUser = asyncErrorHandler(async (req, res, next) => {
   if (!req.params?.id) {
     return next(new CustomError("User ID is required.", 400));
   }
-  const deletedUser = await User.findByIdAndDelete(req.params.id);
-  if (!deletedUser) {
-    return next(new CustomError("No user with given ID found.", 404));
-  }
+  const deletedUser = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      active: false,
+    },
+    { new: true }
+  );
   res.status(202).json({
     status: "Success",
     data: null,
@@ -206,7 +209,7 @@ exports.protect = asyncErrorHandler(async (req, res, next) => {
   }
   // Allow user access to protected route
   req.user = user;
-  console.log(req.user);
+  // console.log(req.user);
   next();
 });
 
@@ -243,11 +246,12 @@ exports.forgotPassword = asyncErrorHandler(async (req, res, next) => {
   await user.save({ validateBeforeSave: false }); // to save the 2 fields in the dbs which we created for token generator function, in function, we only set their values
 
   //  3. Send token to given email
+  console.log("req", req);
   const resetUrl = `${req.protocol}://${req.get(
     "host"
-  )}/api/v3/users/resetpassword/${token}`;
+  )}/resetpassword/${token}`;
+  console.log(resetUrl);
   const message = `We have  recieved a Password Reset Request. Please click on the link below to reset password.\n\n${resetUrl}`;
-  console.log("resetUrl", resetUrl);
   try {
     console.log(1);
     await sendMail({

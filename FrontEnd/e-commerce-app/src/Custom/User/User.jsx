@@ -12,6 +12,7 @@ const User = () => {
   const [loginForm, setLoginForm] = useState(true);
   const [registerForm, setRegisterForm] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [redErrorMessage, setRegErrorMessage] = useState("");
   const nav = useNavigate();
   // =================================== Password Show n Hide =============================================
   const [show, setShow] = useState(false);
@@ -39,8 +40,12 @@ const User = () => {
           state: { data: res.data.data.newUser },
         });
       })
-      .catch((err) => {
-        console.log("Error Ocurred.", err);
+      .catch((error) => {
+        if (error.response && error.response.data.message) {
+          setRegErrorMessage(error.response.data.message);
+        } else {
+          setRegErrorMessage("An error occurred. Please try again.");
+        }
       });
   }
   // function handleFileChange(){
@@ -101,7 +106,7 @@ const User = () => {
   }
 
   return (
-    <div className="flex bg-gray-50 flex-wrap justify-center items-center max-w-full h-auto py-10">
+    <div className="flex bg-gray-50 flex-wrap justify-center items-center max-w-full min-h-fit py-20">
       {/*login/ register button */}
       <div className="flex flex-wrap bg-white shadow-lg shadow-slate-500 rounded-md justify-evenly xs:w-full sm:w-5/6 800:w-7/12 lg:w-1/2 xl:w-5/12 items-center">
         <NavLink
@@ -247,6 +252,11 @@ const User = () => {
                 Choose Avatar
               </label>
             </div>
+            {redErrorMessage && (
+              <p className="w-full text-center" style={{ color: "red" }}>
+                {redErrorMessage}
+              </p>
+            )}
             <button
               type="submit"
               onClick={handleRegSubmit}

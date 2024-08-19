@@ -16,6 +16,7 @@ function UserList() {
   const [isLoading, setIsLoading] = useState(true);
 
   const { accessToken } = useSelector((state) => state.userReducer);
+  // console.log(accessToken);
   useEffect(() => {
     // axios
     //   .get("http://localhost:3000/api/v3/users", {
@@ -31,11 +32,13 @@ function UserList() {
         setIsLoading(false);
       })
       .catch((err) => {
-        nav("/forbidden");
+        console.log(err);
+        // nav("/forbidden");
       });
   }, [users]);
 
   const deleteUser = (userid) => {
+    console.log("userId", userid);
     // axios
     //   .delete(`http://localhost:3000/api/v3/users/${userid}`, {
     api
@@ -45,7 +48,8 @@ function UserList() {
         },
       })
       .then((res) => console.log(res))
-      .catch((err) => nav("/forbidden"));
+      // .catch((err) => nav("/forbidden"));
+      .catch((err) => console.log(err));
   };
 
   return (

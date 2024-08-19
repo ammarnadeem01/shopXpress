@@ -107,7 +107,11 @@ function ConfirmOrder() {
                 key={item._id}
                 className="flex justify-start items-center w-full h-auto text-sm mb-1"
               >
-                <img src={M1} alt="" className="w-2/12 h-20" />
+                <img
+                  src={item.productImages[0]}
+                  alt=""
+                  className="w-2/12 h-20"
+                />
                 <div className="flex justify-between w-full h-full items-center translate-y-2">
                   <p className="w-9/12 text-gray-500">{item.name}</p>
                   <p className="w-3/12 text-gray-900">

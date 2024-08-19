@@ -14,6 +14,8 @@ import api from "../../axiosConfig";
 
 function ShippingDetails() {
   const dispatch = useDispatch();
+  const [errMsg, setErrMsg] = useState("");
+
   const { userId } = useSelector((state) => {
     console.log(state.userReducer);
     return state.userReducer;
@@ -63,7 +65,7 @@ function ShippingDetails() {
         nav("/checkout/confirm");
       })
       .catch((err) => {
-        console.log(err);
+        setErrMsg(err.response.data.message);
       });
   }
 
@@ -90,7 +92,6 @@ function ShippingDetails() {
                 onChange={handleShippingFormChange}
               />
             </div>
-
             <div className="relative w-11/12 sm:w-5/6">
               <LocationOnIcon className="absolute translate-y-1 ml-3" />
               <input
@@ -102,7 +103,6 @@ function ShippingDetails() {
                 onChange={handleShippingFormChange}
               />
             </div>
-
             <div className="relative w-11/12 sm:w-5/6">
               <PhoneEnabledIcon className="absolute translate-y-1 ml-3" />
               <input
@@ -114,7 +114,6 @@ function ShippingDetails() {
                 onChange={handleShippingFormChange}
               />
             </div>
-
             <div className="relative w-11/12 sm:w-5/6">
               <PublicIcon className="absolute translate-y-1 ml-3" />
               <select
@@ -133,7 +132,6 @@ function ShippingDetails() {
                 ))}
               </select>
             </div>
-
             <div className="relative w-11/12 sm:w-5/6">
               <LocationCityIcon className="absolute translate-y-1 ml-3" />
               <select
@@ -154,7 +152,6 @@ function ShippingDetails() {
                 )}
               </select>
             </div>
-
             <div className="relative w-11/12 sm:w-5/6">
               <ApartmentIcon className="absolute translate-y-1 ml-3" />
               <select
@@ -175,8 +172,8 @@ function ShippingDetails() {
                   </option>
                 ))}
               </select>
-            </div>
-
+            </div>{" "}
+            {errMsg && <p style={{ color: "red" }}>{errMsg}</p>}
             <button
               type="submit"
               className="text-center w-5/6 text-sm my-3 text-white bg-orange-600 hover:bg-orange-500 py-2 px-5"

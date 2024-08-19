@@ -2,6 +2,7 @@ import { Rating } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import api from "../../axiosConfig";
+import unknown from "../../Images/GraphicImages/unknown.jpeg";
 
 function ReviewCard({ data }) {
   const [name, setName] = useState("User Name");
@@ -10,9 +11,13 @@ function ReviewCard({ data }) {
     // axios
     //   .get(`http://localhost:3000/api/v3/users/${data.reviewedBy}`)
     api.get(`api/v3/users/${data.reviewedBy}`).then((results) => {
-      setName(results.data.data.user.name);
-      console.log("results.data.data.user : ", results.data.data.user);
-      setAvatar(results.data.data.user.avatar);
+      if (results.data.data.user.active === true) {
+        setName(results.data.data.user.name);
+        setAvatar(results.data.data.user.avatar);
+      } else {
+        setName("[Deleted User]");
+        setAvatar(unknown);
+      }
     });
   }, [name]);
 

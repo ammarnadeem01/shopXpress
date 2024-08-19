@@ -22,7 +22,7 @@ function LeftBar({ data }) {
 
   return (
     <div
-      className={`flex flex-col justify-start items-start pl-5 border-r-2 border-gray-300 pb-5 bg-white xs:max-lg:w-2/5 w-1/5   gap-5
+      className={`z-10 flex flex-col justify-start items-start pl-5 border-r-2 border-gray-300 pb-5 bg-white xs:max-lg:w-2/5 w-1/5   gap-5
         ${
           data === true
             ? "xs:max-1150:flex xs:max-1150:absolute min-h-screen"

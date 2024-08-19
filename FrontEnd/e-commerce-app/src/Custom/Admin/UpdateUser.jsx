@@ -6,9 +6,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import api from "../../axiosConfig";
+import { useSelector } from "react-redux";
 function UpdateUser() {
   const nav = useNavigate();
   const loc = useLocation();
+  const { errMsg, setErrMsg } = useState("");
+  const { accessToken } = useSelector((state) => state.userReducer);
   function editUser() {
     console.log("userData", userData);
     // axios
@@ -18,6 +21,7 @@ function UpdateUser() {
       .patch(`api/v3/users/edituser/${userData.id}`, userData, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
         },
       })
       .then((res) => {
@@ -25,9 +29,10 @@ function UpdateUser() {
         console.log("userData", userData);
         nav("/admin/userlist");
       })
-      .catch((err) =>
-        console.error("Error:", err.response ? err.response.data : err.message)
-      );
+      .catch((err) => {
+        console.error("Error:", err.response ? err.response.data : err.message);
+        setErrMsg(err.response.data.message);
+      });
   }
   const [userData, setUserData] = useState({
     id: loc.state.id,
@@ -83,6 +88,7 @@ function UpdateUser() {
                 <option value="User">User</option>
               </select>
             </div>
+            {errMsg && <p style={{ color: "red" }}>{errMsg}</p>}
             <button
               onClick={editUser}
               className="bg-gray-800 hover:bg-gray-600 rounded-md text-center text-white w-full py-1.5"

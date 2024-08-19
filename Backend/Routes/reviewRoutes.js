@@ -25,8 +25,8 @@ router
     reviewControllers.deleteSpecificReviews
   )
   .patch(
-    userControllers.protect,
-    userControllers.restrict("Admin"),
+    // userControllers.protect,
+    // userControllers.restrict("Admin"),
     reviewControllers.editReview
   );
 

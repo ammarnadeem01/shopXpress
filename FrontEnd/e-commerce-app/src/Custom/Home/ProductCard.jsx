@@ -26,7 +26,7 @@ function ProductCard({ data }) {
 
   return (
     <div
-      className="cursor-pointer md:h-[175px]  lg:h-[450px] bg-white xs:h-[100px] sm:h-[150px] lg:w-1/5 w-11/12  flex flex-row flex-wrap rounded-md shadow-lg hover:-translate-y-3"
+      className="cursor-pointer md:h-[175px]  lg:h-[450px] bg-white xs:h-[100px] sm:h-[150px] lg:w-1/4 xl:w-1/5 w-11/12  flex flex-row flex-wrap rounded-md shadow-lg hover:-translate-y-3"
       onClick={() => nav("/detail", { state: { data: data } })}
     >
       <div className="max-w-full xs:flex xs:flex-row lg:block">
@@ -39,7 +39,7 @@ function ProductCard({ data }) {
           <p className="w-full font-semibold px-0.5 xs:text-sm sm:text-base">
             {data.name}
           </p>
-          <p className="w-full xs:text-xs md:text-base xs:line-clamp-1 overflow-hidden md:line-clamp-2 text-gray-600 text-sm px-0.5">
+          <p className="w-full xs:text-xs md:text-base line-clamp-3  overflow-hidden  text-gray-600 text-sm px-0.5">
             {data.description}
           </p>
           <p className="w-full flex justify-start items-center ">

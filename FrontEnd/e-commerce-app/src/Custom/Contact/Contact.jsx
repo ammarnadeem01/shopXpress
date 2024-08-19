@@ -66,6 +66,10 @@ function Contact() {
                   Leave A Message
                 </p>
                 <div className="relative">
+                  <label htmlFor="" className="text-xl font-semibold">
+                    Name :
+                  </label>
+                  <br />
                   <Field
                     type="text"
                     name="name"

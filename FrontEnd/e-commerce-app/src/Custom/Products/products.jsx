@@ -12,7 +12,7 @@ function Products() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
   const [ratingsValue, setRatingsValue] = useState([0.5, 5]);
-  const [priceValue, setPriceValue] = useState([0, 2500]);
+  const [priceValue, setPriceValue] = useState([0, Infinity]);
   const [prodLength, setProdLength] = useState(0);
   const [filters, setFilters] = useState({
     category: "",
@@ -58,6 +58,21 @@ function Products() {
     getData();
   }, [filters, currentPage]);
 
+  function clearFilters() {
+    setPriceValue([0, Infinity]);
+    setCurrentPage(1);
+    setCategory("");
+    setRatingsValue([0.5, 5]);
+
+    setFilters((prevFilters) => ({
+      category: "",
+      keyword: "",
+      price: { gte: 0, lte: Infinity },
+      avgRating: { gte: 0.5, lte: 5 },
+      page: 1,
+      limit: 8,
+    }));
+  }
   function handleRatingsChange(e, newValue) {
     setRatingsValue(newValue);
     setFilters((prevFilters) => ({
@@ -104,15 +119,21 @@ function Products() {
         >
           Products
         </p>
-        <div className="flex md:flex-row xs:flex-col justify-center h-auto xs:items-center lg:items-start">
+        <div className="flex md:flex-row xs:flex-col justify-center min-w-full h-auto xs:items-center lg:items-start">
           {/* Left */}
-          <div className="lg:flex flex-col  justify-start items-start  xs:w-2/3 450:w-1/2 md:w-1/5 pt-3 px-2 h-auto mt-20">
-            <button className="hover:bg-orange-500 transition-colors duration-300 hover:text-white border-2  border-orange-500 cursor-pointer px-3 py-2">
+          <div className="lg:flex flex-col xs:max-md:-mt-4 md:sticky top-16 left-2 justify-start items-start  xs:w-2/3 450:w-1/2 md:w-1/5 pt-3 px-2 h-auto mt-20">
+            <button
+              onClick={() => {
+                clearFilters();
+              }}
+              className="hover:bg-orange-500 transition-colors duration-300 hover:text-white border-2  border-orange-500 cursor-pointer px-3 py-2"
+            >
               Clear Filters
             </button>
             <div className="px-3 w-full text-lg font-semibold">
               <p>Price</p>
               <Slider
+                className="max-w-[200px]"
                 value={priceValue}
                 onChange={handlePriceChange}
                 color="warning"
@@ -145,6 +166,7 @@ function Products() {
             <div className="px-3 text-lg font-semibold w-full">
               <p>Ratings Above</p>
               <Slider
+                className="max-w-[200px]"
                 value={ratingsValue}
                 onChange={handleRatingsChange}
                 valueLabelDisplay="auto"
