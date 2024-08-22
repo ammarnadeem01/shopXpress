@@ -65,7 +65,11 @@ function ShippingDetails() {
         nav("/checkout/confirm");
       })
       .catch((err) => {
-        setErrMsg(err.response.data.message);
+        if (err.response.data.status !== 500) {
+          setErrMsg(err.response.data.message);
+        } else {
+          setErrMsg("Please Login Again..");
+        }
       });
   }
 
@@ -79,7 +83,7 @@ function ShippingDetails() {
           </p>
           <form
             action=""
-            className="flex flex-col xs:max-sm:w-11/12 flex-wrap justify-evenly items-center gap-2 "
+            className="flex flex-col xs:max-sm:w-11/12 flex-wrap max-w-[350px] justify-evenly items-center gap-2 "
           >
             <div className="relative w-11/12 sm:w-5/6">
               <HomeIcon className="absolute translate-y-1 ml-3" />

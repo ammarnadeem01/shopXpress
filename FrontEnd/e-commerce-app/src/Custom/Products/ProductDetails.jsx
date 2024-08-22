@@ -16,6 +16,7 @@ import "../../Custom/Loader.css";
 
 const ProductDetails = () => {
   const location = useLocation();
+  const [errMsg, setErrMsg] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [reviewId, setReviewId] = useState("");
   const [allReviews, setAllReviews] = useState([]);
@@ -72,7 +73,10 @@ const ProductDetails = () => {
         setPurchased(hasPurchased);
         setIsLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setErrMsg("Please Login Again...");
+      });
   }, [location.state.data._id, avgRating, userId, open, isLoading]);
 
   const handleReviewSubmission = () => {

@@ -27,7 +27,7 @@ function OrderPlaced() {
         },
       })
       .then((res) => {
-        console.log(res.data.data.order);
+        console.log("res.data.data.order", res.data.data.order);
         setOrderData(res.data.data.order);
       })
       .catch((err) => {
@@ -40,7 +40,9 @@ function OrderPlaced() {
       <p className="text-orange-500 text-9xl">
         <CheckCircleIcon fontSize="inherit" />
       </p>
-      <p className="text-4xl">Your Order Has Been Placed Successfully</p>
+      <p className="text-4xl text-center">
+        Your Order Has Been Placed Successfully
+      </p>
       <button
         onClick={handleOpen}
         className="px-6 py-2 mt-4 bg-gray-500 hover:bg-gray-400 text-white text-center cursor-pointer"
@@ -68,7 +70,7 @@ function OrderPlaced() {
             alignItems: "center",
           }}
         >
-          <ViewOrders data={orderData} />
+          <ViewOrders />
         </Box>
       </Modal>
     </div>

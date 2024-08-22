@@ -28,4 +28,7 @@ export const reducers = createReducer(initialState, {
   SET_TOTAL: (state, action) => {
     state.grossTotal = action.payload;
   },
+  CART_RESTORE: () => {
+    return initialState;
+  },
 });

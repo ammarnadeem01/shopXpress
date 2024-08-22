@@ -155,11 +155,27 @@ exports.editUser = asyncErrorHandler(async (req, res, next) => {
 
 // edit profile (by user)
 exports.editProfile = asyncErrorHandler(async (req, res, next) => {
-  const updatedUser = await User.findByIdAndUpdate(
-    req.params.id,
-    req.body.newData,
-    { new: true, runValidators: true }
-  );
+  if (!req.body?.name || !req.body?.email) {
+    return next(new CustomError("Name and Email are required.", 400));
+  }
+  const { name, email } = req.body;
+  const newData = {
+    name,
+    email,
+  };
+  console.log("req.file", req.file);
+  if (req.file?.path) {
+    const avatarLocalPath = req.file.path;
+    const avatarui = await uploadOnCloudinary(avatarLocalPath);
+    if (!avatarui) {
+      return next(new CustomError("Failed to upload avatar", 400));
+    }
+    newData.avatar = avatarui.url;
+  }
+  const updatedUser = await User.findByIdAndUpdate(req.params.id, newData, {
+    new: true,
+    runValidators: true,
+  });
   if (!updatedUser) {
     return next(
       new CustomError(

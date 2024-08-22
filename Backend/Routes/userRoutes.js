@@ -36,5 +36,9 @@ router
     userControllers.restrict("Admin"),
     userControllers.deleteSpecificUser
   )
-  .patch(userControllers.editProfile);
+  .patch(
+    userControllers.protect,
+    upload.single("avatar"),
+    userControllers.editProfile
+  );
 module.exports = router;

@@ -20,7 +20,7 @@ function Home() {
         hover:transition ease-in-out 
         transition-colors duration-1000   
         px-7 py-2
-        text-black hover:text-white"
+        text-black font-semibold opacity-70"
               href="#container"
             >
               Scroll &nbsp;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import Badge from "@mui/material/Badge";
@@ -10,6 +10,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useSelector } from "react-redux";
 
 function Navbar() {
+  const { cartItems } = useSelector((state) => {
+    return state.cartReducer;
+  });
+  useEffect(() => {
+    console.log("upon re-rendering cartitems ", cartItems);
+  }, [cartItems]);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -24,10 +30,6 @@ function Navbar() {
       padding: "0 4px",
     },
   }));
-
-  const { cartItems } = useSelector((state) => {
-    return state.cartReducer;
-  });
 
   return (
     <nav className="sticky top-0 bg-black max-w-full min-w-full text-white h-16 flex justify-between items-center z-20 p-4">

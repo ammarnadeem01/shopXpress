@@ -8,6 +8,7 @@ const initialState = {
   userEmail: "",
   accessToken: "",
   tokenExpiry: "",
+  userRole: "User",
 };
 
 export const reducers = createReducer(initialState, {
@@ -18,15 +19,21 @@ export const reducers = createReducer(initialState, {
     state.userName = action.payload;
   },
   SET_USER_ADDRESS: (state, action) => {
-    state.userName = action.payload;
+    state.userAddress = action.payload;
   },
   SET_USER_PHONE: (state, action) => {
-    state.userName = action.payload;
+    state.userPhone = action.payload;
   },
   SET_ACCESS_TOKEN: (state, action) => {
     state.accessToken = action.payload;
   },
   SET_ACCESS_TOKEN_EXPIRY: (state, action) => {
     state.tokenExpiry = action.payload;
+  },
+  SET_USER_ROLE: (state, action) => {
+    state.userRole = action.payload;
+  },
+  LOGOUT: () => {
+    return initialState;
   },
 });

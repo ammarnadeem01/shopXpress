@@ -27,6 +27,10 @@ function MyProfile() {
       type: "SET_ACCESS_TOKEN",
       payload: location.state.data.token,
     });
+    dispatch({
+      type: "SET_USER_ROLE",
+      payload: location.state.data.role,
+    });
     if (userId) {
       console.log("UserId", userId);
       // axios

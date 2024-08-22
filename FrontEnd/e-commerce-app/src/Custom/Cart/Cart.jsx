@@ -22,18 +22,21 @@ function Cart() {
   const { accessToken } = useSelector((state) => state.userReducer);
 
   useEffect(() => {
-    const fetchPromises = cartItems.map(async (cartItem) => {
-      // const results = await axios.get(
-      //   `http://localhost:3000/api/v3/products/${cartItem.productId}`,
-      const results = await api.get(`api/v3/products/${cartItem.productId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const item = results.data.data.product;
-      item.quantity = cartItem.quantity;
-      return item;
-    });
+    const fetchPromises = cartItems.map(
+      async (cartItem) => {
+        // const results = await axios.get(
+        //   `http://localhost:3000/api/v3/products/${cartItem.productId}`,
+        const results = await api.get(`api/v3/products/${cartItem.productId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        const item = results.data.data.product;
+        item.quantity = cartItem.quantity;
+        return item;
+      },
+      [cartItems]
+    );
 
     Promise.all(fetchPromises)
       .then((fetchedItems) => {
