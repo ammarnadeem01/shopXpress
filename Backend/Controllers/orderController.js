@@ -112,7 +112,7 @@ exports.specificUserOrder = asyncErrorHandler(async (req, res, next) => {
   if (!order) {
     return next(new CustomError("Order with given user ID not found.", 404));
   }
-  console.log(order);
+  // console.log(order);
   res.status(200).json({
     status: "Success",
     data: {

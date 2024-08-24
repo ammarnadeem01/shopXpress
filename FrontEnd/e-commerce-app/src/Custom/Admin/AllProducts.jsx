@@ -28,7 +28,7 @@ function AllProducts() {
       })
       .then((results) => {
         console.log("results", results);
-        setItems(results.data.data.product);
+        setItems(results.data.data.products);
         setIsLoading(false);
       })
       .catch((err) => {

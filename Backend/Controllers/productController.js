@@ -14,7 +14,7 @@ exports.getHighestRated = (req, res, next) => {
 // Get All Products - For Admin - Without Filters
 exports.getAllProducts_AdminOnly = asyncErrorHandler(async (req, res, next) => {
   const products = await Product.find();
-  console.log("admin products endpoint hit");
+  // console.log("admin products endpoint hit");
   res.status(200).json({
     status: "Success",
     data: {

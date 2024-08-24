@@ -5,8 +5,8 @@ const os = require("os");
 
 // Define the upload directory
 const uploadDirectory = path.join(__dirname, "..", "Public/temp");
-console.log(`Upload Directory: ${uploadDirectory}`);
-console.log(`File Permissions: ${fs.statSync(uploadDirectory).mode}`);
+// console.log(`Upload Directory: ${uploadDirectory}`);
+// console.log(`File Permissions: ${fs.statSync(uploadDirectory).mode}`);
 if (!fs.existsSync(uploadDirectory)) {
   fs.mkdirSync(uploadDirectory, { recursive: true });
 }

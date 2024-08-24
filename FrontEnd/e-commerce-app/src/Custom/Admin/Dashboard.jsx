@@ -61,7 +61,7 @@ function Dashboard() {
     // axios
     //   .get("http://localhost:3000/api/v3/products", {
     api
-      .get("api/v3/products/admin", {
+      .get("api/v3/products/", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -71,8 +71,9 @@ function Dashboard() {
         setOutOfStockProducts(response.data.outOfStockProductsLength);
         setIsLoading(false);
       })
-      .catch(() => {
-        nav("/forbidden");
+      .catch((err) => {
+        // nav("/forbidden");
+        console.log(err);
       });
     // axios
     //   .get("http://localhost:3000/api/v3/orders", {

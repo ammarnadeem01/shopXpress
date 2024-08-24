@@ -23,36 +23,43 @@ const reviewSchema = new mongoose.Schema({
 
 reviewSchema.post("save", async function (doc, next) {
   const productId = doc.reviewedProduct;
-  console.log("after save : ", productId);
-  await updateProductRating(productId);
+  // console.log("after save : ", productId);
+  await updateProductRating(productId, this.constructor);
   next();
 });
 
-reviewSchema.post("remove", async function (doc, next) {
+reviewSchema.post("findOneAndRemove", async function (doc, next) {
   const productId = doc.reviewedProduct;
-  console.log("after deletion : ", productId);
-  await updateProductRating(productId);
+  // console.log("after deletion : ", productId);
+  await updateProductRating(productId, this.model);
   next();
 });
 
-reviewSchema.pre("findByIdAndUpdate", async function (next) {
-  const update = this.getUpdate();
-  console.log("update", update);
-  if (update.ratings) {
-    const productId = this._conditions.reviewedProduct;
-    await updateProductRating(productId);
+reviewSchema.post("findOneAndUpdate", async function (doc, next) {
+  const productId = doc.reviewedProduct;
+
+  await updateProductRating(productId, this.model);
+
+  next();
+});
+
+async function updateProductRating(productId, reviewModel) {
+  console.log("this in updateProductRating", reviewModel);
+  try {
+    reviews = await reviewModel.find({ reviewedProduct: productId });
+  } catch (error) {
+    console.log("Error fetching reviews:", error);
+    // throw new Error("Failed to fetch reviews");
   }
-  next();
-});
-
-async function updateProductRating(productId) {
-  const reviews = await this.model.find({ reviewedProduct: productId });
+  // console.log("reviews", reviews);
   const avgRating =
     reviews.length > 0
       ? reviews.reduce((acc, review) => acc + review.ratings, 0) /
         reviews.length
       : 0;
+  // console.log("avgRating", avgRating);
 
   await Product.findByIdAndUpdate(productId, { avgRating });
 }
+
 module.exports = mongoose.model("Review", reviewSchema);
