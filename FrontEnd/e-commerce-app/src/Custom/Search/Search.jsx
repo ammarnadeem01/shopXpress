@@ -118,14 +118,14 @@ function Search() {
     <Fragment>
       {/* Search  */}
       <div className="flex justify-center flex-wrap w-max-screen bg-gray-100">
-        {/* <div className="text-end w-full absolute pt-16">
-          <BasicSpeedDial />
-        </div> */}
         <div className="flex w-11/12 h-auto flex-wrap justify-center my-10 items-center space-y-5 rounded-lg shadow-xl bg-white py-10">
+          <div className="text-end w-full absolute pt-32">
+            <BasicSpeedDial />
+          </div>
           <p className="xs:max-md:text-4xl w-full text-center text-5xl font-semibold">
             Search
           </p>
-          <div className="w-full flex  flex-col sm:flex-row  xs:max-md:gap-2 flex-wrap  justify-center items-center ">
+          <div className="w-full flex z-40  flex-col sm:flex-row  xs:max-md:gap-2 flex-wrap  justify-center items-center ">
             <input
               type="search"
               name=""
@@ -229,9 +229,15 @@ function Search() {
               id="container"
               className="flex flex-row flex-wrap justify-evenly items-baseline  xs:w-full md:w-4/5 h-auto gap-3 py-10 space-y-5"
             >
-              {data.map((product) => {
-                return <ProductCard key={product.id} data={product} />;
-              })}
+              {data.length !== 0 &&
+                data.map((product) => {
+                  return <ProductCard key={product.id} data={product} />;
+                })}
+              {data.length === 0 && (
+                <div className="flex w-[40vw] font-semibold text-3xl">
+                  NO PRODUCTS FOUND
+                </div>
+              )}
             </div>
           )}
         </div>

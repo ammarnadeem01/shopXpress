@@ -11,6 +11,17 @@ exports.getHighestRated = (req, res, next) => {
   next();
 };
 
+// Get All Products - For Admin - Without Filters
+exports.getAllProducts_AdminOnly = asyncErrorHandler(async (req, res, next) => {
+  const products = await Product.find();
+  console.log("admin products endpoint hit");
+  res.status(200).json({
+    status: "Success",
+    data: {
+      products,
+    },
+  });
+});
 // GetAllProducts
 exports.getAllProducts = asyncErrorHandler(async (req, res, next) => {
   const outOfStockProducts = await Product.aggregate([
@@ -22,7 +33,6 @@ exports.getAllProducts = asyncErrorHandler(async (req, res, next) => {
   ]);
 
   const prodlength = await Product.countDocuments();
-  console.log("prodlength,", prodlength);
 
   let features = new ApiFeatures(Product.find(), req.query)
     .search()

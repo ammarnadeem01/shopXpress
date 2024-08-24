@@ -32,7 +32,7 @@ function Navbar() {
   }));
 
   return (
-    <nav className="sticky top-0 bg-black max-w-full min-w-full text-white h-16 flex justify-between items-center z-20 p-4">
+    <nav className="sticky top-0 bg-black max-w-full min-w-full text-white h-16 flex justify-between items-center z-50 p-4">
       <div className="logo text-3xl ml-0 lg:ml-5">
         <span className="text-4xl">S</span>HOP
         <span className="text-4xl italic">X</span>PRES

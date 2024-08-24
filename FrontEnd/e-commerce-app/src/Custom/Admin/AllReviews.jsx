@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Hamburger from "hamburger-react";
 import { useSelector } from "react-redux";
 import api from "../../axiosConfig";
+import BasicSpeedDial from "../User/SpeedDial";
 
 function AllReviews() {
   const [productId, setProductId] = useState("");
@@ -95,7 +96,7 @@ function AllReviews() {
       {!isLoading && (
         <div className="flex w-full min-h-screen bg-gray-100">
           {/* Hamburger for Mobile */}
-          <div className="absolute 1150:hidden z-10 p-4">
+          <div className="absolute 1150:hidden z-40 p-4">
             <Hamburger
               direction="right"
               duration={0.8}
@@ -109,13 +110,16 @@ function AllReviews() {
           <LeftBar data={isOpen} />
 
           {/* Right Bar */}
-          <div className="w-4/5 xs:max-1150:w-full p-6">
+          {/* <div className="text-end w-full absolute pt-16">
+            <BasicSpeedDial />
+          </div> */}
+          <div className="w-4/5 z-20 xs:max-1150:w-full p-6">
             <div className="text-2xl font-bold text-gray-800 mb-6 text-center">
               All Reviews
             </div>
 
             {/* Search Input */}
-            <div className="flex flex-col justify-center items-center gap-3 w-full h-auto py-5 text-gray-700 font-semibold">
+            <div className="flex flex-col justify-center items-center gap-3 w-full z-10 h-auto py-5 text-gray-700 font-semibold">
               <div className="relative">
                 <StarIcon className="absolute translate-y-2.5 translate-x-1 text-gray-500" />
                 <input

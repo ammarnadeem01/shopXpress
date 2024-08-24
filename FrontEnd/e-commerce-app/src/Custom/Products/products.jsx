@@ -2,7 +2,7 @@ import { Slider } from "@mui/material";
 import ProductCard from "../Home/ProductCard";
 import { useEffect, useState } from "react";
 import Pagination from "@mui/material/Pagination";
-// import BasicSpeedDial from "../User/SpeedDial";
+import BasicSpeedDial from "../User/SpeedDial";
 import "../../Custom/Loader.css";
 import { useSelector } from "react-redux";
 import api from "../../../src/axiosConfig.js";
@@ -108,9 +108,9 @@ function Products() {
 
   return (
     <div className="flex flex-wrap justify-center  items-start max-w-full pt-14">
-      {/* <div className="w-full text-right absolute ">
+      <div className="w-full text-right absolute ">
         <BasicSpeedDial />
-      </div> */}
+      </div>
       <div className="max-w-full w-screen box-border">
         <p
           className="text-3xl font-semibold text-center mb-5

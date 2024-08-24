@@ -26,9 +26,15 @@ exports.getAllUsers = asyncErrorHandler(async (req, res, next) => {
 
 // signup
 exports.createNewUser = asyncErrorHandler(async (req, res, next) => {
-  const { name, email, password } = req.body;
-  if (!name || !email || !password) {
-    return next(new CustomError("Name, Email And Password are required.", 400));
+  console.log(req.body);
+  const { name, email, password, confirmPassword } = req.body;
+  if (!name || !email || !password || !confirmPassword) {
+    return next(
+      new CustomError(
+        "Name, Email,Password and Confirm Password are required.",
+        400
+      )
+    );
   }
 
   if (!req.file?.path) {
@@ -44,6 +50,7 @@ exports.createNewUser = asyncErrorHandler(async (req, res, next) => {
     name,
     password,
     email,
+    confirmPassword,
     avatar: avatarui.url,
   });
   if (!newUser) {
@@ -196,7 +203,6 @@ exports.editProfile = asyncErrorHandler(async (req, res, next) => {
 // is login?
 exports.protect = asyncErrorHandler(async (req, res, next) => {
   // Read the token if it exists or not
-  console.log(1);
   const testToken = req.headers.authorization;
   let token;
   if (testToken?.startsWith("Bearer")) {
@@ -347,23 +353,24 @@ exports.resetPassword = asyncErrorHandler(async (req, res, next) => {
 // update passwd (with old passwd)
 exports.updatePassword = asyncErrorHandler(async (req, res, next) => {
   // get current user data
-  console.log(req.user);
   const user = await User.findById(req.user._id).select("+password");
   // check if user exist?
   if (!user) {
-    next(new CustomError("Email is incorrect..", 400));
+    return next(new CustomError("Email is incorrect..", 400));
   }
-  // check if passwords match
+  //  check if passwords match
   const isMatch = await user.comparePasswords(
     req.body.currentPassword,
     user.password
   );
   if (!isMatch) {
-    next(new CustomError("The current password you provided is wrong", 401));
+    return next(
+      new CustomError("The current password you provided is wrong", 401)
+    );
   }
-
   // update passwd
   user.password = req.body.newPassword;
+  user.confirmPassword = req.body.confirmPassword;
   await user.save();
 
   // login

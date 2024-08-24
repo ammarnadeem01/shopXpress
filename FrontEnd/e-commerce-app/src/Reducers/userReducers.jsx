@@ -9,6 +9,7 @@ const initialState = {
   accessToken: "",
   tokenExpiry: "",
   userRole: "User",
+  isLogin: false,
 };
 
 export const reducers = createReducer(initialState, {
@@ -32,6 +33,9 @@ export const reducers = createReducer(initialState, {
   },
   SET_USER_ROLE: (state, action) => {
     state.userRole = action.payload;
+  },
+  SET_IS_LOGIN: (state, action) => {
+    state.isLogin = action.payload;
   },
   LOGOUT: () => {
     return initialState;

@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 const upload = require("../Middlewares/multer.middleware");
 const userControllers = require("../Controllers/userController");
-
+router
+  .route("/updatePassword")
+  .patch(userControllers.protect, userControllers.updatePassword);
 router
   .route("/")
   .get(
@@ -14,9 +16,9 @@ router
 router.route("/forgotpassword").post(userControllers.forgotPassword);
 router.route("/resetpassword/:token").post(userControllers.resetPassword);
 router.route("/login").post(userControllers.login);
-router
-  .route("/updatePassword")
-  .patch(userControllers.protect, userControllers.updatePassword);
+
+// .patch(userControllers.updatePassword);
+
 router
   .route("/editUser/:id")
   .patch(

@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import api from "../../axiosConfig";
+import "../../Custom/Loader.css";
 
 function ViewOrders() {
   const { userId, accessToken } = useSelector((state) => state.userReducer);
@@ -39,7 +40,9 @@ function ViewOrders() {
   return (
     <Fragment>
       {isLoading && (
-        <div className="w-full bg-white flex justify-center items-center"></div>
+        <div className="w-full bg-white h-screen flex justify-center items-center">
+          <div className="loader"></div>
+        </div>
       )}
       {!isLoading && (
         <div className="w-full h-full min-h-screen bg-white">

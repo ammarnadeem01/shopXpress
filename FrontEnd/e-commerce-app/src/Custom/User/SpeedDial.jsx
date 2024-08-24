@@ -13,6 +13,8 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
+import api from "../../axiosConfig.js";
+
 const actions = [
   {
     icon: <DashboardIcon />,
@@ -27,37 +29,63 @@ const actions = [
 ];
 
 export default function BasicSpeedDial() {
+  const { userId, accessToken, userRole, isLogin } = useSelector(
+    (state) => state.userReducer
+  );
   const dispatch = useDispatch();
   const handleActionClick = (action) => {
-    if (action.name === "Logout") {
+    if (action.name === "Profile") {
+      api
+        .get(`api/v3/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((response) => {
+          console.log("userId in sd : ", userId);
+          console.log("response in sd : ", response);
+          nav(action.url, { state: { data: response.data.data.user } });
+        });
+    } else if (action.name === "Logout") {
       dispatch({ type: "LOGOUT" });
       dispatch({ type: "CART_RESTORE" });
       localStorage.removeItem("reduxState");
+      nav(action.url);
+    } else {
+      nav(action.url);
     }
-    nav(action.url);
   };
-  const { userRole } = useSelector((state) => state.userReducer);
   const nav = useNavigate();
   return (
-    <Box sx={{ height: 320, transform: "translateZ(0px)", flexGrow: 1 }}>
-      <SpeedDial
-        direction="down"
-        ariaLabel="SpeedDial basic example"
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon />}
-      >
-        {actions.map(
-          (action) =>
-            (!action.adminOnly || userRole === "Admin") && (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                onClick={() => handleActionClick(action)}
-              />
-            )
-        )}
-      </SpeedDial>
-    </Box>
+    <>
+      {isLogin && (
+        <Box
+          sx={{
+            height: userRole === "Admin" ? 320 : 275,
+            transform: "translateZ(0px)",
+            flexGrow: 1,
+          }}
+        >
+          <SpeedDial
+            direction="down"
+            ariaLabel="SpeedDial basic example"
+            sx={{ position: "absolute", bottom: 16, right: 16 }}
+            icon={<SpeedDialIcon />}
+          >
+            {actions.map(
+              (action) =>
+                (!action.adminOnly || userRole === "Admin") && (
+                  <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    tooltipTitle={action.name}
+                    onClick={() => handleActionClick(action)}
+                  />
+                )
+            )}
+          </SpeedDial>
+        </Box>
+      )}
+    </>
   );
 }

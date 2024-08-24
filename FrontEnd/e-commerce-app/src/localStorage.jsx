@@ -1,6 +1,6 @@
 export const saveToLocalStorage = (state) => {
   try {
-    const { userId, accessToken } = state.userReducer;
+    const { userId, accessToken, isLogin } = state.userReducer;
     const { cartItems, grossTotal } = state.cartReducer;
 
     const serializedState = JSON.stringify({
@@ -23,13 +23,14 @@ export const loadFromLocalStorage = () => {
 
     const {
       userId,
+      isLogin,
       accessToken,
       cartItems = [],
       grossTotal,
     } = JSON.parse(serializedState);
 
     return {
-      userReducer: { userId, accessToken },
+      userReducer: { userId, accessToken, isLogin },
       cartReducer: { cartItems, grossTotal },
     };
   } catch (e) {

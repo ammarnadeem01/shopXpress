@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import BadgeIcon from "@mui/icons-material/Badge";
 import EmailIcon from "@mui/icons-material/Email";
@@ -7,8 +7,10 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import axios from "axios";
 import api from "../../axiosConfig";
+import "./Loaderbutton.css";
 
 const User = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [loginForm, setLoginForm] = useState(true);
   const [registerForm, setRegisterForm] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -16,18 +18,22 @@ const User = () => {
   const nav = useNavigate();
   // =================================== Password Show n Hide =============================================
   const [show, setShow] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   // =================================== REGISTER =============================================
   const [regFormData, setRegFormData] = useState({
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
     avatar: null,
   });
   function handleRegSubmit(e) {
     e.preventDefault();
+    setIsLoading(true);
     // axios
     //   .post("http://localhost:3000/api/v3/users", regFormData, {
+    console.log("red form data", regFormData);
     api
       .post("api/v3/users", regFormData, {
         headers: {
@@ -35,12 +41,16 @@ const User = () => {
         },
       })
       .then((res) => {
+        setIsLoading(false);
         console.log("User Created.");
         nav("/profile", {
           state: { data: res.data.data.newUser },
         });
+        // setIsLoading(false);
       })
+
       .catch((error) => {
+        setIsLoading(false);
         if (error.response && error.response.data.message) {
           setRegErrorMessage(error.response.data.message);
         } else {
@@ -67,12 +77,14 @@ const User = () => {
   });
   function handleLoginSubmit(e) {
     e.preventDefault();
+    setIsLoading(true);
     // axios
     //   .post(`http://localhost:3000/api/v3/users/login`, logFormData)
     api
       .post(`api/v3/users/login`, logFormData)
       .then((results) => {
         console.log(results);
+        setIsLoading(false);
         results.data.user.token = results.data.token;
         results.data.user.expiresIn = results.data.expiresIn;
         nav("/profile", {
@@ -80,6 +92,7 @@ const User = () => {
         });
       })
       .catch((error) => {
+        setIsLoading(false);
         console.log("Error Occurred : ", error);
         if (error.response && error.response.data.message) {
           setErrorMessage(error.response.data.message);
@@ -181,7 +194,8 @@ const User = () => {
               className="w-1/5 text-white bg-gray-700 px-3 py-2 rounded-md hover:bg-gray-600"
               onClick={handleLoginSubmit}
             >
-              Login
+              {isLoading && <div className="loaderBtn w-5 h-5"></div>}
+              {!isLoading && "Login"}
             </button>
           </form>
         )}
@@ -236,6 +250,33 @@ const User = () => {
                 />
               )}
             </div>
+
+            {/* confirm passswd  */}
+            <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
+              <LockIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
+              <input
+                type={showConfirm ? "text" : "password"}
+                placeholder="Confirm Password"
+                className="border-2 border-gray-600 rounded-md w-full px-14 py-2"
+                value={regFormData.confirmPassword}
+                onChange={handleRegChange}
+                name="confirmPassword"
+              />
+
+              {showConfirm && (
+                <VisibilityIcon
+                  onClick={() => setShowConfirm(false)}
+                  className=" cursor-pointer absolute -translate-x-8 translate-y-3"
+                />
+              )}
+              {!showConfirm && (
+                <VisibilityOffIcon
+                  onClick={() => setShowConfirm(true)}
+                  className=" cursor-pointer absolute -translate-x-8 translate-y-3"
+                />
+              )}
+            </div>
+            {/* end */}
             <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
               <input
                 type="file"
@@ -262,7 +303,8 @@ const User = () => {
               onClick={handleRegSubmit}
               className="block w-2/5 text-white bg-gray-700 px-3 py-2 rounded-md hover:bg-gray-600"
             >
-              Register
+              {isLoading && <div className="loaderBtn w-5 h-5"></div>}
+              {!isLoading && "Register"}
             </button>
           </form>
         )}

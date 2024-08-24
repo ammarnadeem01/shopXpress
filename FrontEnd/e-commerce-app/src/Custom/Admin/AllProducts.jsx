@@ -8,6 +8,7 @@ import Hamburger from "hamburger-react";
 import { useSelector } from "react-redux";
 import "../../Custom/Loader.css";
 import api from "../../axiosConfig";
+import BasicSpeedDial from "../User/SpeedDial";
 function AllProducts() {
   const nav = useNavigate();
   const [items, setItems] = useState([]);
@@ -20,20 +21,21 @@ function AllProducts() {
     // axios
     //   .get("http://localhost:3000/api/v3/products/admin/", {
     api
-      .get("api/v3/products/admin/", {
+      .get("api/v3/products/admin/products", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       })
       .then((results) => {
-        console.log(results);
+        console.log("results", results);
         setItems(results.data.data.product);
         setIsLoading(false);
       })
       .catch((err) => {
-        nav("/forbidden");
+        // nav("/forbidden");
+        console.log(err);
       });
-  }, [items]);
+  }, [accessToken]);
 
   const deleteProduct = (prodId) => {
     // axios
@@ -62,7 +64,7 @@ function AllProducts() {
       {!isLoading && (
         <div className="flex w-full min-h-screen bg-gray-100">
           {/* Hamburger for Mobile */}
-          <div className="absolute 1150:hidden z-10 p-4">
+          <div className="absolute 1150:hidden z-40 p-4">
             <Hamburger
               direction="right"
               duration={0.8}
@@ -76,7 +78,10 @@ function AllProducts() {
           <LeftBar data={isOpen} />
 
           {/* Right Bar */}
-          <div className="w-4/5 xs:max-1150:w-full p-6">
+          {/* <div className="text-end w-full absolute pt-16">
+            <BasicSpeedDial />
+          </div> */}
+          <div className="w-4/5 z-20 xs:max-1150:w-full p-6">
             <div className="text-2xl font-bold text-gray-800 mb-6 text-center">
               All Products
             </div>
