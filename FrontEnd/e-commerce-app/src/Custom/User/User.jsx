@@ -8,6 +8,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import axios from "axios";
 import api from "../../axiosConfig";
 import "./Loaderbutton.css";
+import ImageCropper from "../../ImageCropper";
 
 const User = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +17,9 @@ const User = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [redErrorMessage, setRegErrorMessage] = useState("");
   const nav = useNavigate();
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
   // =================================== Password Show n Hide =============================================
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -31,11 +35,16 @@ const User = () => {
   function handleRegSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
+    const formData = new FormData();
+    formData.set("name", regFormData.name);
+    formData.set("email", regFormData.email);
+    formData.set("password", regFormData.password);
+    formData.set("confirmPassword", regFormData.confirmPassword);
+    formData.set("avatar", regFormData.avatar);
     // axios
-    //   .post("http://localhost:3000/api/v3/users", regFormData, {
-    console.log("red form data", regFormData);
+    //   .post("http://localhost:3000/api/v3/users", formData, {
     api
-      .post("api/v3/users", regFormData, {
+      .post("api/v3/users", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -46,7 +55,7 @@ const User = () => {
         nav("/profile", {
           state: { data: res.data.data.newUser },
         });
-        // setIsLoading(false);
+        setIsLoading(false);
       })
 
       .catch((error) => {
@@ -58,12 +67,19 @@ const User = () => {
         }
       });
   }
-  // function handleFileChange(){
+  const handleCropComplete = async (croppedImage) => {
+    const response = await fetch(croppedImage);
+    const blob = await response.blob();
+    const file = new File([blob], "avatar.jpg", { type: "image/jpeg" });
+    setCroppedImage(croppedImage);
+    setRegFormData({ ...regFormData, avatar: file });
+  };
 
-  // }
   function handleRegChange(e) {
     const { name, value, type, files } = e.target;
+    console.log();
     if (type === "file") {
+      setImagePreview(URL.createObjectURL(files[0]));
       setRegFormData({ ...regFormData, [name]: files[0] });
     } else {
       setRegFormData({ ...regFormData, [name]: value });
@@ -292,6 +308,12 @@ const User = () => {
               >
                 Choose Avatar
               </label>
+              {imagePreview && (
+                <ImageCropper
+                  image={imagePreview}
+                  onCropComplete={handleCropComplete}
+                />
+              )}
             </div>
             {redErrorMessage && (
               <p className="w-full text-center" style={{ color: "red" }}>

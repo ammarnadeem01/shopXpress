@@ -170,7 +170,7 @@ exports.editProfile = asyncErrorHandler(async (req, res, next) => {
     name,
     email,
   };
-  console.log("req.file", req.file);
+  console.log("req.file", req?.file);
   if (req.file?.path) {
     const avatarLocalPath = req.file.path;
     const avatarui = await uploadOnCloudinary(avatarLocalPath);

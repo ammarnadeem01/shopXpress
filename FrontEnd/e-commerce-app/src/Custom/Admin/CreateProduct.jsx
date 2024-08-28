@@ -52,11 +52,11 @@ function CreateProduct() {
   function handleCreateProduct(e) {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("name", productData.name);
-    formData.append("description", productData.description);
-    formData.append("stock", productData.stock);
-    formData.append("category", productData.category);
-    formData.append("price", productData.price);
+    formData.set("name", productData.name);
+    formData.set("description", productData.description);
+    formData.set("stock", productData.stock);
+    formData.set("category", productData.category);
+    formData.set("price", productData.price);
 
     productData.productImages.map((img) => {
       formData.append("productImages", img);

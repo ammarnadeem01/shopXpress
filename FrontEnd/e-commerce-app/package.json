@@ -30,6 +30,7 @@
     "react-burger-menu": "^3.0.9",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
+    "react-easy-crop": "^5.0.8",
     "react-icons": "^4.10.1",
     "react-material-ui-carousel": "^3.4.2",
     "react-redux": "^8.1.2",
