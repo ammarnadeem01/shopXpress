@@ -9,8 +9,8 @@ function FeaturedProds() {
   const { accessToken } = useSelector((state) => state.userReducer);
   const [datais, setdatais] = useState([]);
   useEffect(() => {
-    console.log("URL-p", import.meta.env.REACT_APP_API_BASE_URL_PROD);
-    console.log("URL-d", import.meta.env.REACT_APP_API_BASE_URL_DEV);
+    // console.log("URL-p", import.meta.env.REACT_APP_API_BASE_URL_PROD);
+    // console.log("URL-d", import.meta.env.REACT_APP_API_BASE_URL_DEV);
     api
       .get("api/v3/products/highest-rated-products", {
         headers: {
@@ -20,7 +20,7 @@ function FeaturedProds() {
       .then((result) => {
         setdatais(result.data.data.product);
         setIsLoading(false);
-        console.log(result.data.data.product);
+        // console.log(result.data.data.product);
       });
   }, []);
   return (

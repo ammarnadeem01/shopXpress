@@ -53,11 +53,11 @@ function Footer() {
     size = "40px";
   }
   return (
-    <div className="flex max-w-screen flex-wrap h-auto bg-[#1A1919]">
+    <div className="flex max-w-screen xs:max-sm:flex-col flex-wrap h-auto bg-[#1A1919]">
       {/* Left */}
-      <div className="flex w-4/12 h-3/4 py-5  flex-wrap content-center space-y-3.5 pl-9">
-        <p className="w-full text-gray-100 text-xl font-semibold">Follow Us</p>
-        <div className="w-full flex flex-row flex-wrap justify-start  xs:gap-y-5 xs:space-x-2 sm:space-x-4 ">
+      <div className="flex sm:w-4/12  xs-max:sm:w-full h-3/4  sm:py-5 py-2  flex-wrap content-center space-y-3.5 pl-9">
+        <p className="w-full text-gray-100  text-xl font-semibold">Follow Us</p>
+        <div className="w-full flex flex-row  flex-wrap justify-start  xs:gap-y-5 xs:space-x-2 sm:space-x-4 ">
           <SocialIcon
             url="https://youtube.com/in/jaketrent"
             fgColor="white"
@@ -88,7 +88,7 @@ function Footer() {
         <p className="w-full  text-gray-400">E-commerce App v1.0.0</p>
       </div>
       {/* Right */}
-      <div className="flex w-6/12 pl-3 py-5 h-3/4 flex-wrap content-center space-y-1">
+      <div className="flex w-6/12 xs:max-sm:w-full  pl-3 sm:py-5 h-3/4 flex-wrap content-center space-y-1 xs:max-sm:pl-9">
         <div>
           <p className="text-xl text-white font-semibold w-full">Donations</p>
         </div>

@@ -90,7 +90,7 @@ function Products() {
   }
 
   function handlePageChange(val) {
-    console.log("val", val);
+    // console.log("val", val);
     setCurrentPage(val);
     setFilters((prevFilters) => ({
       ...prevFilters,

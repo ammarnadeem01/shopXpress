@@ -55,8 +55,8 @@ const ProductDetails = () => {
           setReview(userReview.review);
           setRatings(userReview.ratings);
         }
-      })
-      .catch((err) => console.log(err));
+      });
+    // .catch((err) => console.log(err));
     // axios
     //   .get(`http://localhost:3000/api/v3/orders/user/${userId}`, {
     api
@@ -74,7 +74,7 @@ const ProductDetails = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setErrMsg("Please Login Again...");
       });
   }, [location.state.data._id, avgRating, userId, open, isLoading]);
@@ -92,8 +92,8 @@ const ProductDetails = () => {
       review,
       ratings,
     };
-    console.log("patchReviewData", patchReviewData);
-    console.log("reviewData", reviewData);
+    // console.log("patchReviewData", patchReviewData);
+    // console.log("reviewData", reviewData);
 
     // const reviewApi = existingReview ? axios.patch : axios.post;
     // const reviewUrl = `http://localhost:3000/api/v3/reviews${
@@ -104,23 +104,22 @@ const ProductDetails = () => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-    })
-      .then((results) => {
-        setIsLoading(false);
-        console.log("results", results);
-        setAllReviews((prevReviews) =>
-          existingReview
-            ? prevReviews.map((r) =>
-                r.reviewedBy === userId ? results.data.data : r
-              )
-            : [...prevReviews, results.data.data]
-        );
-      })
-      .catch((err) => console.log(err));
+    }).then((results) => {
+      setIsLoading(false);
+      // console.log("results", results);
+      setAllReviews((prevReviews) =>
+        existingReview
+          ? prevReviews.map((r) =>
+              r.reviewedBy === userId ? results.data.data : r
+            )
+          : [...prevReviews, results.data.data]
+      );
+    });
+    // .catch((err) => console.log(err));
   };
 
   const AddedToCartFunction = () => {
-    console.log("Order added to cart");
+    // console.log("Order added to cart");
     dispatch({
       type: "ADD_ITEM_TO_CART",
       payload: {

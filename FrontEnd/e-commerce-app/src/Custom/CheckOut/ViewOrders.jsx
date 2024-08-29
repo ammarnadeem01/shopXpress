@@ -15,7 +15,7 @@ function ViewOrders() {
   const { userId, accessToken } = useSelector((state) => state.userReducer);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState({});
-  console.log("userId", userId);
+  // console.log("userId", userId);
   useEffect(() => {
     api
       .get(`api/v3/orders/user/${userId}`, {
@@ -24,15 +24,15 @@ function ViewOrders() {
         },
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         setData(response.data.data.order);
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   });
-  console.log("data", data);
+  // console.log("data", data);
   const formatDate = (date) => {
     const options = {
       year: "numeric",

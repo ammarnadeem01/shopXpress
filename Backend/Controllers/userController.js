@@ -26,7 +26,7 @@ exports.getAllUsers = asyncErrorHandler(async (req, res, next) => {
 
 // signup
 exports.createNewUser = asyncErrorHandler(async (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { name, email, password, confirmPassword } = req.body;
   if (!name || !email || !password || !confirmPassword) {
     return next(
@@ -170,7 +170,7 @@ exports.editProfile = asyncErrorHandler(async (req, res, next) => {
     name,
     email,
   };
-  console.log("req.file", req?.file);
+  // console.log("req.file", req?.file);
   if (req.file?.path) {
     const avatarLocalPath = req.file.path;
     const avatarui = await uploadOnCloudinary(avatarLocalPath);
@@ -268,20 +268,20 @@ exports.forgotPassword = asyncErrorHandler(async (req, res, next) => {
   await user.save({ validateBeforeSave: false }); // to save the 2 fields in the dbs which we created for token generator function, in function, we only set their values
 
   //  3. Send token to given email
-  console.log("req", req);
+  // console.log("req", req);
   const resetUrl = `${req.protocol}://${req.get(
     "host"
   )}/resetpassword/${token}`;
-  console.log(resetUrl);
+  // console.log(resetUrl);
   const message = `We have  recieved a Password Reset Request. Please click on the link below to reset password.\n\n${resetUrl}`;
   try {
-    console.log(1);
+    // console.log(1);
     await sendMail({
       email: user.email,
       subject: "Reset Password Request",
       message,
     });
-    console.log(2);
+    // console.log(2);
     res.status(200).json({
       status: "Success",
       message: "Password reset link sent to user.",

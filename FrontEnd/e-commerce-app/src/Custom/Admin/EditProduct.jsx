@@ -26,11 +26,11 @@ function EditProduct() {
   });
   function handleChange(e) {
     const { name, value, type, files } = e.target;
-    console.log(files);
+    // console.log(files);
     if (type == "file") {
       setProductData({ ...productData, [name]: Array.from(files) });
     } else {
-      console.log(name, value);
+      // console.log(name, value);
       setProductData({ ...productData, [name]: value });
     }
   }
@@ -47,7 +47,7 @@ function EditProduct() {
     productData.productImages.map((img) => {
       formData.append("productImages", img);
     });
-    console.log("formData", formData);
+    // console.log("formData", formData);
     //  axios
     //     .put(`http://localhost:3000/api/v3/products/${loc.state._id}`, formData,{
     api
@@ -59,13 +59,13 @@ function EditProduct() {
       })
       .then((res) => {
         setIsSubmitting(false);
-        console.log(res);
-        console.log("Product Updated.");
+        // console.log(res);
+        // console.log("Product Updated.");
         nav("/admin/products");
       })
       .catch((err) => {
         setIsSubmitting(false);
-        console.log(err);
+        // console.log(err);
         setErrMsg(err.response.data.message);
       });
   }

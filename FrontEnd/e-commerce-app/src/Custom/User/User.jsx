@@ -12,7 +12,7 @@ import ImageCropper from "../../ImageCropper";
 
 const User = () => {
   const getAccessToken = localStorage.getItem("reduxState");
-  console.log("getAccessToken", getAccessToken);
+  // console.log("getAccessToken", getAccessToken);
   const [isLoading, setIsLoading] = useState(false);
   const [loginForm, setLoginForm] = useState(true);
   const [registerForm, setRegisterForm] = useState(false);
@@ -53,7 +53,7 @@ const User = () => {
       })
       .then((res) => {
         setIsLoading(false);
-        console.log("User Created.");
+        // console.log("User Created.");
         nav("/profile", {
           state: { data: res.data.data.newUser },
         });
@@ -79,7 +79,7 @@ const User = () => {
 
   function handleRegChange(e) {
     const { name, value, type, files } = e.target;
-    console.log();
+    // console.log();
     if (type === "file") {
       setImagePreview(URL.createObjectURL(files[0]));
       setRegFormData({ ...regFormData, [name]: files[0] });
@@ -101,7 +101,7 @@ const User = () => {
     api
       .post(`api/v3/users/login`, logFormData)
       .then((results) => {
-        console.log(results);
+        // console.log(results);
         setIsLoading(false);
         results.data.user.token = results.data.token;
         results.data.user.expiresIn = results.data.expiresIn;
@@ -111,7 +111,7 @@ const User = () => {
       })
       .catch((error) => {
         setIsLoading(false);
-        console.log("Error Occurred : ", error);
+        // console.log("Error Occurred : ", error);
         if (error.response && error.response.data.message) {
           setErrorMessage(error.response.data.message);
         } else {

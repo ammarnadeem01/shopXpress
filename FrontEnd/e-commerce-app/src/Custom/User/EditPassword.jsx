@@ -43,7 +43,7 @@ const EditPassword = () => {
 
   const onSubmit = (values, { setSubmitting }) => {
     setIsLoading(true);
-    console.log("Form data", values);
+    // console.log("Form data", values);
     // axios
     //   .patch(`http://localhost:3000/api/v3/users/updatePassword`, values, {
     api

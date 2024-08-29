@@ -16,13 +16,13 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "User",
   },
-  status:{
-    type:String,
-    default:"Processing"
+  status: {
+    type: String,
+    default: "Processing",
   },
-  totalPrice:{
-    type:Number,
-    default:0
+  totalPrice: {
+    type: Number,
+    default: 0,
   },
   placedDate: {
     type: Date,

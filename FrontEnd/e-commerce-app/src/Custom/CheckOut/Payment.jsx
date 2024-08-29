@@ -66,13 +66,13 @@ function Payment() {
         }
       )
       .then((res) => {
-        console.log("res", res);
+        // console.log("res", res);
         dispatch({ type: "CART_RESTORE" });
         nav("/orderplaced", { state: userId });
         // console.log("userId", userId);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }
   return (

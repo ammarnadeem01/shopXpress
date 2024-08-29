@@ -36,11 +36,11 @@ function Contact() {
     api
       .post("api/v3/message", values)
       .then((result) => {
-        console.log(result);
+        // console.log(result);
         resetForm();
       })
       .catch((err) => {
-        console.log(err.message);
+        // console.log(err.message);
       });
   }
   return (

@@ -44,11 +44,11 @@ reviewSchema.post("findOneAndUpdate", async function (doc, next) {
 });
 
 async function updateProductRating(productId, reviewModel) {
-  console.log("this in updateProductRating", reviewModel);
+  // console.log("this in updateProductRating", reviewModel);
   try {
     reviews = await reviewModel.find({ reviewedProduct: productId });
   } catch (error) {
-    console.log("Error fetching reviews:", error);
+    // console.log("Error fetching reviews:", error);
     // throw new Error("Failed to fetch reviews");
   }
   // console.log("reviews", reviews);

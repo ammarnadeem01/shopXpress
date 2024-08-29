@@ -27,12 +27,12 @@ function AllOrders() {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setOrders(res.data.data.order);
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         nav("/forbidden");
       });
   }, [accessToken, orders]);
@@ -47,10 +47,10 @@ function AllOrders() {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 

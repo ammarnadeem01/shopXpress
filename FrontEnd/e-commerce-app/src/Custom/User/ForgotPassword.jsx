@@ -31,7 +31,7 @@ const ForgotPassword = () => {
     api
       .post("api/v3/users/forgotpassword", values)
       .then((res) => {
-        console.log("res", res);
+        // console.log("res", res);
         nav("/verifyEmail");
       })
       .catch((err) => {

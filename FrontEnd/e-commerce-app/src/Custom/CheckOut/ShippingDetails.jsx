@@ -27,7 +27,7 @@ function ShippingDetails() {
   const [errMsg, setErrMsg] = useState("");
 
   const { userId } = useSelector((state) => {
-    console.log(state.userReducer);
+    // console.log(state.userReducer);
     return state.userReducer;
   });
 
@@ -50,7 +50,7 @@ function ShippingDetails() {
 
   function handleShippingFormSubmit(e) {
     e.preventDefault();
-    console.log(shippingFormData);
+    // console.log(shippingFormData);
     // axios
     //   .post("http://localhost:3000/api/v3/shippinginfo", shippingFormData, {
     api
@@ -61,13 +61,13 @@ function ShippingDetails() {
         },
       })
       .then((response) => {
-        console.log("response: ", response);
-        console.log("response.data: ", response.data);
-        console.log("response.data.data: ", response.data.data);
-        console.log(
-          "response.data.data.newShippingInfo: ",
-          response.data.data.newShippingInfo
-        );
+        // console.log("response: ", response);
+        // console.log("response.data: ", response.data);
+        // console.log("response.data.data: ", response.data.data);
+        // console.log(
+        //   "response.data.data.newShippingInfo: ",
+        //   response.data.data.newShippingInfo
+        // );
         dispatch({
           type: "SET_SHIPPING_DATA",
           payload: response.data.data.newShippingInfo,

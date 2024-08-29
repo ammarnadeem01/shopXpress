@@ -15,7 +15,7 @@ exports.addShippingInfo = asyncErrorHandler(async (req, res, next) => {
       )
     );
   }
-  console.log(req.body);
+  // console.log(req.body);
   const newShippingInfo = await ShippingInfo.create({
     address,
     city,

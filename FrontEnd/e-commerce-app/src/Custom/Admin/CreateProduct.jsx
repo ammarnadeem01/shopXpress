@@ -27,7 +27,7 @@ function CreateProduct() {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }, [accessToken]);
 
@@ -43,7 +43,7 @@ function CreateProduct() {
   });
   function handleChange(e) {
     const { name, value, type, files } = e.target;
-    console.log(files);
+    // console.log(files);
     if (type == "file") {
       setProductData({ ...productData, [name]: Array.from(files) });
     } else {
@@ -75,7 +75,7 @@ function CreateProduct() {
       })
       .then(() => {
         setIsSubmitting(false);
-        console.log("Product Created.");
+        // console.log("Product Created.");
       })
       .catch((err) => {
         setIsSubmitting(false);

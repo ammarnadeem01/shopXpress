@@ -24,7 +24,7 @@ const EditProfile = () => {
   const { accessToken } = useSelector((state) => state.userReducer);
   const [croppedImage, setCroppedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  console.log("accessToken comp", accessToken);
+  // console.log("accessToken comp", accessToken);
   const location = useLocation();
   const initialValues = {
     name: location?.state?.name,
@@ -44,7 +44,7 @@ const EditProfile = () => {
   // }, accessToken);
   function setAvatar(e) {
     const { name, value, type, files } = e.target;
-    console.log(name, value, type, files);
+    // console.log(name, value, type, files);
     if (type === "file") {
       setImagePreview(URL.createObjectURL(files[0]));
       initialValues.avatar = files[0];
@@ -62,8 +62,8 @@ const EditProfile = () => {
 
   const onSubmit = (values, { setSubmitting }) => {
     setIsUpdating(true);
-    console.log("values", values);
-    console.log("accessToken", accessToken);
+    // console.log("values", values);
+    // console.log("accessToken", accessToken);
     const formData = new FormData();
     for (const [key, value] of Object.entries(values)) {
       formData.append(key, value);
@@ -79,8 +79,8 @@ const EditProfile = () => {
       })
       .then((res) => {
         setIsUpdating(false);
-        console.log("Profile updated successfully.");
-        console.log(res);
+        // console.log("Profile updated successfully.");
+        // console.log(res);
         dispatch({
           type: "SET_USER_NAME",
           payload: res.data.data.updatedUser.name,
@@ -91,7 +91,7 @@ const EditProfile = () => {
       })
       .catch((err) => {
         setIsUpdating(false);
-        console.log("Error updating profile", err);
+        // console.log("Error updating profile", err);
       });
 
     setSubmitting(false);

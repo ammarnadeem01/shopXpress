@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please Enter Your Confirm Password"],
     validate: {
       validator: function (value) {
-        console.log(`Validator: ${value} === ${this.password}`); // Debugging line
+        // console.log(`Validator: ${value} === ${this.password}`); // Debugging line
         return value === this.password;
       },
       message: "Password and Confirm Passwords don't match",
@@ -64,7 +64,7 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
   // Encrypting password before it is saved
-  console.log(`Hashing password: ${this.password}`); // Debugging line
+  // console.log(`Hashing password: ${this.password}`); // Debugging line
   this.password = await bcrypt.hash(this.password, 12);
   this.confirmPassword = undefined;
   next();
@@ -92,8 +92,8 @@ userSchema.methods.createResetPasswordToken = async function () {
     .update(resetToken)
     .digest("hex");
   this.ResetPasswordTokenExpiresIn = Date.now() + 10 * 60 * 1000; // (10 minutes into ms)
-  console.log("ResetPasswordToken", this.ResetPasswordToken);
-  console.log("ResetPasswordTokenExpiresIn", this.ResetPasswordTokenExpiresIn);
+  // console.log("ResetPasswordToken", this.ResetPasswordToken);
+  // console.log("ResetPasswordTokenExpiresIn", this.ResetPasswordTokenExpiresIn);
   return resetToken; // we excrypt password for db but send simple token to user
 };
 

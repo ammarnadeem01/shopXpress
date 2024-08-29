@@ -72,8 +72,8 @@ function Dashboard() {
         setIsLoading(false);
       })
       .catch((err) => {
-        // nav("/forbidden");
-        console.log(err);
+        nav("/forbidden");
+        // console.log(err);
       });
     // axios
     //   .get("http://localhost:3000/api/v3/orders", {
@@ -116,7 +116,7 @@ function Dashboard() {
           });
 
         setOrderTotalAmount(orderTotals);
-        console.log(orderTotals);
+        // console.log(orderTotals);
       });
     // axios
     //   .get("http://localhost:3000/api/v3/users", {
@@ -127,7 +127,7 @@ function Dashboard() {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setUserCount(response.data.length);
       });
   }, [userCount]);

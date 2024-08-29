@@ -113,7 +113,7 @@ exports.addNewProduct = asyncErrorHandler(async (req, res, next) => {
 //Update
 
 exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
-  console.log("req.body", req.body);
+  // console.log("req.body", req.body);
   const { name, description, price, category, stock } = req.body;
   const { id } = req.params;
 
@@ -131,7 +131,7 @@ exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
     return next(new CustomError("No product found with the given ID.", 404));
   }
   const updatedData = { name, description, price, category, stock };
-  console.log("req.files", req.files);
+  // console.log("req.files", req.files);
   if (req.files.length > 0) {
     if (req.files.length < 3) {
       return next(new CustomError("At least 3 images are required.", 400));
@@ -145,7 +145,7 @@ exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
     updatedData.productImages = [img1.url, img2.url, img3.url];
   }
 
-  console.log("updatedData", updatedData);
+  // console.log("updatedData", updatedData);
   const updatedProduct = await Product.findByIdAndUpdate(id, updatedData, {
     new: true,
     runValidators: true,

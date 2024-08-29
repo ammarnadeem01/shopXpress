@@ -51,8 +51,8 @@ export default function BasicSpeedDial() {
           },
         })
         .then((response) => {
-          console.log("userId in sd : ", userId);
-          console.log("response in sd : ", response);
+          // console.log("userId in sd : ", userId);
+          // console.log("response in sd : ", response);
           response.data.data.user.token = accessToken;
           nav(action.url, { state: { data: response.data.data.user } });
         });

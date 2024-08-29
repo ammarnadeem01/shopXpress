@@ -28,18 +28,18 @@ function UserList() {
         },
       })
       .then((results) => {
-        console.log(results);
+        // console.log(results);
         setUsers(results.data.data.users);
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
-        // nav("/forbidden");
+        // console.log(err);
+        nav("/forbidden");
       });
   }, [users]);
 
   const deleteUser = (userid) => {
-    console.log("userId", userid);
+    // console.log("userId", userid);
     // axios
     //   .delete(`http://localhost:3000/api/v3/users/${userid}`, {
     api

@@ -14,20 +14,20 @@ const messageSchema = new mongoose.Schema({
     unique: true,
     validate: [validator.isEmail, "Please Enter a valid Email"],
   },
-  message:{
-    type:String,
-    required:true,
+  message: {
+    type: String,
+    required: true,
     maxLength: [300, "Message cannot exceed 300 characters"],
     minLength: [1, "Name should have more than 1 character"],
   },
-  phoneNumber:{
-    type:String,
-    required:true,
+  phoneNumber: {
+    type: String,
+    required: true,
     validate: {
-      validator: function(v) {
-        return validator.isMobilePhone(v, 'any', { strictMode: false });
+      validator: function (v) {
+        return validator.isMobilePhone(v, "any", { strictMode: false });
       },
-      message: "Please Enter a valid Phone Number"
+      message: "Please Enter a valid Phone Number",
     },
   },
   createdAt: {
@@ -35,4 +35,4 @@ const messageSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-module.exports = mongoose.model("Message",messageSchema);
+module.exports = mongoose.model("Message", messageSchema);

@@ -13,9 +13,9 @@ function Navbar() {
   const { cartItems } = useSelector((state) => {
     return state.cartReducer;
   });
-  useEffect(() => {
-    console.log("upon re-rendering cartitems ", cartItems);
-  }, [cartItems]);
+  // useEffect(() => {
+  //   // console.log("upon re-rendering cartitems ", cartItems);
+  // }, [cartItems]);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {

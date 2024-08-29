@@ -13,7 +13,7 @@ function UpdateUser() {
   const { errMsg, setErrMsg } = useState("");
   const { accessToken } = useSelector((state) => state.userReducer);
   function editUser() {
-    console.log("userData", userData);
+    // console.log("userData", userData);
     // axios
     //   .patch(
     //     `http://localhost:3000/api/v3/users/edituser/${userData.id}`,
@@ -25,12 +25,12 @@ function UpdateUser() {
         },
       })
       .then((res) => {
-        console.log("res", res);
-        console.log("userData", userData);
+        // console.log("res", res);
+        // console.log("userData", userData);
         nav("/admin/userlist");
       })
       .catch((err) => {
-        console.error("Error:", err.response ? err.response.data : err.message);
+        // console.error("Error:", err.response ? err.response.data : err.message);
         setErrMsg(err.response.data.message);
       });
   }

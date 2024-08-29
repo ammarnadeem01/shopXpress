@@ -47,7 +47,7 @@ function AllReviews() {
               if (error.response?.status === 404) {
                 return { ...review, user: "[Deleted User]" };
               } else {
-                console.error("Error fetching user details:", error);
+                // console.error("Error fetching user details:", error);
                 return review;
               }
             }
@@ -58,18 +58,18 @@ function AllReviews() {
 
         Promise.all(revData)
           .then((updatedReviews) => {
-            console.log("updatedReviews", updatedReviews);
+            // console.log("updatedReviews", updatedReviews);
             setReviews(updatedReviews);
             setIsLoading(false);
           })
           .catch((error) => {
-            console.error("Error processing reviews:", error);
+            // console.error("Error processing reviews:", error);
             // Handle any errors that occur during the Promise.all execution
             nav("/forbidden");
           });
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }
 
@@ -82,8 +82,8 @@ function AllReviews() {
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      .then((res) => searchReviews())
-      .catch((err) => console.log(err));
+      .then((res) => searchReviews());
+    // .catch((err) => console.log(err));
   };
 
   return (

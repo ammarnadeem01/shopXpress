@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
 const ResetPassword = () => {
-  // const nav = useNavigate();
+  const nav = useNavigate();
   // const { isLogin } = useSelector((state) => state.userReducer);
   // useEffect(() => {
   //   if (!isLogin) {
@@ -16,7 +16,7 @@ const ResetPassword = () => {
   //   }
   // }, [isLogin]);
   const { token } = useParams();
-  console.log("Token:", token);
+  // console.log("Token:", token);
   const initialValues = {
     newPassword: "",
     confirmPassword: "",
@@ -32,7 +32,7 @@ const ResetPassword = () => {
   });
 
   const onSubmit = (values, { setSubmitting }) => {
-    console.log("Form data", values);
+    // console.log("Form data", values);
     // axios
     //   .post(`http://localhost:3000/api/v3/users/resetpassword/${token}`, values)
     api
@@ -41,6 +41,7 @@ const ResetPassword = () => {
         console.log(res);
       })
       .catch((err) => {
+        nav("/user");
         console.log(err);
       });
     setTimeout(() => {

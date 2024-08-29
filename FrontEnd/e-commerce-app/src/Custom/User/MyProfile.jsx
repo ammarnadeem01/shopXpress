@@ -33,7 +33,7 @@ function MyProfile() {
     //   nav("/user");
     // }
     // if (isLogin) {
-    console.log("location : ", location);
+    // console.log("location : ", location);
     dispatch({
       type: "SET_USER_ID",
       payload: location.state.data._id,
@@ -59,14 +59,14 @@ function MyProfile() {
       payload: true,
     });
     if (userId) {
-      console.log("UserId", userId);
+      // console.log("UserId", userId);
       // }
       // axios
       //   .get(`http://localhost:3000/api/v3/users/${userId}`)
       api
         .get(`api/v3/users/${userId}`)
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           setData({
             name: data.data.data.user.name,
             email: data.data.data.user.email,

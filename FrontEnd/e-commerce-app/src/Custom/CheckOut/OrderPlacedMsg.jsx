@@ -30,11 +30,11 @@ function OrderPlaced() {
         },
       })
       .then((res) => {
-        console.log("res.data.data.order", res.data.data.order);
+        // console.log("res.data.data.order", res.data.data.order);
         setOrderData(res.data.data.order);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 

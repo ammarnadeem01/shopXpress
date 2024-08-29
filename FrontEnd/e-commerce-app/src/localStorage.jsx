@@ -13,7 +13,7 @@ export const saveToLocalStorage = (state) => {
 
     localStorage.setItem("reduxState", serializedState);
   } catch (e) {
-    console.warn("Could not save state", e);
+    // console.warn("Could not save state", e);
   }
 };
 
@@ -35,7 +35,7 @@ export const loadFromLocalStorage = () => {
       cartReducer: { cartItems, grossTotal },
     };
   } catch (e) {
-    console.warn("Could not load state", e);
+    // console.warn("Could not load state", e);
     return undefined;
   }
 };

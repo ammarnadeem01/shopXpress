@@ -30,11 +30,11 @@ function ShippingInfo() {
         }
       )
       .then((response) => {
-        console.log("response", response);
+        // console.log("response", response);
         if (orderData.status == "Processing") {
           cartItems.map((item) => {
-            console.log("item.stock", item.stock);
-            console.log("item.quantity", item.quantity);
+            // console.log("item.stock", item.stock);
+            // console.log("item.quantity", item.quantity);
             const newStock = item.stock - item.quantity;
             // axios
             //   .patch(`http://localhost:3000/api/v3/products/${item.id}`, {
@@ -61,7 +61,7 @@ function ShippingInfo() {
         window.location.reload();
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }
 
@@ -95,8 +95,8 @@ function ShippingInfo() {
               }
             );
             const productDetails = productResponse.data.data.product;
-            console.log("productResponse", productResponse);
-            console.log("productDetails", productDetails);
+            // console.log("productResponse", productResponse);
+            // console.log("productDetails", productDetails);
             return {
               id: productDetails._id,
               name: productDetails.name,
@@ -106,24 +106,24 @@ function ShippingInfo() {
               stock: productDetails.stock,
             };
           } catch (error) {
-            console.error(
-              `Error fetching details for item ${orderedItem.item}:`,
-              error
-            );
+            // console.error(
+            //   `Error fetching details for item ${orderedItem.item}:`,
+            //   error
+            // );
             return null;
           }
         }
       );
 
       const itemDetails = await Promise.all(itemDetailsPromises);
-      console.log("validItemDetails", itemDetails);
+      // console.log("validItemDetails", itemDetails);
       setCartItems(itemDetails);
 
       // Fetch user data
       // const userResponse = await axios.get(
       //   `http://localhost:3000/api/v3/users/${order.placedBy}`
       // );
-      console.log("order.placedBy", order.placedBy);
+      // console.log("order.placedBy", order.placedBy);
       const userResponse = await api.get(`api/v3/users/${order.placedBy}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -131,7 +131,7 @@ function ShippingInfo() {
       });
       const user = userResponse.data.data.user;
       setUserData(user);
-      console.log("user", user);
+      // console.log("user", user);
 
       // Fetch shipping data
       // const shippingResponse = await axios.get(
@@ -146,13 +146,13 @@ function ShippingInfo() {
         }
       );
       const shippingInfo = shippingResponse.data.data.shippingInfo[0];
-      console.log("shippingInfo", shippingInfo);
+      // console.log("shippingInfo", shippingInfo);
       setShippingData(shippingInfo);
     } catch (error) {}
   };
 
   useEffect(() => {
-    console.log("status", status);
+    // console.log("status", status);
     fetchOrderDetails();
   }, [orderId]);
   const [isOpen, setIsOpen] = useState(false);
