@@ -5,8 +5,17 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import api from "../../axiosConfig";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import LoginRequired from "../CheckOut/LoginRequired";
 const ForgotPassword = () => {
   const nav = useNavigate();
+  const { isLogin } = useSelector((state) => state.userReducer);
+  // useEffect(() => {
+  //   if (!isLogin) {
+  //     nav("/user");
+  //   }
+  // }, [isLogin]);
   const initialValues = {
     email: "",
   };

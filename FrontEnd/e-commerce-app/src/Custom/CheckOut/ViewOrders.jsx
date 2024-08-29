@@ -2,8 +2,16 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import api from "../../axiosConfig";
 import "../../Custom/Loader.css";
+import { useNavigate } from "react-router-dom";
 
 function ViewOrders() {
+  const nav = useNavigate();
+  const { isLogin } = useSelector((state) => state.userReducer);
+  // useEffect(() => {
+  //   if (!isLogin) {
+  //     nav("/user");
+  //   }
+  // }, [isLogin]);
   const { userId, accessToken } = useSelector((state) => state.userReducer);
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState({});
@@ -39,6 +47,7 @@ function ViewOrders() {
   };
   return (
     <Fragment>
+      {/* {isLogin } */}
       {isLoading && (
         <div className="w-full bg-white h-screen flex justify-center items-center">
           <div className="loader"></div>

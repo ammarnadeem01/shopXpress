@@ -6,6 +6,7 @@ export const saveToLocalStorage = (state) => {
     const serializedState = JSON.stringify({
       userId,
       accessToken,
+      isLogin,
       cartItems,
       grossTotal,
     });

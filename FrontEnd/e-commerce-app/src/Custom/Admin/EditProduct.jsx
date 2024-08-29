@@ -11,6 +11,7 @@ import api from "../../axiosConfig";
 import { useSelector } from "react-redux";
 
 function EditProduct() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const loc = useLocation();
   const { accessToken } = useSelector((state) => state.userReducer);
   const [errMsg, setErrMsg] = useState("");
@@ -34,6 +35,7 @@ function EditProduct() {
     }
   }
   function handleUpdateProduct(e) {
+    setIsSubmitting(true);
     e.preventDefault();
     const formData = new FormData();
     formData.append("name", productData.name);
@@ -56,11 +58,13 @@ function EditProduct() {
         },
       })
       .then((res) => {
+        setIsSubmitting(false);
         console.log(res);
         console.log("Product Updated.");
         nav("/admin/products");
       })
       .catch((err) => {
+        setIsSubmitting(false);
         console.log(err);
         setErrMsg(err.response.data.message);
       });
@@ -160,7 +164,8 @@ function EditProduct() {
               className="bg-gray-800 mt-2 cursor-pointer  hover:bg-gray-600 rounded-md text-center text-white w-full py-1.5"
               onClick={handleUpdateProduct}
             >
-              Update
+              {isSubmitting && <div className="loaderBtn w-5 h-5"></div>}
+              {!isSubmitting && "Update"}
             </button>
           </div>
         </div>

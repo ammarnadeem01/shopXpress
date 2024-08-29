@@ -16,8 +16,7 @@ function AllProducts() {
   const [isLoading, setIsLoading] = useState(true);
 
   const { accessToken } = useSelector((state) => state.userReducer);
-
-  useEffect(() => {
+  const fetchProducts = () => {
     // axios
     //   .get("http://localhost:3000/api/v3/products/admin/", {
     api
@@ -32,9 +31,12 @@ function AllProducts() {
         setIsLoading(false);
       })
       .catch((err) => {
-        // nav("/forbidden");
+        nav("/forbidden");
         console.log(err);
       });
+  };
+  useEffect(() => {
+    fetchProducts();
   }, [accessToken]);
 
   const deleteProduct = (prodId) => {
@@ -48,6 +50,7 @@ function AllProducts() {
       })
       .then((res) => {
         console.log(res);
+        fetchProducts();
       })
       .catch((err) => {
         console.log(err);

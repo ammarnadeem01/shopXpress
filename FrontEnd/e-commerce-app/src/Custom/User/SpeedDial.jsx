@@ -9,7 +9,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ArticleIcon from "@mui/icons-material/Article";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
@@ -29,9 +29,18 @@ const actions = [
 ];
 
 export default function BasicSpeedDial() {
+  const [login, setLogin] = useState(false);
   const { userId, accessToken, userRole, isLogin } = useSelector(
     (state) => state.userReducer
   );
+  // let login;
+  const reduxState = localStorage.getItem("reduxState");
+  useEffect(() => {
+    // console.log("reduxState", );
+    const log = JSON.parse(reduxState).isLogin;
+    setLogin(log);
+  }, [login]);
+
   const dispatch = useDispatch();
   const handleActionClick = (action) => {
     if (action.name === "Profile") {
@@ -44,6 +53,7 @@ export default function BasicSpeedDial() {
         .then((response) => {
           console.log("userId in sd : ", userId);
           console.log("response in sd : ", response);
+          response.data.data.user.token = accessToken;
           nav(action.url, { state: { data: response.data.data.user } });
         });
     } else if (action.name === "Logout") {

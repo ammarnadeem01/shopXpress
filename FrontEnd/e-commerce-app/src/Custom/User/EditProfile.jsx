@@ -6,22 +6,47 @@ import EmailIcon from "@mui/icons-material/Email";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import api from "../../axiosConfig";
+import { useEffect, useState } from "react";
+import ImageCropper from "../../ImageCropper";
 
 const EditProfile = () => {
   const dispatch = useDispatch();
+  const nav = useNavigate();
+  const { isLogin } = useSelector((state) => state.userReducer);
+  useEffect(() => {
+    if (!isLogin) {
+      nav("/user");
+    }
+  }, [isLogin]);
+  // const [userAccessToken, setUserAccessToken] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
   const { userId } = useSelector((state) => state.userReducer);
   const { accessToken } = useSelector((state) => state.userReducer);
-  const navigate = useNavigate();
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  console.log("accessToken comp", accessToken);
   const location = useLocation();
   const initialValues = {
-    name: location.state.name,
-    email: location.state.email,
-    avatar: location.state.avatar,
+    name: location?.state?.name,
+    email: location?.state?.email,
+    avatar: location?.state?.avatar,
   };
+
+  const handleCropComplete = async (croppedImage) => {
+    const response = await fetch(croppedImage);
+    const blob = await response.blob();
+    const file = new File([blob], "avatar.jpg", { type: "image/jpeg" });
+    setCroppedImage(croppedImage);
+    setRegFormData({ ...regFormData, avatar: file });
+  };
+  // useEffect(() => {
+  //   setUserAccessToken(accessToken);
+  // }, accessToken);
   function setAvatar(e) {
     const { name, value, type, files } = e.target;
     console.log(name, value, type, files);
     if (type === "file") {
+      setImagePreview(URL.createObjectURL(files[0]));
       initialValues.avatar = files[0];
     }
   }
@@ -36,28 +61,36 @@ const EditProfile = () => {
   });
 
   const onSubmit = (values, { setSubmitting }) => {
+    setIsUpdating(true);
     console.log("values", values);
+    console.log("accessToken", accessToken);
+    const formData = new FormData();
+    for (const [key, value] of Object.entries(values)) {
+      formData.append(key, value);
+    }
     // axios
     //   .patch(`http://localhost:3000/api/v3/users/${userId}`, formData, {
     api
-      .patch(`api/v3/users/${userId}`, values, {
+      .patch(`api/v3/users/${userId}`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
+        setIsUpdating(false);
         console.log("Profile updated successfully.");
         console.log(res);
         dispatch({
           type: "SET_USER_NAME",
           payload: res.data.data.updatedUser.name,
         });
-        navigate("/profile", {
+        nav("/profile", {
           state: { data: res.data.data.updatedUser },
         });
       })
       .catch((err) => {
+        setIsUpdating(false);
         console.log("Error updating profile", err);
       });
 
@@ -78,7 +111,7 @@ const EditProfile = () => {
           onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
-            <Form className="flex bg-black flex-wrap justify-center items-center gap-2 mt-2 h-auto   w-full py-4">
+            <Form className="flex flex-wrap justify-center items-center gap-2 mt-2 h-auto   w-full py-4">
               <div className="sm:w-2/3 xs:w-11/12 md:w-10/12 450:w-2/3 lg:w-3/4  xl:2/3 2xl:w-3/5">
                 <BadgeIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
                 <Field
@@ -125,13 +158,19 @@ const EditProfile = () => {
                   Choose Avatar
                 </label>
               </div>
-
+              {imagePreview && (
+                <ImageCropper
+                  image={imagePreview}
+                  onCropComplete={handleCropComplete}
+                />
+              )}
               <button
                 type="submit"
                 disabled={isSubmitting}
                 className="w-2/5 text-white bg-gray-700 px-3 py-2 my-2 rounded-md hover:bg-gray-600"
               >
-                Update Profile
+                {isUpdating && <div className="loaderBtn w-5 h-5"></div>}
+                {!isUpdating && "Update Profile"}
               </button>
             </Form>
           )}

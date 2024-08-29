@@ -10,15 +10,22 @@ function ReviewCard({ data }) {
   useEffect(() => {
     // axios
     //   .get(`http://localhost:3000/api/v3/users/${data.reviewedBy}`)
-    api.get(`api/v3/users/${data.reviewedBy}`).then((results) => {
-      if (results.data.data.user.active === true) {
-        setName(results.data.data.user.name);
-        setAvatar(results.data.data.user.avatar);
-      } else {
-        setName("[Deleted User]");
-        setAvatar(unknown);
-      }
-    });
+    api
+      .get(`api/v3/users/${data.reviewedBy}`)
+      .then((results) => {
+        console.log(results);
+        if (results.data.data.user.active === true) {
+          setName(results.data.data.user.name);
+          setAvatar(results.data.data.user.avatar);
+        } else {
+          setName("[Deleted User]");
+          setAvatar(unknown);
+          console.log("avatar", avatar);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [name]);
 
   return (

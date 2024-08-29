@@ -5,12 +5,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import BasicSpeedDial from "./SpeedDial.jsx";
 import api from "../../axiosConfig.js";
 import "../../Custom/Loader.css";
+// import Redirect from "./Redirect.jsx";
+
 function MyProfile() {
+  const { isLogin } = useSelector((state) => state.userReducer);
   const [isLoading, setIsLoading] = useState(true);
   const nav = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.userReducer);
+  // <Redirect />;
   const [data, setData] = useState({ name: "", email: "", avatar: null });
   const formatDate = (date) => {
     const options = {
@@ -25,15 +29,19 @@ function MyProfile() {
     return date.toLocaleString("en-US", options);
   };
   useEffect(() => {
+    // if (!isLogin) {
+    //   nav("/user");
+    // }
+    // if (isLogin) {
     console.log("location : ", location);
     dispatch({
       type: "SET_USER_ID",
       payload: location.state.data._id,
     });
-    // dispatch({
-    //   type: "SET_ACCESS_TOKEN_EXPIRY",
-    //   payload: location.state.data.expiresIn,
-    // });
+    dispatch({
+      type: "SET_ACCESS_TOKEN_EXPIRY",
+      payload: location.state.data.expiresIn,
+    });
     dispatch({
       type: "SET_USER_NAME",
       payload: location.state.data.name,
@@ -52,6 +60,7 @@ function MyProfile() {
     });
     if (userId) {
       console.log("UserId", userId);
+      // }
       // axios
       //   .get(`http://localhost:3000/api/v3/users/${userId}`)
       api
@@ -69,7 +78,7 @@ function MyProfile() {
         .catch((err) => console.log(err));
     }
     // });
-  }, [location.state.data, dispatch, userId]);
+  }, [location?.state?.data, dispatch, userId]);
 
   return (
     <Fragment>

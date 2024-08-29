@@ -37,6 +37,7 @@ import EditPassword from "./Custom/User/EditPassword";
 import EditProfile from "./Custom/User/EditProfile";
 import ViewOrders from "./Custom/CheckOut/ViewOrders";
 import Forbidden from "./Custom/Admin/Forbidden";
+import LoginRequired from "./Custom/CheckOut/LoginRequired";
 //
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
           <Route path="/checkout/confirm" element={<ConfirmOrder />} />
           <Route path="/checkout/payment" element={<Payment />} />
           <Route path="/checkout/shipping" element={<ShippingDetails />} />
+          <Route path="/loginrequired" element={<LoginRequired />} />
           <Route path="/orderplaced" element={<OrderPlaced />} />
           <Route path="/empty" element={<EmptyCart />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />

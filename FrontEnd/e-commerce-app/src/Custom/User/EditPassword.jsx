@@ -6,17 +6,20 @@ import { useSelector } from "react-redux";
 import api from "../../axiosConfig";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PasswordChanged from "./PasswordChanged";
-
+import LoginRequired from "../CheckOut/LoginRequired";
 const EditPassword = () => {
+  const { isLogin } = useSelector((state) => state.userReducer);
+  const [isLoading, setIsLoading] = useState(false);
   const nav = useNavigate();
   const [showPasswdChnaged, setShowPasswdChanged] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [show, setShow] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+
   const { accessToken } = useSelector((state) => {
     return state.userReducer;
   });
@@ -39,6 +42,7 @@ const EditPassword = () => {
   });
 
   const onSubmit = (values, { setSubmitting }) => {
+    setIsLoading(true);
     console.log("Form data", values);
     // axios
     //   .patch(`http://localhost:3000/api/v3/users/updatePassword`, values, {
@@ -49,6 +53,7 @@ const EditPassword = () => {
         },
       })
       .then((res) => {
+        setIsLoading(false);
         setShowPasswdChanged(true);
         setTimeout(() => {
           setShowPasswdChanged(false);
@@ -56,6 +61,8 @@ const EditPassword = () => {
         }, 3000);
       })
       .catch((err) => {
+        setIsLoading(false);
+
         setErrMsg(err.response.data.message);
       });
     setTimeout(() => {
@@ -65,6 +72,7 @@ const EditPassword = () => {
 
   return (
     <Fragment>
+      {!isLogin && <LoginRequired></LoginRequired>}
       {showPasswdChnaged && <PasswordChanged />}
       <div className="flex bg-gray-50 flex-wrap justify-center max-w-full items-center w-max-screen h-auto py-10">
         <div className="flex flex-wrap bg-white shadow-lg shadow-slate-500 rounded-md justify-evenly xs:w-full md:w-1/2 lg:w-5/12 items-center">
@@ -185,7 +193,8 @@ const EditPassword = () => {
                   disabled={isSubmitting}
                   className="w-2/5 text-white bg-gray-700 px-3 py-2 my-2 rounded-md hover:bg-gray-600"
                 >
-                  Reset Password
+                  {isLoading && <div className="loaderBtn w-5 h-5"></div>}
+                  {!isLoading && " Reset Password"}
                 </button>
               </Form>
             )}

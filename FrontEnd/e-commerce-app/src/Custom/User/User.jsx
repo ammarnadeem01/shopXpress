@@ -11,6 +11,8 @@ import "./Loaderbutton.css";
 import ImageCropper from "../../ImageCropper";
 
 const User = () => {
+  const getAccessToken = localStorage.getItem("reduxState");
+  console.log("getAccessToken", getAccessToken);
   const [isLoading, setIsLoading] = useState(false);
   const [loginForm, setLoginForm] = useState(true);
   const [registerForm, setRegisterForm] = useState(false);

@@ -1,11 +1,20 @@
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import api from "../../axiosConfig";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const ResetPassword = () => {
+  // const nav = useNavigate();
+  // const { isLogin } = useSelector((state) => state.userReducer);
+  // useEffect(() => {
+  //   if (!isLogin) {
+  //     nav("/user");
+  //   }
+  // }, [isLogin]);
   const { token } = useParams();
   console.log("Token:", token);
   const initialValues = {

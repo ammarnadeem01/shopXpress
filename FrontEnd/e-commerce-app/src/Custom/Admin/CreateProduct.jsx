@@ -13,6 +13,7 @@ import Forbidden from "./Forbidden";
 import api from "../../axiosConfig";
 
 function CreateProduct() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const { accessToken, userId } = useSelector((state) => state.userReducer);
@@ -51,6 +52,7 @@ function CreateProduct() {
   }
   function handleCreateProduct(e) {
     e.preventDefault();
+    setIsSubmitting(true);
     const formData = new FormData();
     formData.set("name", productData.name);
     formData.set("description", productData.description);
@@ -72,11 +74,16 @@ function CreateProduct() {
         },
       })
       .then(() => {
+        setIsSubmitting(false);
         console.log("Product Created.");
       })
       .catch((err) => {
-        nav("/forbidden");
-        setErrMsg(err.response.data.message);
+        setIsSubmitting(false);
+        if (err.response.data.status === 400) {
+          setErrMsg(err.response.data.message);
+        } else {
+          nav("/forbidden");
+        }
       });
   }
   const [isOpen, setOpen] = useState(true);
@@ -187,7 +194,10 @@ function CreateProduct() {
                       className="bg-gray-800 mt-2 cursor-pointer  hover:bg-gray-600 rounded-md text-center text-white w-full py-1.5"
                       onClick={handleCreateProduct}
                     >
-                      Create
+                      {isSubmitting && (
+                        <div className="loaderBtn w-5 h-5"></div>
+                      )}
+                      {!isSubmitting && "Create"}
                     </button>
                   </div>
                 </div>
