@@ -1,6 +1,6 @@
 const express = require("express");
 const hpp = require("hpp"); // http paramter pollution
-const rateLimit = require("express-rate-limit"); // limited no of req
+// const rateLimit = require("express-rate-limit"); // limited no of req
 const sanitize = require("express-mongo-sanitize"); // sanitize for hacker attacks- nosql query
 const xss = require("xss-clean"); // sanitize for hacker attacks- html
 const helmet = require("helmet"); //  security headers
@@ -18,15 +18,16 @@ const cors = require("cors");
 const app = express();
 
 app.use(helmet());
-let limtier = rateLimit({
-  max: 100000, // max no of req from particular ip
-  windowMs: 60 * 60 * 1000, // within time in ms
-  message:
-    "We have received too many requests from this ip. Please try again later.",
-});
-app.use("/api", limtier);
+// let limtier = rateLimit({
+//   max: 100000, // max no of req from particular ip
+//   windowMs: 60 * 60 * 1000, // within time in ms
+//   message:
+//     "We have received too many requests from this ip. Please try again later.",
+// });
+// app.use("/api", limtier);
 
-app.use(express.json({ limit: "10kb" }));
+// app.use(express.json({ limit: "10kb" }));
+app.use(express.json());
 
 app.use(sanitize());
 app.use(xss());
