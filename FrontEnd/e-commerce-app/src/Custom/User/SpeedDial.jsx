@@ -37,7 +37,9 @@ export default function BasicSpeedDial() {
   const reduxState = localStorage.getItem("reduxState");
   useEffect(() => {
     // console.log("reduxState", );
-    const log = JSON.parse(reduxState).isLogin;
+    const log = JSON.parse(reduxState)?.isLogin;
+    // const log = JSON.parse(reduxState).isLogin;
+
     setLogin(log);
   }, [login]);
 

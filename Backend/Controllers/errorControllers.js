@@ -47,6 +47,7 @@ const prodErrors = (res, error) => {
       status: "error",
       message: "Something went wrong! Please try again later.",
     });
+    p;
   }
 };
 
@@ -55,6 +56,12 @@ module.exports = (error, req, res, next) => {
   error.status = error.status || "error";
 
   if (process.env.NODE_ENV === "development") {
+    if (error.name === "CastError") error = castErrorHandler(error);
+    if (error.code === 11000) error = duplicateKeyErrorHandler(error);
+    if (error.name === "ValidationError") error = validationErrorHandler(error);
+    if (error.name === "TokenExpiredError") error = handleExpiredJWT(error);
+    if (error.name === "JsonWebTokenError") error = handleJWTError(error);
+
     devErrors(res, error);
   } else if (process.env.NODE_ENV === "production") {
     if (error.name === "CastError") error = castErrorHandler(error);

@@ -42,7 +42,13 @@ exports.createNewUser = asyncErrorHandler(async (req, res, next) => {
   }
 
   const avatarLocalPath = req.file.path;
-  const avatarui = await uploadOnCloudinary(avatarLocalPath);
+  let avatarui;
+  try {
+    avatarui = await uploadOnCloudinary(avatarLocalPath);
+  } catch (error) {
+    return next(new CustomError("Nhi ho rha upload", 400));
+  }
+
   if (!avatarui) {
     return next(new CustomError("Failed to upload avatar", 400));
   }

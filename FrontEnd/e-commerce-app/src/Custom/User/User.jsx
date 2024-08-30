@@ -137,7 +137,7 @@ const User = () => {
   }
 
   return (
-    <div className="flex bg-gray-50 flex-wrap justify-center items-center max-w-full min-h-fit py-20">
+    <div className="flex bg-gray-50 flex-wrap justify-center items-center max-w-full h-[80vh] py-20">
       {/*login/ register button */}
       <div className="flex flex-wrap bg-white shadow-lg shadow-slate-500 rounded-md justify-evenly xs:w-full sm:w-5/6 800:w-7/12 lg:w-1/2 xl:w-5/12 items-center">
         <NavLink
