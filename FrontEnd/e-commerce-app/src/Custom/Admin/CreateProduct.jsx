@@ -72,7 +72,7 @@ function CreateProduct() {
     api
       .post("api/v3/products", formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          // "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${accessToken}`,
         },
       })
