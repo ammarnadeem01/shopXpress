@@ -27,8 +27,9 @@ exports.getAllUsers = asyncErrorHandler(async (req, res, next) => {
 // signup
 exports.createNewUser = asyncErrorHandler(async (req, res, next) => {
   // console.log(req.body);
-  const { name, email, password, confirmPassword } = req.body;
-  if (!name || !email || !password || !confirmPassword) {
+  // const { name, email, password, confirmPassword } = req.body;
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
     return next(
       new CustomError(
         "Name, Email,Password and Confirm Password are required.",
@@ -56,7 +57,7 @@ exports.createNewUser = asyncErrorHandler(async (req, res, next) => {
     name,
     password,
     email,
-    confirmPassword,
+    // confirmPassword,
     avatar: avatarui.url,
   });
   if (!newUser) {

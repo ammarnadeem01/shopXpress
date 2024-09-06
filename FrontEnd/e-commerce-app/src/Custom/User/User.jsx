@@ -31,7 +31,7 @@ const User = () => {
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    // confirmPassword: "",
     avatar: null,
   });
   function handleRegSubmit(e) {
@@ -41,7 +41,7 @@ const User = () => {
     formData.set("name", regFormData.name);
     formData.set("email", regFormData.email);
     formData.set("password", regFormData.password);
-    formData.set("confirmPassword", regFormData.confirmPassword);
+    // formData.set("confirmPassword", regFormData.confirmPassword);
     formData.set("avatar", regFormData.avatar);
     // axios
     //   .post("http://localhost:3000/api/v3/users", formData, {
@@ -270,7 +270,7 @@ const User = () => {
             </div>
 
             {/* confirm passswd  */}
-            <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
+            {/* <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
               <LockIcon className="absolute translate-x-1 translate-y-2 ml-2.5" />
               <input
                 type={showConfirm ? "text" : "password"}
@@ -293,7 +293,7 @@ const User = () => {
                   className=" cursor-pointer absolute -translate-x-8 translate-y-3"
                 />
               )}
-            </div>
+            </div> */}
             {/* end */}
             <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
               <input
