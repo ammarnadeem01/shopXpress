@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 function ShippingInfo() {
   const [orderData, setOrderData] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [orderStatus, setOrderStatus] = useState("Processing");
+  const [orderStatus, setOrderStatus] = useState("");
   const [userData, setUserData] = useState({});
   const [shippingData, setShippingData] = useState({});
   const { accessToken } = useSelector((state) => state.userReducer);
