@@ -82,7 +82,8 @@ function CreateProduct() {
         if (err.response.data.status === 400) {
           setErrMsg(err.response.data.message);
         } else {
-          nav("/forbidden");
+          console.log(err);
+          // nav("/forbidden");
         }
       });
   }
