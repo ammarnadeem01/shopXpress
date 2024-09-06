@@ -231,7 +231,7 @@ function ShippingInfo() {
                     : "text-red-800"
                 }`}
               >
-                {orderData.status}
+                {orderStatus}
               </p>
             </div>
           </div>
