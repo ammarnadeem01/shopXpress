@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 function ShippingInfo() {
   const [orderData, setOrderData] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [orderStatus, setOrderStatus] = useState("Processing");
   const [userData, setUserData] = useState({});
   const [shippingData, setShippingData] = useState({});
   const { accessToken } = useSelector((state) => state.userReducer);
@@ -31,6 +32,7 @@ function ShippingInfo() {
       )
       .then((response) => {
         // console.log("response", response);
+        setOrderStatus(orderData.status);
         if (orderData.status == "Processing") {
           cartItems.map((item) => {
             // console.log("item.stock", item.stock);
@@ -58,7 +60,7 @@ function ShippingInfo() {
               });
           });
         }
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((err) => {
         // console.log(err);
@@ -151,10 +153,11 @@ function ShippingInfo() {
     } catch (error) {}
   };
 
+  // useEffect(() => {}, [orderStatus]);
   useEffect(() => {
     // console.log("status", status);
     fetchOrderDetails();
-  }, [orderId]);
+  }, [orderStatus]);
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="flex w-max-screen ">
