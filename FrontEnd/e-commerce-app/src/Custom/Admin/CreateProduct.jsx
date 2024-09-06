@@ -39,7 +39,7 @@ function CreateProduct() {
     description: "",
     category: "Laptop",
     stock: 1,
-    // productImages: [],
+    productImages: [],
   });
   function handleChange(e) {
     const { name, value, type, files } = e.target;
@@ -60,10 +60,13 @@ function CreateProduct() {
     formData.set("category", productData.category);
     formData.set("price", productData.price);
 
-    // productData.productImages.map((img) => {
-    //   formData.append("productImages", img);
-    // });
+    productData.productImages.map((img) => {
+      formData.append("productImages", img);
+    });
 
+    for (let index = 0; index < 3; index++) {
+      console.log(formData.productImages[index]);
+    }
     // axios
     //   .post("http://localhost:3000/api/v3/products", formData, {
     api
