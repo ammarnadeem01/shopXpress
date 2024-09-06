@@ -39,7 +39,7 @@ function CreateProduct() {
     description: "",
     category: "Laptop",
     stock: 1,
-    productImages: [],
+    // productImages: [],
   });
   function handleChange(e) {
     const { name, value, type, files } = e.target;
@@ -60,9 +60,9 @@ function CreateProduct() {
     formData.set("category", productData.category);
     formData.set("price", productData.price);
 
-    productData.productImages.map((img) => {
-      formData.append("productImages", img);
-    });
+    // productData.productImages.map((img) => {
+    //   formData.append("productImages", img);
+    // });
 
     // axios
     //   .post("http://localhost:3000/api/v3/products", formData, {

@@ -38,21 +38,21 @@ exports.createNewUser = asyncErrorHandler(async (req, res, next) => {
     );
   }
 
-  // if (!req.file?.path) {
-  //   return next(new CustomError("Avatar is required.", 400));
-  // }
+  if (!req.file?.path) {
+    return next(new CustomError("Avatar is required.", 400));
+  }
 
-  // const avatarLocalPath = req.file.path;
-  // let avatarui;
-  // try {
-  //   avatarui = await uploadOnCloudinary(avatarLocalPath);
-  // } catch (error) {
-  //   return next(new CustomError("Nhi ho rha upload", 400));
-  // }
+  const avatarLocalPath = req.file.path;
+  let avatarui;
+  try {
+    avatarui = await uploadOnCloudinary(avatarLocalPath);
+  } catch (error) {
+    return next(new CustomError("Nhi ho rha upload", 400));
+  }
 
-  // if (!avatarui) {
-  //   return next(new CustomError("Failed to upload avatar", 400));
-  // }
+  if (!avatarui) {
+    return next(new CustomError("Failed to upload avatar", 400));
+  }
   const newUser = await User.create({
     name,
     password,
