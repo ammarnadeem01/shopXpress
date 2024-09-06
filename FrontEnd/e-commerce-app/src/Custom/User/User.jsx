@@ -37,16 +37,16 @@ const User = () => {
   function handleRegSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
-    const formData = new FormData();
-    formData.set("name", regFormData.name);
-    formData.set("email", regFormData.email);
-    formData.set("password", regFormData.password);
-    formData.set("confirmPassword", regFormData.confirmPassword);
+    // const formData = new FormData();
+    // formData.set("name", regFormData.name);
+    // formData.set("email", regFormData.email);
+    // formData.set("password", regFormData.password);
+    // formData.set("confirmPassword", regFormData.confirmPassword);
     // formData.set("avatar", regFormData.avatar);
     // axios
     //   .post("http://localhost:3000/api/v3/users", formData, {
     api
-      .post("api/v3/users", formData, {
+      .post("api/v3/users", regFormData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -295,7 +295,7 @@ const User = () => {
               )}
             </div>
             {/* end */}
-            {/* <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
+            <div className="sm:w-2/3 xs:w-11/12 450:w-2/3 xl:w-2/3">
               <input
                 type="file"
                 placeholder="avatar"
@@ -316,7 +316,7 @@ const User = () => {
                   onCropComplete={handleCropComplete}
                 />
               )}
-            </div> */}
+            </div>
             {redErrorMessage && (
               <p className="w-full text-center" style={{ color: "red" }}>
                 {redErrorMessage}
