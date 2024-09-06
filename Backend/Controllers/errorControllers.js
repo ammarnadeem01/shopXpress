@@ -47,7 +47,6 @@ const prodErrors = (res, error) => {
       status: "error",
       message: "Something went wrong! Please try again later.",
     });
-    p;
   }
 };
 
