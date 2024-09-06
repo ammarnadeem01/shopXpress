@@ -84,23 +84,27 @@ exports.addNewProduct = asyncErrorHandler(async (req, res, next) => {
       )
     );
   }
-
-  if (!req.files || req.files.length < 3) {
-    return next(new CustomError("At least 3 images are required.", 400));
+  let img1, img2, img3;
+  try {
+    if (!req.files || req.files.length < 3) {
+      return next(new CustomError("At least 3 images are required.", 400));
+    }
+    const image1LocalePath = req.files[0].path;
+    const image2LocalePath = req.files[1].path;
+    const image3LocalePath = req.files[2].path;
+    img1 = await uploadOnCloudinary(image1LocalePath);
+    img2 = await uploadOnCloudinary(image2LocalePath);
+    img3 = await uploadOnCloudinary(image3LocalePath);
+  } catch (error) {
+    console.log(error);
   }
-  const image1LocalePath = req.files[0].path;
-  const image2LocalePath = req.files[1].path;
-  const image3LocalePath = req.files[2].path;
-  const img1 = await uploadOnCloudinary(image1LocalePath);
-  const img2 = await uploadOnCloudinary(image2LocalePath);
-  const img3 = await uploadOnCloudinary(image3LocalePath);
   const newProduct = await Product.create({
     name,
     description,
     price,
     category,
     stock,
-    // productImages: [img1.url, img2.url, img3.url],
+    productImages: [img1.url, img2.url, img3.url],
   });
   res.status(201).json({
     status: "Success",
