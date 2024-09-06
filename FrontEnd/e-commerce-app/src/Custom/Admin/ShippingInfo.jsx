@@ -53,7 +53,6 @@ function ShippingInfo() {
                 }
               )
               .then((response) => {
-                setOrderStatus(orderData.status);
                 console.log(response);
               })
               .catch((err) => {
@@ -61,6 +60,7 @@ function ShippingInfo() {
               });
           });
         }
+        setOrderStatus(orderData.status);
         // window.location.reload();
       })
       .catch((err) => {
