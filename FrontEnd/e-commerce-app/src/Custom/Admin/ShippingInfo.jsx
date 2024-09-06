@@ -32,7 +32,7 @@ function ShippingInfo() {
       )
       .then((response) => {
         // console.log("response", response);
-        setOrderStatus(orderData.status);
+        // setOrderStatus(orderData.status);
         if (orderData.status == "Processing") {
           cartItems.map((item) => {
             // console.log("item.stock", item.stock);
@@ -53,6 +53,7 @@ function ShippingInfo() {
                 }
               )
               .then((response) => {
+                setOrderStatus(orderData.status);
                 console.log(response);
               })
               .catch((err) => {
