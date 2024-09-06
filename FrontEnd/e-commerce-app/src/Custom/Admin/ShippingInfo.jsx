@@ -5,17 +5,21 @@ import axios from "axios";
 import Hamburger from "hamburger-react";
 import api from "../../axiosConfig";
 import { useSelector } from "react-redux";
+import "../../Custom/Loader.css";
 function ShippingInfo() {
   const [orderData, setOrderData] = useState([]);
   const [cartItems, setCartItems] = useState([]);
-  const [orderStatus, setOrderStatus] = useState("");
+  const [orderStatus, setOrderStatus] = useState("Processing");
   const [userData, setUserData] = useState({});
   const [shippingData, setShippingData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const { accessToken } = useSelector((state) => state.userReducer);
   const loc = useLocation();
   const orderId = loc.state;
 
   function handleStatus() {
+    setIsLoading(true);
+    setOrderStatus(orderData.status == "Processing" ? "Shipped" : "Delivered");
     // axios
     //   .patch(`http://localhost:3000/api/v3/orders/${orderId}`, {
     api
@@ -60,7 +64,9 @@ function ShippingInfo() {
               });
           });
         }
-        setOrderStatus(orderData.status);
+        setIsLoading(false);
+
+        // setOrderStatus(orderData.status);
         // window.location.reload();
       })
       .catch((err) => {
@@ -245,7 +251,8 @@ function ShippingInfo() {
                   onClick={handleStatus}
                   className="cursor-pointer w-full text-center py-2 text-white text-sm mt-2 bg-orange-600 hover:bg-orange-500"
                 >
-                  Process
+                  {isLoading && <div className="loader"></div>}
+                  {!isLoading && "Process"}
                 </button>
               </div>
             )}
@@ -350,7 +357,8 @@ function ShippingInfo() {
               onClick={handleStatus}
               className="cursor-pointer w-full text-center py-2 text-white text-sm mt-2 bg-orange-600 hover:bg-orange-500"
             >
-              Process
+              {isLoading && <div className="loader w-5 h-5"></div>}
+              {!isLoading && "Process"}
             </button>
           </div>
         )}
