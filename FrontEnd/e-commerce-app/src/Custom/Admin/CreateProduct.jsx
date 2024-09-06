@@ -51,6 +51,7 @@ function CreateProduct() {
     }
   }
   function handleCreateProduct(e) {
+    console.log("productData", productData);
     e.preventDefault();
     setIsSubmitting(true);
     const formData = new FormData();
@@ -64,9 +65,7 @@ function CreateProduct() {
       formData.append("productImages", img);
     });
 
-    for (let index = 0; index < 3; index++) {
-      console.log(formData.productImages[index]);
-    }
+    console.log("formData", formData);
     // axios
     //   .post("http://localhost:3000/api/v3/products", formData, {
     api
