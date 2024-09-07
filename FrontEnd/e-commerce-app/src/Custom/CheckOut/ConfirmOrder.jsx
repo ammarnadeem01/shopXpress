@@ -84,7 +84,7 @@ function ConfirmOrder() {
   return (
     <>
       {!isLogin && cartItems?.length === 0 && <LoginRequired></LoginRequired>}
-      <div className="flex items-center justify-center bg-gray-50 w-max-screen my-3 h-auto">
+      <div className="flex items-center justify-center bg-gray-50 min-h-[60vh] my-3 h-auto">
         <div className="bg-white shadow-lg shadow-gray-400 w-11/12 h-full py-3">
           <Checkout step={2} />
           <div className="flex 900:flex-row xs:max-900:flex-col justify-between items-center flex-wrap w-max-screen h-auto">

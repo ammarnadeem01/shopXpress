@@ -75,7 +75,7 @@ function Cart() {
   }
 
   return (
-    <div className="flex justify-center items-center bg-gray-50 w-max--screen h-auto flex-wrap py-10">
+    <div className="flex justify-center items-center bg-gray-50  min-h-[80vh] h-auto flex-wrap py-10">
       <div className="flex bg-orange-500 py-1 rounded-md shadow-md sm:w-11/12 xs:w-full xs:px-1 h-4/5 items-center justify-evenly flex-wrap">
         <p className="w-1/2 sm:w-4/6 text-white translate-y-1.5 pl-2">
           Product

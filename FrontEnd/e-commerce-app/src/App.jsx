@@ -41,7 +41,7 @@ import LoginRequired from "./Custom/CheckOut/LoginRequired";
 //
 function App() {
   return (
-    <div className="box-border p-0 m-0 w-full">
+    <div className="box-border p-0 m-0 w-full ">
       <BrowserRouter>
         <Navbar />
         <Routes>
