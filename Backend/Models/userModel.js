@@ -22,17 +22,17 @@ const userSchema = new mongoose.Schema({
     minLength: [8, "Password should be greater than 8 characters"],
     select: false,
   },
-  // confirmPassword: {
-  //   type: String,
-  //   required: [true, "Please Enter Your Confirm Password"],
-  //   validate: {
-  //     validator: function (value) {
-  //       // console.log(`Validator: ${value} === ${this.password}`); // Debugging line
-  //       return value === this.password;
-  //     },
-  //     message: "Password and Confirm Passwords don't match",
-  //   },
-  // },
+  confirmPassword: {
+    type: String,
+    required: [true, "Please Enter Your Confirm Password"],
+    validate: {
+      validator: function (value) {
+        // console.log(`Validator: ${value} === ${this.password}`); // Debugging line
+        return value === this.password;
+      },
+      message: "Password and Confirm Passwords don't match",
+    },
+  },
   passwordChangedAt: Date,
   ResetPasswordToken: String,
   ResetPasswordTokenExpiresIn: Date,
@@ -66,7 +66,7 @@ userSchema.pre("save", async function (next) {
   // Encrypting password before it is saved
   // console.log(`Hashing password: ${this.password}`); // Debugging line
   this.password = await bcrypt.hash(this.password, 12);
-  // this.confirmPassword = undefined;
+  this.confirmPassword = undefined;
   next();
 });
 
