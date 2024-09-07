@@ -186,6 +186,14 @@ const ProductDetails = () => {
             <div className="flex mb-2">
               <p
                 className="bg-gray-500 text-white w-5 text-center cursor-pointer"
+                onClick={() => setCount(count > 1 ? count - 1 : count)}
+              >
+                -
+              </p>
+              <p className="w-auto px-2">{count}</p>
+
+              <p
+                className="bg-gray-500 text-white w-5 text-center cursor-pointer"
                 onClick={() =>
                   setCount(
                     count < location.state.data.stock ? count + 1 : count
@@ -193,13 +201,6 @@ const ProductDetails = () => {
                 }
               >
                 +
-              </p>
-              <p className="w-auto px-2">{count}</p>
-              <p
-                className="bg-gray-500 text-white w-5 text-center cursor-pointer"
-                onClick={() => setCount(count > 1 ? count - 1 : count)}
-              >
-                -
               </p>
               <button
                 className={`cursor-pointer ml-3 text-center text-xs flex items-center text-white px-4 rounded-3xl ${

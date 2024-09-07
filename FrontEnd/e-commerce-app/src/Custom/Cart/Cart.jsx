@@ -115,6 +115,28 @@ function Cart() {
                 const updatedItems = items.map((prevItem) => ({
                   ...prevItem,
                   quantity:
+                    prevItem._id === item._id && prevItem.quantity > 1
+                      ? prevItem.quantity - 1
+                      : prevItem.quantity,
+                }));
+
+                const newQuantity =
+                  item.quantity > 1 ? item.quantity - 1 : item.quantity;
+
+                setItems(updatedItems);
+                updateQuantity(item._id, newQuantity);
+              }}
+            >
+              -
+            </p>
+            <p className="w-auto px-2">{item.quantity}</p>
+
+            <p
+              className="bg-gray-500 text-white w-5 h-7 text-center cursor-pointer"
+              onClick={() => {
+                const updatedItems = items.map((prevItem) => ({
+                  ...prevItem,
+                  quantity:
                     prevItem._id === item._id &&
                     prevItem.quantity < prevItem.stock
                       ? prevItem.quantity + 1
@@ -131,29 +153,6 @@ function Cart() {
               }}
             >
               +
-            </p>
-
-            <p className="w-auto px-2">{item.quantity}</p>
-
-            <p
-              className="bg-gray-500 text-white w-5 h-7 text-center cursor-pointer"
-              onClick={() => {
-                const updatedItems = items.map((prevItem) => ({
-                  ...prevItem,
-                  quantity:
-                    prevItem._id === item._id && prevItem.quantity > 1
-                      ? prevItem.quantity - 1
-                      : prevItem.quantity,
-                }));
-
-                const newQuantity =
-                  item.quantity > 1 ? item.quantity - 1 : item.quantity;
-
-                setItems(updatedItems);
-                updateQuantity(item._id, newQuantity);
-              }}
-            >
-              -
             </p>
           </div>
 

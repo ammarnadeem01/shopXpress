@@ -98,7 +98,7 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="flex bg-gray-50 flex-wrap justify-center max-w-full items-center w-max-screen h-auto py-10">
+    <div className="flex bg-gray-50 flex-wrap justify-center max-w-full items-center min-h-[70vh] h-auto py-10">
       <div className="flex flex-wrap bg-white shadow-lg shadow-slate-500 rounded-md justify-evenly xs:w-full md:w-1/2 lg:w-5/12 items-center">
         <div className="pt-3">
           <div className="text-center  border-b-4 px-4 border-b-gray-600 text-9xl font-semibold">
