@@ -1,7 +1,7 @@
 const express = require("express");
 const productControllers = require("../Controllers/productController");
 const userControllers = require("../Controllers/userController");
-const upload = require("../Middlewares/multer.middleware");
+const { upload } = require("../Middlewares/multer.middleware");
 const router = express.Router();
 router
   .route("/admin/products")

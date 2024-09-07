@@ -65,9 +65,6 @@ function CreateProduct() {
       formData.append("productImages", img);
     });
 
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
     // axios
     //   .post("http://localhost:3000/api/v3/products", formData, {
     api
@@ -79,6 +76,7 @@ function CreateProduct() {
       })
       .then(() => {
         setIsSubmitting(false);
+        nav("/admin/products");
         // console.log("Product Created.");
       })
       .catch((err) => {
@@ -87,7 +85,7 @@ function CreateProduct() {
           setErrMsg(err.response.data.message);
         } else {
           console.log(err);
-          // nav("/forbidden");
+          nav("/forbidden");
         }
       });
   }

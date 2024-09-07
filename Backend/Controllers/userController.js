@@ -1,7 +1,7 @@
 const asyncErrorHandler = require("./../Utils/asyncErrorHandler");
 const CustomError = require("./../Utils/CustomError");
 const User = require("../Models/userModel");
-const uploadOnCloudinary = require("../Utils/cloudinary");
+const { uploadToCloudinary } = require("../Middlewares/multer.middleware.js");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendMail = require("../Utils/Email");
@@ -26,9 +26,7 @@ exports.getAllUsers = asyncErrorHandler(async (req, res, next) => {
 
 // signup
 exports.createNewUser = asyncErrorHandler(async (req, res, next) => {
-  // console.log(req.body);
   const { name, email, password, confirmPassword } = req.body;
-  // const { name, email, password } = req.body;
   if (!name || !email || !password || !confirmPassword) {
     return next(
       new CustomError(
@@ -38,27 +36,25 @@ exports.createNewUser = asyncErrorHandler(async (req, res, next) => {
     );
   }
 
-  if (!req.file?.path) {
-    return next(new CustomError("Avatar is required.", 400));
+  console.log(req.file);
+  if (!req.file) {
+    return next(new CustomError("Avatar image is required.", 400));
   }
 
-  const avatarLocalPath = req.file.path;
-  let avatarui;
+  let avatarUrl;
   try {
-    avatarui = await uploadOnCloudinary(avatarLocalPath);
+    const result = await uploadToCloudinary(req.file.buffer);
+    console.log("result", result);
+    avatarUrl = result.secure_url;
   } catch (error) {
-    return next(new CustomError("Nhi ho rha upload", 400));
-  }
-
-  if (!avatarui) {
-    return next(new CustomError("Failed to upload avatar", 400));
+    return next(new CustomError("Failed to upload to Cloudinary", 500));
   }
   const newUser = await User.create({
     name,
     password,
     email,
     confirmPassword,
-    // avatar: avatarui.url,
+    avatar: avatarUrl,
   });
   if (!newUser) {
     return next(new CustomError("New User Creation Failed", 500));

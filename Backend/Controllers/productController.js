@@ -1,7 +1,7 @@
 const asyncErrorHandler = require("./../Utils/asyncErrorHandler");
 const CustomError = require("./../Utils/CustomError");
 const Product = require("../Models/productsModel");
-const uploadOnCloudinary = require("../Utils/cloudinary");
+const { uploadToCloudinary } = require("../Middlewares/multer.middleware.js");
 const ApiFeatures = require("../Utils/ApiFeatures");
 
 exports.getHighestRated = (req, res, next) => {
@@ -84,34 +84,45 @@ exports.addNewProduct = asyncErrorHandler(async (req, res, next) => {
       )
     );
   }
-  let img1, img2, img3;
-  try {
-    if (!req.files || req.files.length < 3) {
-      return next(new CustomError("At least 3 images are required.", 400));
-    }
-    const image1LocalePath = req.files[0].path;
-    const image2LocalePath = req.files[1].path;
-    const image3LocalePath = req.files[2].path;
-    img1 = await uploadOnCloudinary(image1LocalePath);
-    img2 = await uploadOnCloudinary(image2LocalePath);
-    img3 = await uploadOnCloudinary(image3LocalePath);
-  } catch (error) {
-    console.log(error);
+
+  if (!req.files || req.files.length < 3) {
+    return next(new CustomError("At least 3 images are required.", 400));
   }
-  const newProduct = await Product.create({
-    name,
-    description,
-    price,
-    category,
-    stock,
-    productImages: [img1.url, img2.url, img3.url],
-  });
-  res.status(201).json({
-    status: "Success",
-    data: {
-      newProduct,
-    },
-  });
+
+  let imageUrls = [];
+  try {
+    for (const file of req.files) {
+      const result = await uploadToCloudinary(file.buffer);
+      imageUrls.push(result.secure_url);
+    }
+
+    if (imageUrls.length < 3) {
+      return next(new CustomError("Failed to upload all images.", 400));
+    }
+
+    const newProduct = await Product.create({
+      name,
+      description,
+      price,
+      category,
+      stock,
+      productImages: imageUrls,
+    });
+
+    if (!newProduct) {
+      return next(new CustomError("Product creation failed.", 500));
+    }
+
+    res.status(201).json({
+      status: "Success",
+      data: {
+        newProduct,
+      },
+    });
+  } catch (error) {
+    console.error("Failed to upload images to Cloudinary:", error);
+    return next(new CustomError("Failed to upload images to Cloudinary.", 500));
+  }
 });
 
 //Update
@@ -140,13 +151,28 @@ exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
     if (req.files.length < 3) {
       return next(new CustomError("At least 3 images are required.", 400));
     }
-    const image1LocalePath = req.files[0].path;
-    const image2LocalePath = req.files[1].path;
-    const image3LocalePath = req.files[2].path;
-    const img1 = await uploadOnCloudinary(image1LocalePath);
-    const img2 = await uploadOnCloudinary(image2LocalePath);
-    const img3 = await uploadOnCloudinary(image3LocalePath);
-    updatedData.productImages = [img1.url, img2.url, img3.url];
+
+    const imageUrls = [];
+    try {
+      for (const file of req.files) {
+        if (!file.buffer) {
+          throw new Error("File buffer is missing.");
+        }
+        const result = await uploadToCloudinary(file.buffer);
+        imageUrls.push(result.secure_url);
+      }
+
+      if (imageUrls.length < 3) {
+        return next(new CustomError("Failed to upload all images.", 400));
+      }
+
+      updatedData.productImages = imageUrls;
+    } catch (error) {
+      console.error("Failed to upload images to Cloudinary:", error);
+      return next(
+        new CustomError("Failed to upload images to Cloudinary.", 500)
+      );
+    }
   }
 
   // console.log("updatedData", updatedData);

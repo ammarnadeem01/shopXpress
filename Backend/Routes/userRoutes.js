@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const upload = require("../Middlewares/multer.middleware");
+const { upload } = require("../Middlewares/multer.middleware");
 const userControllers = require("../Controllers/userController");
 router
   .route("/updatePassword")

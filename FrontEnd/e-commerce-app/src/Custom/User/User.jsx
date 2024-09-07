@@ -37,16 +37,16 @@ const User = () => {
   function handleRegSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
-    // const formData = new FormData();
-    // formData.set("name", regFormData.name);
-    // formData.set("email", regFormData.email);
-    // formData.set("password", regFormData.password);
-    // formData.set("confirmPassword", regFormData.confirmPassword);
-    // formData.set("avatar", regFormData.avatar);
+    const formData = new FormData();
+    formData.set("name", regFormData.name);
+    formData.set("email", regFormData.email);
+    formData.set("password", regFormData.password);
+    formData.set("confirmPassword", regFormData.confirmPassword);
+    formData.set("avatar", regFormData.avatar);
     // axios
     //   .post("http://localhost:3000/api/v3/users", formData, {
     api
-      .post("api/v3/users", regFormData, {
+      .post("api/v3/users", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -69,23 +69,23 @@ const User = () => {
         }
       });
   }
-  // const handleCropComplete = async (croppedImage) => {
-  //   const response = await fetch(croppedImage);
-  //   const blob = await response.blob();
-  //   const file = new File([blob], "avatar.jpg", { type: "image/jpeg" });
-  //   setCroppedImage(croppedImage);
-  //   setRegFormData({ ...regFormData, avatar: file });
-  // };
+  const handleCropComplete = async (croppedImage) => {
+    const response = await fetch(croppedImage);
+    const blob = await response.blob();
+    const file = new File([blob], "avatar.jpg", { type: "image/jpeg" });
+    setCroppedImage(croppedImage);
+    setRegFormData({ ...regFormData, avatar: file });
+  };
 
   function handleRegChange(e) {
     const { name, value, type, files } = e.target;
-    // console.log();
-    // if (type === "file") {
-    //   setImagePreview(URL.createObjectURL(files[0]));
-    //   setRegFormData({ ...regFormData, [name]: files[0] });
-    // } else {
-    setRegFormData({ ...regFormData, [name]: value });
-    // }
+    console.log();
+    if (type === "file") {
+      setImagePreview(URL.createObjectURL(files[0]));
+      setRegFormData({ ...regFormData, [name]: files[0] });
+    } else {
+      setRegFormData({ ...regFormData, [name]: value });
+    }
   }
 
   // =================================== LOGIN =============================================
