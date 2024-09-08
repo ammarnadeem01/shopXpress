@@ -2,7 +2,7 @@ import Rating from "@mui/material/Rating";
 import { Fragment, useEffect, useState } from "react";
 import ReviewCard from "./ReviewCard";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -15,7 +15,7 @@ import api from "../../../src/axiosConfig.js";
 import "../../Custom/Loader.css";
 
 const ProductDetails = () => {
-  const location = useLocation();
+  const { id } = useParams();
   const [errMsg, setErrMsg] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [reviewId, setReviewId] = useState("");
@@ -29,17 +29,27 @@ const ProductDetails = () => {
   const [review, setReview] = useState("");
   const [ratings, setRatings] = useState(0);
   const [avgRating, setAvgRating] = useState(0.5);
+  const [productData, setProductData] = useState([]);
+  const [prodImgs, setProdImgs] = useState([]);
   const nav = useNavigate();
   const { accessToken } = useSelector((state) => state.userReducer);
+  const fetchProducts = () => {
+    api.get(`api/v3/products/${id}`).then((result) => {
+      result = result.data.data.product;
+      console.log("result", result);
+      setProductData(result);
+      setAvgRating(result.avgRating);
+      setProdImgs(result.productImages);
+    });
+  };
   useEffect(() => {
-    const productId = location.state.data._id;
-    setAvgRating(location.state.data.avgRating);
+    fetchProducts(id);
 
     // axios
     //   .get(`http://localhost:3000/api/v3/reviews/product/${productId}`, {
 
     api
-      .get(`api/v3/reviews/product/${productId}`, {
+      .get(`api/v3/reviews/products/${id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -77,13 +87,13 @@ const ProductDetails = () => {
         // console.log(err);
         setErrMsg("Please Login Again...");
       });
-  }, [location.state.data._id, avgRating, userId, open, isLoading]);
+  }, [id, avgRating, userId, open, isLoading]);
 
   const handleReviewSubmission = () => {
     setIsLoading(true);
     handleClose();
     const reviewData = {
-      productId: location.state.data._id,
+      productId: id,
       userId,
       review,
       ratings,
@@ -123,7 +133,7 @@ const ProductDetails = () => {
     dispatch({
       type: "ADD_ITEM_TO_CART",
       payload: {
-        productId: location.state.data._id,
+        productId: id,
         quantity: count,
       },
     });
@@ -134,7 +144,7 @@ const ProductDetails = () => {
     dispatch({
       type: "UPDATE_ITEM_IN_CART",
       payload: {
-        productId: location.state.data._id,
+        productId: id,
         quantity: count,
       },
     });
@@ -158,7 +168,7 @@ const ProductDetails = () => {
         <div className="flex w-4/5 rounded-md xs:max-md:flex-col shadow-lg flex-wrap">
           <div className="w-1/2  xs:max-md:w-full xs:max-md:h-[50vh]">
             <Carousel>
-              {location.state.data.productImages.map((image, index) => (
+              {prodImgs.map((image, index) => (
                 <img src={image} className="h-full w-full" />
               ))}
             </Carousel>
@@ -166,10 +176,8 @@ const ProductDetails = () => {
 
           {/* detail */}
           <div className="w-1/2  bg-white p-6 flex xs:max-md:w-full flex-col  justify-evenly items-start detail-container">
-            <p className="text-2xl font-semibold">{location.state.data.name}</p>
-            <p className="text-xs text-gray-400">
-              Product # {location.state.data._id}
-            </p>
+            <p className="text-2xl font-semibold">{productData.name}</p>
+            <p className="text-xs text-gray-400">Product # {productData._id}</p>
             <div className="flex items-center border-y-2 border-gray-200 w-3/4 py-2">
               <Rating
                 name="half-rating"
@@ -180,9 +188,7 @@ const ProductDetails = () => {
               />
               <p className="ml-2 mt-3 text-xs">({allReviews.length} Reviews)</p>
             </div>
-            <p className="text-2xl font-semibold mb-2">
-              {location.state.data.price}
-            </p>
+            <p className="text-2xl font-semibold mb-2">{productData.price}</p>
             <div className="flex mb-2">
               <p
                 className="bg-gray-500 text-white w-5 text-center cursor-pointer"
@@ -195,20 +201,18 @@ const ProductDetails = () => {
               <p
                 className="bg-gray-500 text-white w-5 text-center cursor-pointer"
                 onClick={() =>
-                  setCount(
-                    count < location.state.data.stock ? count + 1 : count
-                  )
+                  setCount(count < productData.stock ? count + 1 : count)
                 }
               >
                 +
               </p>
               <button
                 className={`cursor-pointer ml-3 text-center text-xs flex items-center text-white px-4 rounded-3xl ${
-                  location.state.data.stock === 0
+                  productData.stock === 0
                     ? "bg-orange-300"
                     : "bg-orange-600 hover:bg-orange-500"
                 }`}
-                disabled={location.state.data.stock === 0}
+                disabled={productData.stock === 0}
                 onClick={AddedToCartFunction}
               >
                 Add to Cart
@@ -218,19 +222,17 @@ const ProductDetails = () => {
               Status:
               <span
                 className={`font-semibold ml-2 ${
-                  location.state.data.stock === 0
-                    ? "text-red-600"
-                    : "text-green-600"
+                  productData.stock === 0 ? "text-red-600" : "text-green-600"
                 }`}
               >
-                {location.state.data.stock === 0 ? "Out Of Stock" : "In Stock"}
+                {productData.stock === 0 ? "Out Of Stock" : "In Stock"}
               </span>
             </p>
             <p>
               <span className="text-lg font-semibold">
                 Description: <br />
               </span>
-              {location.state.data.description}
+              {productData.description}
             </p>
             <button
               disabled={!purchased}

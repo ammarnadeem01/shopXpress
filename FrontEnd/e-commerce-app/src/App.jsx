@@ -10,16 +10,12 @@ import Search from "./Custom/Search/Search";
 import Cart from "./Custom/Cart/Cart";
 import User from "./Custom/User/User";
 import ProductDetails from "./Custom/Products/ProductDetails";
-
 import PageNotFound from "./Custom/PageNotFound";
 import MyProfile from "./Custom/User/MyProfile";
-
 import ConfirmOrder from "./Custom/CheckOut/ConfirmOrder";
 import OrderPlaced from "./Custom/CheckOut/OrderPlacedMsg";
 import Payment from "./Custom/CheckOut/Payment";
 import ShippingDetails from "./Custom/CheckOut/ShippingDetails";
-
-//
 import UserList from "./Custom/Admin/userList";
 import UpdateUser from "./Custom/Admin/UpdateUser";
 import Dashboard from "./Custom/Admin/Dashboard";
@@ -38,7 +34,8 @@ import EditProfile from "./Custom/User/EditProfile";
 import ViewOrders from "./Custom/CheckOut/ViewOrders";
 import Forbidden from "./Custom/Admin/Forbidden";
 import LoginRequired from "./Custom/CheckOut/LoginRequired";
-//
+import OrderDetails from "./Custom/CheckOut/OrderDetails";
+
 function App() {
   return (
     <div className="box-border p-0 m-0 w-full ">
@@ -52,7 +49,7 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/user" element={<User />} />
-          <Route path="/detail" element={<ProductDetails />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/admin/userlist" element={<UserList />} />
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/updateuser" element={<UpdateUser />} />
@@ -75,6 +72,7 @@ function App() {
           <Route path="/editpassword" element={<EditPassword />} />
           <Route path="/editprofile" element={<EditProfile />} />
           <Route path="/vieworders" element={<ViewOrders />} />
+          <Route path="/order/:id" element={<OrderDetails />} />
           <Route path="/forbidden" element={<Forbidden />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>

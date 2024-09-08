@@ -24,9 +24,9 @@ function ViewOrders() {
       })
       .catch((err) => {
         console.error(err);
-        // Handle error as needed
       });
-  }, [userId, accessToken]);
+    // }, [userId, accessToken]);
+  });
 
   const formatDate = (date) => {
     const options = {
@@ -51,7 +51,7 @@ function ViewOrders() {
       {!isLoading && (
         <div className="w-full h-full min-h-screen bg-white p-4">
           {/* Table for Larger Screens */}
-          <div className="hidden lg:block bg-white shadow-lg rounded-lg overflow-hidden">
+          <div className="hidden lg:block bg-white shadow-lg rounded-lg overflow-hidden ">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-orange-400 text-white">
                 <tr>
@@ -71,7 +71,13 @@ function ViewOrders() {
               </thead>
               <tbody>
                 {data.map((order) => (
-                  <tr key={order._id}>
+                  <tr
+                    key={order._id}
+                    onClick={() => {
+                      nav(`/order/${order._id}`);
+                    }}
+                    className="cursor-pointer hover:bg-gray-100 transition"
+                  >
                     <td className="px-6 py-3 uppercase font-semibold text-left text-sm">
                       {order._id}
                     </td>
@@ -100,8 +106,11 @@ function ViewOrders() {
           <div className="block lg:hidden space-y-4">
             {data.map((order) => (
               <div
+                onClick={() => {
+                  nav(`/order/${order._id}`);
+                }}
                 key={order._id}
-                className="bg-white p-6 rounded-lg shadow-md flex flex-col space-y-2"
+                className="bg-white p-6 rounded-lg shadow-md flex flex-col space-y-2 cursor-pointer"
               >
                 <div className="text-lg font-semibold text-gray-800">
                   Order ID: {order._id}

@@ -41,9 +41,9 @@ exports.getShippingInfo = asyncErrorHandler(async (req, res, next) => {
   if (!id) {
     return next(new CustomError("ID is required...", 400));
   }
-  const document = await ShippingInfo.find({ customer: id }).select(
-    "address city state country phone"
-  );
+  const document = await ShippingInfo.findOne({ customer: id })
+    .sort({ createdAt: -1 })
+    .select("address city state country phone");
 
   if (!document) {
     return next(new CustomError("Shipping Info not found", 404));

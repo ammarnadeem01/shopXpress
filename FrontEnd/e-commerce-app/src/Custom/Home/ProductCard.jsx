@@ -27,7 +27,7 @@ function ProductCard({ data }) {
   return (
     <div
       className="cursor-pointer md:h-[175px]  lg:h-[450px] bg-white xs:h-[100px] sm:h-[150px] lg:w-1/4 xl:w-1/5 w-11/12  flex flex-row flex-wrap rounded-md shadow-lg hover:-translate-y-3"
-      onClick={() => nav("/detail", { state: { data: data } })}
+      onClick={() => nav(`/product/${data._id}`)}
     >
       <div className="max-w-full xs:flex xs:flex-row lg:block">
         <img

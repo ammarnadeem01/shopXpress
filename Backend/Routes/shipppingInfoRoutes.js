@@ -5,12 +5,10 @@ const shippingInfoControllers = require("../Controllers/shippingInfoController")
 router
   .route("/")
   .post(userControllers.protect, shippingInfoControllers.addShippingInfo);
-router
-  .route("/:id")
-  .get(
-    userControllers.protect,
-    userControllers.restrict("Admin"),
-    shippingInfoControllers.getShippingInfo
-  );
+router.route("/:id").get(
+  userControllers.protect,
+  // userControllers.restrict("Admin"),
+  shippingInfoControllers.getShippingInfo
+);
 
 module.exports = router;
