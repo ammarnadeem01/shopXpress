@@ -42,14 +42,15 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/products" element={<Products />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/user" element={<User />} />
           <Route path="/product/:id" element={<ProductDetails />} />
+
+          {/* Admin Routes */}
           <Route path="/admin/userlist" element={<UserList />} />
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/updateuser" element={<UpdateUser />} />
@@ -59,14 +60,20 @@ function App() {
           <Route path="/admin/create" element={<CreateProduct />} />
           <Route path="/admin/editproduct" element={<EditProduct />} />
           <Route path="/admin/orders" element={<AllOrders />} />
-          <Route path="/profile" element={<MyProfile />} />
+
+          {/* Cart and CheckOut Routes */}
+          <Route path="/cart" element={<Cart />} />
           <Route path="/checkout/confirm" element={<ConfirmOrder />} />
           <Route path="/checkout/payment" element={<Payment />} />
           <Route path="/checkout/shipping" element={<ShippingDetails />} />
-          <Route path="/loginrequired" element={<LoginRequired />} />
           <Route path="/orderplaced" element={<OrderPlaced />} />
           <Route path="/empty" element={<EmptyCart />} />
+
+          {/* User Routes */}
+          <Route path="/profile" element={<MyProfile />} />
+          <Route path="/loginrequired" element={<LoginRequired />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/user" element={<User />} />
           <Route path="/resetpassword/:token" element={<ResetPassword />} />
           <Route path="/verifyemail" element={<VerifyEmail />} />
           <Route path="/editpassword" element={<EditPassword />} />
@@ -74,6 +81,7 @@ function App() {
           <Route path="/vieworders" element={<ViewOrders />} />
           <Route path="/order/:id" element={<OrderDetails />} />
           <Route path="/forbidden" element={<Forbidden />} />
+          {/* Not Found */}
           <Route path="*" element={<PageNotFound />} />
         </Routes>
         <Footer />

@@ -102,18 +102,19 @@ function CreateProduct() {
           {!isAdmin && <Forbidden />}
           {isAdmin && (
             <div className="flex w-max-screen ">
-              <div className="absolute lg:hidden z-10">
+              <div className="absolute 1150:hidden z-40 p-4">
                 <Hamburger
                   direction="right"
                   duration={0.8}
                   toggled={isOpen}
                   toggle={setOpen}
+                  color="#ff5722"
                 />
               </div>
               {/*  Left Bar */}
               <LeftBar data={isOpen} />
               {/* Right Bar */}
-              <div className="flex bg-gray-300 w-4/5 h-full xs:max-1150:w-full">
+              <div className="flex z-20 bg-gray-300 w-4/5 h-full xs:max-1150:w-full">
                 <div className="flex justify-center items-center w-full h-screen flex-wrap">
                   <div className="w-1/4 xs:max-450:w-5/6 450:max-sm:w-2/3 sm:max-900:w-1/2 900:max-lg:w-1/2 lg:max-2xl:w-1/3 h-3/5 flex flex-col justify-evenly items-center ">
                     <p className="text-2xl font-semibold">Create Product</p>
