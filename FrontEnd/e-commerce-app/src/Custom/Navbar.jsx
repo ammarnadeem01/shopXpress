@@ -10,6 +10,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useSelector } from "react-redux";
 
 function Navbar() {
+  const { isLogin } = useSelector((state) => {
+    return state.userReducer;
+  });
   const { cartItems } = useSelector((state) => {
     return state.cartReducer;
   });
@@ -105,12 +108,14 @@ function Navbar() {
             <ShoppingCartIcon />
           </StyledBadge>
         </NavLink>
-        <NavLink
-          to="/user"
-          className="navLink no-underline text-xl lg:text-2xl"
-        >
-          <AccountBoxIcon />
-        </NavLink>
+        {!isLogin && (
+          <NavLink
+            to="/user"
+            className="navLink no-underline text-xl lg:text-2xl"
+          >
+            <AccountBoxIcon />
+          </NavLink>
+        )}
       </div>
 
       {/* Mobile Menu */}
@@ -180,13 +185,15 @@ function Navbar() {
             <ShoppingCartIcon />
           </StyledBadge>
         </NavLink>
-        <NavLink
-          to="/user"
-          className="navLink no-underline text-xl py-2 w-full text-center border-b border-gray-600"
-          onClick={toggleMenu}
-        >
-          <AccountBoxIcon />
-        </NavLink>
+        {!isLogin && (
+          <NavLink
+            to="/user"
+            className="navLink no-underline text-xl py-2 w-full text-center border-b border-gray-600"
+            onClick={toggleMenu}
+          >
+            <AccountBoxIcon />
+          </NavLink>
+        )}
       </div>
     </nav>
   );
