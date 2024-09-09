@@ -154,7 +154,8 @@ function ShippingInfo() {
           },
         }
       );
-      const shippingInfo = shippingResponse.data.data.shippingInfo[0];
+      console.log("shippingInfo", shippingResponse);
+      const shippingInfo = shippingResponse.data.data.shippingInfo;
       // console.log("shippingInfo", shippingInfo);
       setShippingData(shippingInfo);
     } catch (error) {}
@@ -207,6 +208,7 @@ function ShippingInfo() {
               </p>
               <p className="text-gray-500 text-sm">
                 <span className="font-semibold text-black">Phone : </span>
+                {console.log("shippingData", shippingData)}
                 {shippingData.phone}
               </p>
               <p className="text-gray-500 text-sm">
@@ -292,7 +294,7 @@ function ShippingInfo() {
                       />
                     </td>
                     <td className="px-3 py-3  text-left text-sm font-semibold uppercase tracking-wider">
-                      {/* {item.name} */}Samsung g20 smtp http
+                      {item.name}
                     </td>
                     <td className="px-3 py-3  text-left text-sm font-semibold uppercase tracking-wider">
                       {item.price}
