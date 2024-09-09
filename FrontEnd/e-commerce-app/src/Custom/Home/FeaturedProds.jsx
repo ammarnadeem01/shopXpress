@@ -42,7 +42,8 @@ function FeaturedProds() {
             Featured Products
           </p>
           <div className="flex flex-row justify-center">
-            <div className="flex flex-row flex-wrap justify-evenly items-baseline xs:w-full md:w-5/6 h-auto xs:space-y-0.5 sm:gap-3 py-10 space-y-5">
+            {/* <div className="flex flex-row flex-wrap justify-evenly items-baseline xs:w-full md:w-5/6 h-auto xs:space-y-0.5 sm:gap-3 py-10 space-y-5"> */}
+            <div className="flex flex-row flex-wrap justify-evenly items-baseline  xs:w-full md:w-4/5 h-auto gap-3 py-10 space-y-2">
               {datais.map((product) => {
                 return <ProductCard key={product._id} data={product} />;
               })}

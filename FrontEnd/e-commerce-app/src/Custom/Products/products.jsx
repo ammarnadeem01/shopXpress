@@ -186,7 +186,7 @@ function Products() {
           {!isLoading && (
             <div
               id="container"
-              className="flex flex-row flex-wrap justify-evenly items-baseline  xs:w-full md:w-4/5 h-auto gap-3 py-10 space-y-5"
+              className="flex flex-row flex-wrap justify-evenly items-baseline  xs:w-full md:w-4/5 h-auto gap-3 py-10 space-y-2"
             >
               {data.map((product) => (
                 <ProductCard key={product._id} data={product} />

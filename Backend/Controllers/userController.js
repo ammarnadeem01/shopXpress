@@ -7,9 +7,13 @@ const crypto = require("crypto");
 const sendMail = require("../Utils/Email");
 
 function signToken(id) {
-  return jwt.sign({ id }, process.env.SECRET_STR, {
-    expiresIn: process.env.LOGIN_EXPIRES_IN,
-  });
+  return jwt.sign(
+    { id },
+    process.env.SECRET_STR
+    // {
+    // expiresIn: process.env.LOGIN_EXPIRES_IN,
+    // }
+  );
 }
 
 // all users
@@ -96,7 +100,7 @@ exports.login = asyncErrorHandler(async (req, res, next) => {
   res.status(200).json({
     status: "Success",
     token,
-    expiresIn: exp,
+    // expiresIn: exp,
     user,
   });
 });
@@ -331,7 +335,7 @@ exports.resetPassword = asyncErrorHandler(async (req, res, next) => {
     .digest("hex");
   const user = await User.findOne({
     ResetPasswordToken: encryptedToken,
-    ResetPasswordTokenExpiresIn: { $gt: Date.now() },
+    // ResetPasswordTokenExpiresIn: { $gt: Date.now() },
   });
   if (!user) {
     const err = new CustomError("Token is invalid or has expired", 400);
