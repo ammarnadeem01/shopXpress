@@ -11,6 +11,8 @@ function UpdateUser() {
   const nav = useNavigate();
   const loc = useLocation();
   const { errMsg, setErrMsg } = useState("");
+  const [isOpen, setOpen] = useState(true);
+
   const { accessToken } = useSelector((state) => state.userReducer);
   function editUser() {
     // console.log("userData", userData);
@@ -46,10 +48,19 @@ function UpdateUser() {
   }
   return (
     <div className="flex w-max-screen h-screen">
+      <div className="absolute 1150:hidden z-40 p-4">
+        <Hamburger
+          direction="right"
+          duration={0.8}
+          toggled={isOpen}
+          toggle={setOpen}
+          color="#ff5722"
+        />
+      </div>
       {/*  Left Bar */}
-      <LeftBar />
+      <LeftBar data={setOpen} />
       {/* Right Bar */}
-      <div className="flex bg-gray-300 w-4/5 h-full ">
+      <div className="flex z-20 bg-gray-300 w-4/5 h-full ">
         <div className="flex justify-center items-center bg-gray-300 w-full h-full">
           <div className="flex flex-col gap-10 bg-white justify-center items-start py-16 px-8 shadow-black shadow-2xl">
             <p className="text-center text-2xl font-semibold w-full">
