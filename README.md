@@ -52,10 +52,10 @@ Follow the steps below to set up the project locally:
 2. **Install dependencies:**
 
    ```bash
-   cd backend
+   cd Backend
    npm install
 
-   cd ../ecommerce/frontend
+   cd ../Frontend/e-commerce-app
    npm install
    ```
 
@@ -67,17 +67,6 @@ Follow the steps below to set up the project locally:
    JWT_SECRET=your-jwt-secret
    CLOUDINARY_URL=your-cloudinary-url
    STRIPE_SECRET=dummy-stripe-key
-   PAYPAL_CLIENT_ID=dummy-paypal-id
-   ```
-
-   Example values for testing:
-
-   ```plaintext
-   MONGO_URI=mongodb://localhost:27017/shopxpress
-   JWT_SECRET=mysecurekey
-   CLOUDINARY_URL=https://api.cloudinary.com/v1_1/demo
-   STRIPE_SECRET=sk_test_4eC39HqLyjWDarjtT1zdp7dc
-   PAYPAL_CLIENT_ID=Abc123DummyClientID
    ```
 
 4. **Run the backend server:**
@@ -95,7 +84,7 @@ Follow the steps below to set up the project locally:
    ```
 
 6. **Access the application:**
-   Open [http://localhost:3000](http://localhost:5173) in your browser.
+   Open http://localhost:5173 in your browser.
 
 ## Folder Structure
 
