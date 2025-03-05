@@ -12,6 +12,9 @@ ShopXpress is a modern e-commerce platform built to provide seamless shopping ex
 - **Reviews and Ratings**: Add reviews and ratings for products.
 - **Responsive Design**: Optimized for desktops, tablets, and mobile devices.
 
+## Demo
+[Live Demo](https://shop-xpress-front-end.vercel.app/)
+
 ## Tech Stack
 
 ### Frontend:
